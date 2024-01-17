@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Sword</string>
+    <string name="title_activity_adding_verse">AddingVerseActivity</string>
+</resources>
