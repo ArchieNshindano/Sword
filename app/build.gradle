@@ -77,9 +77,9 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1"
 
      //FOR ROOM
-    implementation "androidx.room:room-ktx:2.5.2"
-    implementation("androidx.room:room-paging:2.5.2")
-    kapt "androidx.room:room-compiler:2.5.2"
+    implementation "androidx.room:room-ktx:2.6.1"
+    implementation("androidx.room:room-paging:2.6.1")
+    kapt "androidx.room:room-compiler:2.6.1"
 
 
 //    //Dagger - Hilt
@@ -94,6 +94,8 @@ dependencies {
     //HILT
     implementation 'com.google.dagger:hilt-android:2.49'
     kapt 'com.google.dagger:hilt-compiler:2.49'
+    implementation 'androidx.fragment:fragment-ktx:1.6.2'
+
 
     // For instrumentation tests
     androidTestImplementation  'com.google.dagger:hilt-android-testing:2.49'

@@ -2,11 +2,11 @@ package com.archie.Sword.states
 
 data class AddingVerseScreenStates(
 
-    val bookName: String = "",
-    val chapter: String = "",
+    val bookName: String = "Genesis",
+    val chapter: String = "1",
 
     val chapterAndVerseNumber: String = "",
-    val verseNumber: String = "",
+    val verseNumber: String = "1",
 
     val verse: String = "",
     val note: String = "",

@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 interface DaoFunctions {
 
     @Upsert
-    suspend fun addVerse(verse: Verse) = Unit
+    suspend fun addVerse(verse: Verse)
 
 
     @Query("SELECT * FROM MyVersesTable ORDER BY bookPosition ASC")

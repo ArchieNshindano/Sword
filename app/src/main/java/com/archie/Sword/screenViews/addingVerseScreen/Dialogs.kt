@@ -278,7 +278,6 @@ fun verseSelectionDialog(viewModel: AddingVerseScreenViewModel,state: AddingVers
 
                                             onClick = {
 
-                                                viewModel.setChapterAndVerseNumber( "${state.chapter}:${state.verseNumber}" )
                                                 viewModel.setVerseNumber( verse.toString() )
                                                 viewModel.hideVerseSelectionDialog()
 

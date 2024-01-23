@@ -81,18 +81,13 @@ class AddingVerseScreenViewModel @Inject constructor(
 
     fun saveVerse() {
 
-
-        Log.d("ViewModel","About to Add ")
-
 //        if (_state.value.bookName.isBlank() || _state.value.verse.isBlank() || _state.value.themeName.isBlank() || _state.value.photoFilePath.isBlank() || _state.value.note.isBlank())
 //            return
-
-        Log.d("ViewModel","Skipped Return")
 
 
         val verse =  Verse(
             bookName = _state.value.bookName,
-            chapterAndVerseNumber = _state.value.chapterAndVerseNumber,
+            chapterAndVerseNumber = _state.value.chapter + ":" + _state.value.verseNumber,
             verse = _state.value.verse,
             date = System.currentTimeMillis(),
             themeName = _state.value.themeName,
@@ -105,13 +100,10 @@ class AddingVerseScreenViewModel @Inject constructor(
         viewModelScope.launch {
 
 
-            Log.d("Verse",verse.bookName)
-
             daoFunctions.addVerse(verse)
 
         } // SCOPE ENDS
 
-        Log.d("ViewModel","VERSE ADDED ")
 
 //        _state.update {
 //
@@ -132,9 +124,6 @@ class AddingVerseScreenViewModel @Inject constructor(
 //            ) // COPY ENDS
 //
 //        } // UPDATE ENDS
-
-
-        Log.d("ViewModel","STATE UPDATED ")
 
 
 
@@ -248,16 +237,6 @@ class AddingVerseScreenViewModel @Inject constructor(
         _state.update {    it.copy(verseNumber = verseNumber)     }
 
     }
-
-
-
-
-    fun setChapterAndVerseNumber(chapterAndVerseNumber: String){
-
-        _state.update {    it.copy(chapterAndVerseNumber =chapterAndVerseNumber)     }
-
-    }
-
 
 
 

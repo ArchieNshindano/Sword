@@ -32,19 +32,7 @@ class HomeScreenViewModel @Inject constructor(
 
 
 
-//    val verses = daoFunctions.getVersesByDateFlow()
-//
-
-
-
-
   private val _state = MutableStateFlow(HomeScreenStates())
-
-//      var a =  _state.update {
-//
-//          verses = verses
-//      }
-
 
 
   val state = _state.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), HomeScreenStates())
@@ -223,30 +211,8 @@ class HomeScreenViewModel @Inject constructor(
 
 
 
-    fun handleEvent(event: HomeScreenEvents){
-
-//        when(event){
-//
-//            is HomeScreenEvents.showPopUpMenu -> updateState(   _it.copy(showingPopupMenu = true)   )
-//            is HomeScreenEvents.hidePopUpMenu -> updateState(   _state.value.copy(showingPopupMenu  =  false)    )
-//
-//            is HomeScreenEvents.showMenuSideBar -> updateState(   _state.value.copy(showingMenuSideBar = true)  )
-//            is HomeScreenEvents.hideMenuSideBar -> updateState(   _state.value.copy(showingMenuSideBar = false )  )
-//
-//            is HomeScreenEvents.expandSearchBar -> updateState(    _state.value.copy(expandedSearchBar = true)  )
-//            is HomeScreenEvents.collapseSearchBar -> updateState(   _state.value.copy(expandedSearchBar = false)  )
-//
-//            is HomeScreenEvents.showAddingVerseFloatingButton -> updateState(   _state.value.copy(showingAddingVerseFloatingButton = true)  )
-//            is HomeScreenEvents.hideAddingVerseFloatingButton -> updateState(   _state.value.copy(showingAddingVerseFloatingButton = false))
-//
-//            is HomeScreenEvents.changeSortTypeOfVersesTo -> updateState(     _state.value.copy(sortType = event.sortType)         )
-//            is HomeScreenEvents.updateUiThemeTo -> updateState(        _state.value.copy( lastOpenedTheme = event.theme )      )
-//
-//        } // WHEN ENDS
-//
 
 
-    } // EVENT ENDS
 
 
 

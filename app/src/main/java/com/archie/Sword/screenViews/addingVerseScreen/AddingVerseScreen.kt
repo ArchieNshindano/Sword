@@ -135,7 +135,7 @@ fun topScreen(viewModel: AddingVerseScreenViewModel, state: AddingVerseScreenSta
                 Column(modifier = Modifier.fillMaxSize()) {
 
                     Text(
-                        text = if(state.bookName.isBlank()) "Genesis" else state.bookName.checkLengthThenReduceSize,
+                        text = state.bookName,
                         fontSize = 30.sp,
                         fontWeight = Bold,
                         modifier = Modifier.padding(start = 5.dp)
@@ -151,7 +151,7 @@ fun topScreen(viewModel: AddingVerseScreenViewModel, state: AddingVerseScreenSta
 
 
                         Text(
-                            text = if(state.chapterAndVerseNumber.isBlank()) "1:1" else "${state.chapter}:${state.verseNumber}",
+                            text = "${state.chapter}:${state.verseNumber}",
                             fontSize = 25.sp,
                             fontWeight = Bold,
                             modifier = Modifier
