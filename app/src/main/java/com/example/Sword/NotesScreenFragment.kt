@@ -10,10 +10,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.archie.Sword.viewModels.NotesViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.lifecycle.HiltViewModel
 
 @AndroidEntryPoint
-class Notes : Fragment() {
+class NotesScreenFragment : Fragment() {
 
 private val viewModel: NotesViewModel by viewModels()
 

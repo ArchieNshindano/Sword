@@ -18,6 +18,7 @@ data class Verse(
 
     val photoFilePath: String,
 
+    val isPartOfFavourite: Boolean,
 
 
 

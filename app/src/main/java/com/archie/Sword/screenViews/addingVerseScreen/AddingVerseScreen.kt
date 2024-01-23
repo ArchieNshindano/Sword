@@ -534,7 +534,7 @@ fun bottomScreen(context: Context,viewModel: AddingVerseScreenViewModel,state: A
         ){
             
             Text(
-                text = "Notes",
+                text = "NotesScreenFragment",
                 fontSize = 20.sp
             )
 
@@ -1089,7 +1089,7 @@ fun bottomScreenExperimental(){
         ){
 
             Text(
-                text = "Notes",
+                text = "NotesScreenFragment",
                 fontSize = 20.sp
             )
 
