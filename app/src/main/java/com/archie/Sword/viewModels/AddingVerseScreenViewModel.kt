@@ -1,10 +1,8 @@
 package com.archie.Sword.viewModels
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.archie.Sword.events.AddingVerseScreenEvents
-import com.archie.Sword.repositories.database.DaoFunctions
 import com.archie.Sword.repositories.database.DataBaseRepositoryImpl
 import com.archie.Sword.repositories.database.Verse
 import com.archie.Sword.states.AddingVerseScreenStates
@@ -93,6 +91,9 @@ class AddingVerseScreenViewModel @Inject constructor(
             themeName = _state.value.themeName,
             bookPosition = _state.value.bookPosition,
             photoFilePath = _state.value.photoFilePath,
+            themeColor = state.value.themeColour,
+            note = state.value.note,
+            isPartOfFavorites = 0
 
 
         ) // VERSE ENDS

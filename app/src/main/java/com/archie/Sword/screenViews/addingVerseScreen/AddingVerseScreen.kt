@@ -135,7 +135,7 @@ fun topScreen(viewModel: AddingVerseScreenViewModel, state: AddingVerseScreenSta
                 Column(modifier = Modifier.fillMaxSize()) {
 
                     Text(
-                        text = state.bookName,
+                        text = state.bookName.checkLengthThenReduceSize,
                         fontSize = 30.sp,
                         fontWeight = Bold,
                         modifier = Modifier.padding(start = 5.dp)
@@ -663,11 +663,6 @@ fun topScreenExperimental() {
 
 
 
-    val themes = remember {
-
-        VerseThemes.values().toList()
-    }
-
 
 
     Column(
@@ -785,105 +780,107 @@ fun topScreenExperimental() {
 
 
 
+      themeSelection()
 
 
-        Column(
+
+
+    } // COULUMN1 END
+
+}
+
+
+
+
+@Composable
+fun themeSelection(){
+
+
+    val themes = remember {
+
+        VerseThemes.values().toList()
+    }
+
+
+
+
+
+    Column(
+        modifier = Modifier
+            .padding(start = 20.dp, end = 20.dp, top = 30.dp)
+            .fillMaxWidth()
+    ) {
+
+        Text(
+            text = "Theme",
+            fontSize = 20.sp,
             modifier = Modifier
-                .padding(start = 20.dp, end = 20.dp, top = 30.dp)
-                .fillMaxWidth()
-        ) {
+                .padding(bottom = 8.dp)
 
-            Text(
-                text = "Theme",
-                fontSize = 20.sp,
-                modifier = Modifier
-                    .padding(bottom = 8.dp)
-
-            )
+        )
 
 
+        LazyRow(
+            horizontalArrangement = Arrangement.spacedBy(20.dp),
+            content = {
 
-            LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(20.dp),
-                content = {
+
+                items(themes) { theme ->
+
+                    Card(
+                        shape = RoundedCornerShape(20.dp),
+                        modifier = Modifier
+                            .size(width = 90.dp, height = 90.dp),
+                        elevation = CardDefaults.cardElevation(
 
 
-                    items(themes) { theme ->
+                            defaultElevation = 1.dp
+                        ),
+                        colors = CardDefaults.cardColors(
 
-                        Card(
-                            shape = RoundedCornerShape(20.dp),
+                            containerColor = Color.White
+                        )
+                    ) {
+
+
+                        Box(
                             modifier = Modifier
-                                .size(width = 105.dp, height = 105.dp),
-                            elevation = CardDefaults.cardElevation(
-
-
-                                defaultElevation = 1.dp
-                            ),
-                            colors = CardDefaults.cardColors(
-
-                                containerColor = Color.White
-                            )
+                                .fillMaxSize()
+                                .background(
+                                    brush = Brush.verticalGradient(theme.colorLevelValues.reversed())
+                                )
                         ) {
 
+                            Column(modifier = Modifier.fillMaxSize()) {
 
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .background(
-                                        brush = Brush.verticalGradient(theme.colorLevelValues.reversed())
-                                    )
-                            ) {
+                                Text(
+                                    text = theme.name,
+                                    modifier = Modifier
+                                        .align(Alignment.CenterHorizontally)
+                                        .padding(top = 40.dp),
+                                    fontSize = 20.sp,
+                                    fontWeight = Bold
 
-                                Column(modifier = Modifier.fillMaxSize()) {
+                                ) // TEXT ENDS
 
-                                    Text(
-                                        text = theme.name,
-                                        modifier = Modifier
-                                            .align(Alignment.CenterHorizontally)
-                                            .padding(top = 40.dp),
-                                        fontSize = 20.sp,
-                                        fontWeight = Bold
+                            } // COLUMN ENDS
 
-                                    ) // TEXT ENDS
-
-                                } // COLUMN ENDS
-
-                            } // BOX ENDS
+                        } // BOX ENDS
 
 
-                        } // CARD WNDS
+                    } // CARD WNDS
 
 
-                    } // ITEMS ENDS
+                } // ITEMS ENDS
 
 
-                }, // CONTENT ENDS
+            }, // CONTENT ENDS
 
 
-            ) // LAZY ROW ENDS
+        ) // LAZY ROW ENDS
 
 
-        }
-
-
-
-
-
-
-
-
-    } // COULUMN1 ENDS
-
-
-
-
-
-
-
-
-
-
-
+    }
 
 }
 

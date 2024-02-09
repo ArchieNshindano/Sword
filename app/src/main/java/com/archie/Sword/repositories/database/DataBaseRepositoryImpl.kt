@@ -1,12 +1,8 @@
 package com.archie.Sword.repositories.database
 
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import androidx.paging.PagingSource
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
-import javax.inject.Singleton
 
 class DataBaseRepositoryImpl @Inject constructor( val daos: DaoFunctions): DataBaseRepository{
 
@@ -14,16 +10,25 @@ class DataBaseRepositoryImpl @Inject constructor( val daos: DaoFunctions): DataB
 
     override fun getVerseByBook() = daos.getVerseByBook()
 
-
     override fun getVersesByTheme() = daos.getVersesByTheme()
 
     override fun getVersesByDate() = daos.getVersesByDate()
 
-    override fun deletVerse(verse: Verse) = daos.deletVerse(verse)
-
-    override fun getVersesByDateFlow() = daos.getVersesByDateFlow()
+    override fun deleteVerse(verse: Verse) = daos.deleteVerse(verse)
 
 
 
+
+
+
+
+
+
+    override suspend fun addTheme(theme: Theme) = daos.addTheme(theme)
+
+    override fun getThemeByName(): Flow<Theme> = daos.getThemeByName()
+
+    override fun getThemeByDate(): Flow<Theme> = daos.getThemeByDate()
+    override fun deleteTheme(theme: Theme) = daos.deleteTheme(theme)
 
 }

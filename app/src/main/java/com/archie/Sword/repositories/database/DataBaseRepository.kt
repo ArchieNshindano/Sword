@@ -1,12 +1,10 @@
 package com.archie.Sword.repositories.database
 
 import androidx.paging.PagingSource
-import androidx.room.Delete
-import androidx.room.Query
-import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
 
 interface DataBaseRepository {
+
 
 
     suspend fun addVerse(verse: Verse)
@@ -17,8 +15,17 @@ interface DataBaseRepository {
 
     fun getVersesByDate(): PagingSource<Int,Verse>
 
-    fun deletVerse(verse: Verse)
+    fun deleteVerse(verse: Verse)
 
-    fun getVersesByDateFlow(): List<Verse>
+
+
+
+
+    suspend fun addTheme(theme: Theme)
+
+    fun getThemeByName(): Flow<Theme>
+    fun getThemeByDate(): Flow<Theme>
+
+    fun deleteTheme(theme: Theme)
 
 }

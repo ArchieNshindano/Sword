@@ -3,8 +3,7 @@ package com.archie.Sword.daggerHilt
 import android.content.Context
 import android.util.Log
 import androidx.room.Room
-import androidx.room.RoomDatabase
-import com.archie.Sword.repositories.database.DaoFunctions
+import com.archie.Sword.repositories.database.Migration_2_3
 import com.archie.Sword.repositories.database.VersesDatabase
 import dagger.Module
 import dagger.Provides
@@ -24,7 +23,9 @@ object AppModule {
         klass = VersesDatabase::class.java,
         name = "My Verses Database"
 
-    ).build()
+    )
+//        .addMigrations(Migration_2_3)
+        .build()
 
 
     @Provides

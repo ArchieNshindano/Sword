@@ -21,14 +21,34 @@ interface DaoFunctions {
     @Query("SELECT * FROM MyVersesTable ORDER BY themeName ASC")
     fun getVersesByTheme(): PagingSource<Int,Verse>
 
+
     @Query("SELECT * FROM MyVersesTable ORDER BY date ASC")
     fun getVersesByDate(): PagingSource<Int,Verse>
 
-    @Query("SELECT * FROM MyVersesTable")
-    fun getVersesByDateFlow(): List<Verse>
+    @Delete
+     fun deleteVerse(verse: Verse)
+
+
+
+
+
+
+    @Upsert
+    suspend fun addTheme(theme: Theme)
+
+
+    @Query("SELECT * FROM MyThemesTable ORDER BY themeName ASC")
+    fun getThemeByName(): Flow<Theme>
+
+    @Query("SELECT * FROM MyThemesTable ORDER BY themeName ASC")
+    fun getThemeByDate(): Flow<Theme>
 
     @Delete
-     fun deletVerse(verse: Verse)
+    fun deleteTheme(theme: Theme)
+
+
+
+
 
 
 

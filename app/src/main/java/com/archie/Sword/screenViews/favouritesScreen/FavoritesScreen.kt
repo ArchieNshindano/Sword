@@ -1,5 +1,6 @@
 package com.archie.Sword.screenViews.favouritesScreen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,42 +17,24 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.archie.Sword.states.FavouritesScreenStates
-import com.archie.Sword.viewModels.FavouritesScreenViewModel
+import com.archie.Sword.events.BottomNavigationScreensSharedEvents
+import com.archie.Sword.states.HomeScreenStates
 
 @ExperimentalMaterial3Api
 
 
 
 @Composable
-fun FavoritesScreen(viewModel: FavouritesScreenViewModel, states: FavouritesScreenStates){
+fun favoritesScreen(onEvent:(BottomNavigationScreensSharedEvents) -> Unit, states: HomeScreenStates){
 
 
     val list: List<String> = listOf("hvhdvbjhbhj","jhbhbhbb ehbeeuue","hshuibbwfhbhrfbhb","khjkbkbbb")
 
 
-    Scaffold(
 
-        modifier = Modifier.fillMaxSize(),
-
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = { /*TODO*/ }
-
-            ) {
-
-                Icon(imageVector = Icons.Default.Add, contentDescription = "Add more")
-
-
-            }
-
-        }
-
-    ) {
-
-
-        LazyColumn(
+    LazyColumn(
 
             verticalArrangement = Arrangement.spacedBy(3.dp),
             content = {
@@ -71,12 +54,13 @@ fun FavoritesScreen(viewModel: FavouritesScreenViewModel, states: FavouritesScre
 
 
             }, // CONTENT ENDS
-            contentPadding = it
+            modifier = Modifier.background(color = Color.Yellow)
+                .fillMaxSize()
 
         ) // LAZY COLUMN ENDS
 
 
-    } // SCAFFOLD ENDS
+
 
 
 }

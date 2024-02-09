@@ -4,29 +4,29 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.paging.compose.collectAsLazyPagingItems
-import com.archie.Sword.events.HomeScreenEvents
+import androidx.navigation.compose.rememberNavController
+import com.archie.Sword.events.BottomNavigationScreensSharedEvents
 import com.archie.Sword.enums.SortType
-import com.archie.Sword.repositories.database.Verse
-import com.archie.Sword.screenViews.homeScreen.myHomeScreen
-import com.archie.Sword.states.HomeScreenStates
+import com.archie.Sword.screenViews.homeScreen.experimentalHomeScreen
+import com.archie.Sword.screenViews.mainScreen
 
-import com.archie.Sword.viewModels.HomeScreenViewModel
+import com.archie.Sword.viewModels.BottomNavigationSharedViewModel
 import com.example.Sword.ui.theme.SwordTheme
 
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 
+@ExperimentalMaterial3Api
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val viewModel: HomeScreenViewModel by viewModels()
+    private val viewModel: BottomNavigationSharedViewModel by viewModels()
 
 
 
@@ -43,17 +43,17 @@ class MainActivity : ComponentActivity() {
 
                  when(event){
 
-                     HomeScreenEvents.showMenuSideBar ->  viewModel.showMenuSideBar()
-                     is HomeScreenEvents.changeSortTypeOfVersesTo -> viewModel.changeSortTypeOfVersesTo(
+                     BottomNavigationScreensSharedEvents.ShowMenuSideBar ->  viewModel.showMenuSideBar()
+                     is BottomNavigationScreensSharedEvents.ChangeSortTypeTo -> viewModel.changeSortTypeTo(
                          SortType.byDate)
-                     HomeScreenEvents.collapseSearchBar -> viewModel.collapseSearchBar()
-                     HomeScreenEvents.expandSearchBar -> viewModel.expandSearchBar()
-                     HomeScreenEvents.hideAddingVerseFloatingButton -> viewModel.hideAddingVerseFloatingButton()
-                     HomeScreenEvents.hideMenuSideBar ->  viewModel.hideMenuSideBar()
-                     HomeScreenEvents.hidePopUpMenu -> viewModel.hidePopUpMenu()
-                     HomeScreenEvents.showAddingVerseFloatingButton -> viewModel.showAddingVerseFloatingButton()
-                     HomeScreenEvents.showPopUpMenu -> viewModel.showPopUpMenu()
-                     is HomeScreenEvents.updateUiThemeTo -> viewModel.updateUiThemeTo("")
+                     BottomNavigationScreensSharedEvents.CollapseSearchBar -> viewModel.collapseSearchBar()
+                     BottomNavigationScreensSharedEvents.ExpandSearchBar -> viewModel.expandSearchBar()
+                     BottomNavigationScreensSharedEvents.HideAddingVerseFloatingButton -> viewModel.hideAddingVerseFloatingButton()
+                     BottomNavigationScreensSharedEvents.HideMenuSideBar ->  viewModel.hideMenuSideBar()
+                     BottomNavigationScreensSharedEvents.HidePopUpMenu -> viewModel.hidePopUpMenu()
+                     BottomNavigationScreensSharedEvents.ShowAddingVerseFloatingButton -> viewModel.showAddingVerseFloatingButton()
+                     BottomNavigationScreensSharedEvents.ShowPopUpMenu -> viewModel.showPopUpMenu()
+                     is BottomNavigationScreensSharedEvents.UpdateUiThemeTo -> viewModel.updateUiThemeTo("")
                  }
 
 
@@ -63,18 +63,22 @@ class MainActivity : ComponentActivity() {
 
 
         setContent {
+//
+//            val state = viewModel.state.collectAsStateWithLifecycle()
+//            val pagingItems = viewModel.allVerses.flow.collectAsLazyPagingItems()
+            val navController = rememberNavController()
 
-            val state = viewModel.state.collectAsStateWithLifecycle()
-            val pagingItems = viewModel.allVerses.flow.collectAsLazyPagingItems()
 
-
-            myHomeScreen(context = this, viewModel = viewModel, state = state.value , pagingItems = pagingItems)
+//            mainScreen(context = this,navController = navController)
+            experimentalHomeScreen()
 
 
         }
     }
 
-} 
+}
+
+
 
 @Composable
 fun hi(){

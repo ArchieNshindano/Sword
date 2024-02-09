@@ -3,7 +3,6 @@ package com.archie.Sword.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.archie.Sword.enums.SortType
-import com.archie.Sword.events.HomeScreenEvents
 import com.archie.Sword.events.NotesScreenEvents
 import com.archie.Sword.repositories.database.DaoFunctions
 import com.archie.Sword.states.NotesScreenStates

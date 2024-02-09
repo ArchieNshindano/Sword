@@ -2,9 +2,9 @@ package com.archie.Sword.viewModels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.archie.Sword.events.FavouritesScreenEvents
+import com.archie.Sword.events.ThemeScreenEvents
 import com.archie.Sword.repositories.database.DaoFunctions
-import com.archie.Sword.states.FavouritesScreenStates
+import com.archie.Sword.states.ThemeScreenStates
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,19 +16,16 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class FavouritesScreenViewModel @Inject constructor(
-
+class ThemeScreenViewModel @Inject constructor(
     daoFunctions: DaoFunctions
 ): ViewModel() {
 
+    val _state = MutableStateFlow(ThemeScreenStates())
+    val state = _state.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), ThemeScreenStates())
 
-    private val _state = MutableStateFlow(FavouritesScreenStates())
 
-    val state = _state.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), FavouritesScreenStates())
-
-    private val eventsChannel = Channel<FavouritesScreenEvents>()
+    private val eventsChannel = Channel<ThemeScreenEvents>()
     val eventFlow = eventsChannel.receiveAsFlow()
-
 
 
 
@@ -36,7 +33,7 @@ class FavouritesScreenViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            eventsChannel.send(FavouritesScreenEvents.showPopUpMenu)
+            eventsChannel.send(ThemeScreenEvents.showPopUpMenu)
 
         }
 
@@ -50,44 +47,11 @@ class FavouritesScreenViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            eventsChannel.send(FavouritesScreenEvents.hidePopUpMenu)
+            eventsChannel.send(ThemeScreenEvents.hidePopUpMenu)
 
         }
 
     }
-
-
-
-    fun triggerShowingRecentlyAddedItemsEvent(){
-
-        viewModelScope.launch {
-
-            eventsChannel.send(FavouritesScreenEvents.showRecentlyAddedItems)
-
-        }
-
-    }
-
-
-
-
-
-
-
-
-
-
-
-    fun triggerShowingAllItemsEvent(){
-
-        viewModelScope.launch {
-
-            eventsChannel.send(FavouritesScreenEvents.showAllItems)
-
-        }
-
-    }
-
 
 
 
@@ -98,7 +62,7 @@ class FavouritesScreenViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            eventsChannel.send(FavouritesScreenEvents.showAddingButton)
+            eventsChannel.send(ThemeScreenEvents.showAddingButton)
 
         }
 
@@ -112,15 +76,11 @@ class FavouritesScreenViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            eventsChannel.send(FavouritesScreenEvents.hideAddingButton)
+            eventsChannel.send(ThemeScreenEvents.showAddingButton)
 
         }
 
     }
-
-
-
-
 
 
 
@@ -146,21 +106,18 @@ class FavouritesScreenViewModel @Inject constructor(
 
 
 
-    fun showAddingVerseFloatingButton(){
+
+    fun showAddingButton(){
 
         _state.update {      it.copy(isAddingButtonShowing = true)     }
 
     }
 
-    fun hideAddingVerseFloatingButton(){
+    fun hideAddingButton(){
 
         _state.update {      it.copy(isAddingButtonShowing = false)     }
 
     }
-
-
-
-
 
 
 

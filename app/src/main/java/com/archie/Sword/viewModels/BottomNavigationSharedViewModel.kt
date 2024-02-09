@@ -4,18 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
-import com.archie.Sword.events.HomeScreenEvents
-import com.archie.Sword.repositories.database.DaoFunctions
+import com.archie.Sword.events.BottomNavigationScreensSharedEvents
 import com.archie.Sword.enums.SortType
-import com.archie.Sword.repositories.database.DataBaseRepository
 import com.archie.Sword.repositories.database.DataBaseRepositoryImpl
-import com.archie.Sword.repositories.database.Verse
 import com.archie.Sword.states.HomeScreenStates
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -23,7 +19,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeScreenViewModel @Inject constructor(
+class BottomNavigationSharedViewModel @Inject constructor(
 
     val daoFunctions: DataBaseRepositoryImpl
 
@@ -65,15 +61,38 @@ class HomeScreenViewModel @Inject constructor(
  }// PAGER ENDS
 
 
-    private val eventsChannel = Channel<HomeScreenEvents>()
+    private val eventsChannel = Channel<BottomNavigationScreensSharedEvents>()
     val eventFlow = eventsChannel.receiveAsFlow()
 
 
-    fun triggerShowingPopUpMenuEvent(){
+
+
+    fun onEvent(event: BottomNavigationScreensSharedEvents){
+
+
+        when(event){
+
+            is BottomNavigationScreensSharedEvents.ChangeSortTypeTo -> triggerChangingSortTypeEvent(event.sortType)
+            BottomNavigationScreensSharedEvents.CollapseSearchBar -> triggerCollapsingSearchBarEvent()
+            BottomNavigationScreensSharedEvents.ExpandSearchBar -> triggerExpandingSearchBarEvent()
+            BottomNavigationScreensSharedEvents.HideAddingVerseFloatingButton -> triggerHidingAddVerseFloatingButton()
+            BottomNavigationScreensSharedEvents.HideMenuSideBar -> triggerHidingMenuSideBarEvent()
+            BottomNavigationScreensSharedEvents.HidePopUpMenu -> triggerHidingPopUpMenuEvent()
+            BottomNavigationScreensSharedEvents.ShowAddingVerseFloatingButton -> triggerShowingAddVerseFloatingButton()
+            BottomNavigationScreensSharedEvents.ShowMenuSideBar -> triggerShowingMenuSideBarEvent()
+            BottomNavigationScreensSharedEvents.ShowPopUpMenu -> triggerShowingPopUpMenuEvent()
+            is BottomNavigationScreensSharedEvents.UpdateUiThemeTo -> TODO()
+        }
+
+
+    }
+
+
+    private fun triggerShowingPopUpMenuEvent(){
 
          viewModelScope.launch {
 
-             eventsChannel.send(HomeScreenEvents.showPopUpMenu)
+             eventsChannel.send(BottomNavigationScreensSharedEvents.ShowPopUpMenu)
 
          }
 
@@ -83,11 +102,39 @@ class HomeScreenViewModel @Inject constructor(
 
 
 
-    fun triggerHidingPopUpMenuEvent(){
+    private fun triggerHidingPopUpMenuEvent(){
 
         viewModelScope.launch {
 
-            eventsChannel.send(HomeScreenEvents.hidePopUpMenu)
+            eventsChannel.send(BottomNavigationScreensSharedEvents.HidePopUpMenu)
+
+        }
+    }
+
+
+
+
+
+
+    private fun triggerShowingMenuSideBarEvent(){
+
+        viewModelScope.launch {
+
+            eventsChannel.send(BottomNavigationScreensSharedEvents.ShowMenuSideBar)
+
+        }
+
+    }
+
+
+
+
+
+    private fun triggerHidingMenuSideBarEvent(){
+
+        viewModelScope.launch {
+
+            eventsChannel.send(BottomNavigationScreensSharedEvents.HideMenuSideBar)
 
         }
 
@@ -98,11 +145,11 @@ class HomeScreenViewModel @Inject constructor(
 
 
 
-    fun triggerShowingMenuSideBarEvent(){
+    private fun triggerExpandingSearchBarEvent(){
 
         viewModelScope.launch {
 
-            eventsChannel.send(HomeScreenEvents.showMenuSideBar)
+            eventsChannel.send(BottomNavigationScreensSharedEvents.ExpandSearchBar)
 
         }
 
@@ -112,40 +159,11 @@ class HomeScreenViewModel @Inject constructor(
 
 
 
-    fun triggerHidingMenuSideBarEvent(){
+    private fun triggerCollapsingSearchBarEvent(){
 
         viewModelScope.launch {
 
-            eventsChannel.send(HomeScreenEvents.hideMenuSideBar)
-
-        }
-
-    }
-
-
-
-
-
-
-    fun triggerExpandingSearchBarEvent(){
-
-        viewModelScope.launch {
-
-            eventsChannel.send(HomeScreenEvents.expandSearchBar)
-
-        }
-
-    }
-
-
-
-
-
-    fun triggerCollapsingSearchBarEvent(){
-
-        viewModelScope.launch {
-
-            eventsChannel.send(HomeScreenEvents.collapseSearchBar)
+            eventsChannel.send(BottomNavigationScreensSharedEvents.CollapseSearchBar)
 
         }
 
@@ -157,11 +175,11 @@ class HomeScreenViewModel @Inject constructor(
 
 
 
-    fun triggerShowingAddVerseFloatingButton(){
+    private fun triggerShowingAddVerseFloatingButton(){
 
         viewModelScope.launch {
 
-            eventsChannel.send(HomeScreenEvents.showAddingVerseFloatingButton)
+            eventsChannel.send(BottomNavigationScreensSharedEvents.ShowAddingVerseFloatingButton)
 
         }
 
@@ -171,11 +189,11 @@ class HomeScreenViewModel @Inject constructor(
 
 
 
-    fun triggerHidingAddVerseFloatingButton(){
+    private fun triggerHidingAddVerseFloatingButton(){
 
         viewModelScope.launch {
 
-            eventsChannel.send(HomeScreenEvents.showAddingVerseFloatingButton)
+            eventsChannel.send(BottomNavigationScreensSharedEvents.ShowAddingVerseFloatingButton)
 
         }
 
@@ -186,11 +204,11 @@ class HomeScreenViewModel @Inject constructor(
 
 
 
-    fun triggerChangingSortTypeEvent(sortType: SortType){
+    private fun triggerChangingSortTypeEvent(sortType: SortType){
 
         viewModelScope.launch {
 
-            eventsChannel.send(HomeScreenEvents.changeSortTypeOfVersesTo(sortType))
+            eventsChannel.send(BottomNavigationScreensSharedEvents.ChangeSortTypeTo(sortType))
 
         }
 
@@ -278,7 +296,7 @@ class HomeScreenViewModel @Inject constructor(
 
 
 
-    fun changeSortTypeOfVersesTo(sortType: SortType){
+    fun changeSortTypeTo(sortType: SortType){
 
 
         _state.update {      it.copy(sortType =  sortType)     }

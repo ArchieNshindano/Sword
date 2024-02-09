@@ -1,5 +1,6 @@
 package com.archie.Sword.repositories.database
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -15,10 +16,15 @@ data class Verse(
 
 
     val themeName: String,
+    val themeColor: String,
 
     val photoFilePath: String,
 
-    val isPartOfFavourite: Boolean,
+    @ColumnInfo(name = "isPartOfFavorites", defaultValue = "0")
+    val isPartOfFavorites: Int,
+
+    @ColumnInfo(name = "note", defaultValue = " ")
+    val note: String,
 
 
 
