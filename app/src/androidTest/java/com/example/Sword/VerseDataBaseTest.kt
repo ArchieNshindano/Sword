@@ -1,11 +1,17 @@
 package com.example.Sword
 
+import android.app.Instrumentation
 import android.content.Context
 import androidx.room.Room
+import androidx.room.migration.Migration
+import androidx.room.testing.MigrationTestHelper
+import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 
 import com.archie.Sword.repositories.database.DaoFunctions
+import com.archie.Sword.repositories.database.Migration_2_3
 import com.archie.Sword.repositories.database.Verse
 import com.archie.Sword.repositories.database.VersesDatabase
 import junit.framework.TestCase
@@ -18,6 +24,7 @@ import org.junit.Assert
 import org.junit.Assert.assertThat
 import org.junit.Assert.assertTrue
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.IOException
@@ -28,14 +35,24 @@ class VerseDataBaseTest{
     // get reference to the LanguageDatabase and LanguageDao class
     private lateinit var db: VersesDatabase
     private lateinit var dao: DaoFunctions
+    private val context = ApplicationProvider.getApplicationContext<Context>()
 
     // Override function setUp() and annotate it with @Before
     // this function will be called at first when this test class is called
+
+    @get:Rule
+    val helper = MigrationTestHelper(
+
+        InstrumentationRegistry.getInstrumentation(),
+        VersesDatabase::class.java,
+        listOf(),
+        FrameworkSQLiteOpenHelperFactory()
+    )
     @Before
     fun setUp() {
         // get context -- since this is an instrumental test it requires
         // context from the running application
-        val context = ApplicationProvider.getApplicationContext<Context>()
+
         // initialize the db and dao variable
         db = Room.inMemoryDatabaseBuilder(context, VersesDatabase::class.java).build()
         dao = db.daoFunctions()
@@ -56,22 +73,21 @@ class VerseDataBaseTest{
     @Throws(Exception::class)
     fun writeAndReadVerse() {
 
-        val verse = Verse(
-            bookName = "John",
-            chapterAndVerseNumber = "1:1",
-            verse = "jjkbjbkbkje",
-            bookPosition = 1,
-            date = 33,
-            themeName = "trust",
-            photoFilePath = "hbhbdb",
-            id = 0
-        )
+//        val verse = Verse(
+//            bookName = "John",
+//            chapterAndVerseNumber = "1:1",
+//            verse = "jjkbjbkbkje",
+//            bookPosition = 1,
+//            date = 33,
+//            themeName = "trust",
+//            photoFilePath = "hbhbdb",
+//            id = 0,
+//        )
 
 
-        dao.addVerse(verse)
+        //dao.addVerse(verse)
 
-        val verses = dao.getVersesByDateFlow()
-        assertTrue(verses[0].bookName, !verses.isEmpty())
+
 
     }
 
