@@ -1,5 +1,6 @@
 package com.archie.Sword.viewModels
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
@@ -7,7 +8,7 @@ import androidx.paging.PagingConfig
 import com.archie.Sword.events.BottomNavigationScreensSharedEvents
 import com.archie.Sword.enums.SortType
 import com.archie.Sword.repositories.database.DataBaseRepositoryImpl
-import com.archie.Sword.states.HomeScreenStates
+import com.archie.Sword.states.BottomNavigationSharedStates
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,10 +29,10 @@ class BottomNavigationSharedViewModel @Inject constructor(
 
 
 
-  private val _state = MutableStateFlow(HomeScreenStates())
+  private val _state = MutableStateFlow(BottomNavigationSharedStates())
 
 
-  val state = _state.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), HomeScreenStates())
+  val state = _state.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), BottomNavigationSharedStates())
 
 
     val allVerses = Pager(
@@ -66,7 +67,6 @@ class BottomNavigationSharedViewModel @Inject constructor(
 
 
 
-
     fun onEvent(event: BottomNavigationScreensSharedEvents){
 
 
@@ -82,6 +82,11 @@ class BottomNavigationSharedViewModel @Inject constructor(
             BottomNavigationScreensSharedEvents.ShowMenuSideBar -> triggerShowingMenuSideBarEvent()
             BottomNavigationScreensSharedEvents.ShowPopUpMenu -> triggerShowingPopUpMenuEvent()
             is BottomNavigationScreensSharedEvents.UpdateUiThemeTo -> TODO()
+            is BottomNavigationScreensSharedEvents.TickOrUntickCheckBoxToMemoriseVerse -> {
+                Log.d("CheckBoxOnEvent", event.isCheckBoxTicked.toString())
+
+                triggerTickOrUntickCheckBoxToMemoriseVerseEvent(event.isCheckBoxTicked)
+            }
         }
 
 
@@ -218,6 +223,27 @@ class BottomNavigationSharedViewModel @Inject constructor(
 
 
 
+    fun triggerTickOrUntickCheckBoxToMemoriseVerseEvent(isCheckBoxTicked: Boolean)
+    = viewModelScope.launch {
+
+            Log.d("CheckBoxTrigger", isCheckBoxTicked.toString())
+
+            eventsChannel.send(BottomNavigationScreensSharedEvents.TickOrUntickCheckBoxToMemoriseVerse(isCheckBoxTicked))
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -239,7 +265,7 @@ class BottomNavigationSharedViewModel @Inject constructor(
      fun showPopUpMenu(){
 
 
-        _state.update { it.copy(showingPopupMenu = true) }
+        _state.update { it.copy(isPopupMenuShowing = true) }
 
 
     }
@@ -247,7 +273,7 @@ class BottomNavigationSharedViewModel @Inject constructor(
     fun hidePopUpMenu(){
 
 
-        _state.update {    it.copy(showingPopupMenu = false)    }
+        _state.update {    it.copy(isPopupMenuShowing = false)    }
 
 
     }
@@ -255,28 +281,28 @@ class BottomNavigationSharedViewModel @Inject constructor(
 
     fun showMenuSideBar(){
 
-        _state.update {     it.copy(showingMenuSideBar = false)    }
+        _state.update {     it.copy(isMenuSideBarShowing = false)    }
 
     }
 
 
     fun hideMenuSideBar(){
 
-        _state.update {     it.copy(showingMenuSideBar = false)     }
+        _state.update {     it.copy(isMenuSideBarShowing = false)     }
 
     }
 
 
     fun expandSearchBar(){
 
-        _state.update {      it.copy(expandedSearchBar = true)     }
+        _state.update {      it.copy(isSearchBarExpanded = true)     }
 
     }
 
 
     fun collapseSearchBar(){
 
-        _state.update {      it.copy(expandedSearchBar = false)     }
+        _state.update {      it.copy(isSearchBarExpanded = false)     }
 
     }
 
@@ -308,6 +334,17 @@ class BottomNavigationSharedViewModel @Inject constructor(
 
 
         _state.update {      it.copy(lastOpenedTheme = theme)     }
+
+    }
+
+
+    fun tickOrUntickMemoriseVerseCheckBox(isCheckBoxTicked: Boolean){
+
+
+        Log.d("CheckBoxTrigger", isCheckBoxTicked.toString())
+
+
+        _state.update {      it.copy(isCheckBoxTicked = isCheckBoxTicked)     }
 
     }
 

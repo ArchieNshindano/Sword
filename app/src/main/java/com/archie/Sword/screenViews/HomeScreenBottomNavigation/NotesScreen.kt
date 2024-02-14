@@ -23,13 +23,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.archie.Sword.events.BottomNavigationScreensSharedEvents
-import com.archie.Sword.states.HomeScreenStates
+import com.archie.Sword.states.BottomNavigationSharedStates
 import com.example.Sword.ui.theme.SwordTheme
 
 
 @ExperimentalMaterial3Api
 @Composable
-fun NotesScreen(onEvent:(BottomNavigationScreensSharedEvents) -> Unit, states: HomeScreenStates){
+fun NotesScreen(onEvent:(BottomNavigationScreensSharedEvents) -> Unit, states: BottomNavigationSharedStates){
 
     val list: List<String> = listOf("hvhdvbjhbhj","jhbhbhbb ehbeeuue","hshuibbwfhbhrfbhb","khjkbkbbb")
 

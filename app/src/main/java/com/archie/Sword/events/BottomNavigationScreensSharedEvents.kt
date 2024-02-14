@@ -2,23 +2,25 @@ package com.archie.Sword.events
 
 import com.archie.Sword.enums.SortType
 
-sealed class BottomNavigationScreensSharedEvents{
+sealed interface BottomNavigationScreensSharedEvents{
 
-    data class UpdateUiThemeTo(val theme: String): BottomNavigationScreensSharedEvents()
+    data class UpdateUiThemeTo(val theme: String): BottomNavigationScreensSharedEvents
 
-    object ShowPopUpMenu: BottomNavigationScreensSharedEvents()
-    object HidePopUpMenu: BottomNavigationScreensSharedEvents()
+    object ShowPopUpMenu: BottomNavigationScreensSharedEvents
+    data class TickOrUntickCheckBoxToMemoriseVerse(val isCheckBoxTicked: Boolean): BottomNavigationScreensSharedEvents
 
-    object ShowMenuSideBar: BottomNavigationScreensSharedEvents()
-    object HideMenuSideBar: BottomNavigationScreensSharedEvents()
+    object HidePopUpMenu: BottomNavigationScreensSharedEvents
 
-    object ExpandSearchBar: BottomNavigationScreensSharedEvents()
-    object CollapseSearchBar: BottomNavigationScreensSharedEvents()
+    object ShowMenuSideBar: BottomNavigationScreensSharedEvents
+    object HideMenuSideBar: BottomNavigationScreensSharedEvents
 
-    object ShowAddingVerseFloatingButton: BottomNavigationScreensSharedEvents()
-    object HideAddingVerseFloatingButton: BottomNavigationScreensSharedEvents()
+    object ExpandSearchBar: BottomNavigationScreensSharedEvents
+    object CollapseSearchBar: BottomNavigationScreensSharedEvents
 
-    data class ChangeSortTypeTo(val sortType: SortType): BottomNavigationScreensSharedEvents()
+    object ShowAddingVerseFloatingButton: BottomNavigationScreensSharedEvents
+    object HideAddingVerseFloatingButton: BottomNavigationScreensSharedEvents
+
+    data class ChangeSortTypeTo(val sortType: SortType): BottomNavigationScreensSharedEvents
 
 //
 //    //Fragments

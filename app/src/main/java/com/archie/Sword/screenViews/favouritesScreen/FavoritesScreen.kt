@@ -20,14 +20,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.archie.Sword.events.BottomNavigationScreensSharedEvents
-import com.archie.Sword.states.HomeScreenStates
+import com.archie.Sword.states.BottomNavigationSharedStates
 
 @ExperimentalMaterial3Api
 
 
 
 @Composable
-fun favoritesScreen(onEvent:(BottomNavigationScreensSharedEvents) -> Unit, states: HomeScreenStates){
+fun favoritesScreen(onEvent:(BottomNavigationScreensSharedEvents) -> Unit, states: BottomNavigationSharedStates){
 
 
     val list: List<String> = listOf("hvhdvbjhbhj","jhbhbhbb ehbeeuue","hshuibbwfhbhrfbhb","khjkbkbbb")
