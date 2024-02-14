@@ -1,11 +1,10 @@
-package com.archie.Sword.screenViews
+package com.archie.Sword.screenViews.HomeScreenBottomNavigation
 
 import android.content.Context
 import android.content.Intent
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.DateRange
@@ -44,8 +43,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.archie.Sword.events.BottomNavigationScreensSharedEvents
-import com.archie.Sword.screenViews.HomeScreenBottomNavigation.Navigation
-import com.archie.Sword.screenViews.HomeScreenBottomNavigation.Screens
 import com.archie.Sword.screenViews.homeScreen.TopAppBarIcon
 import com.archie.Sword.states.BottomNavigationSharedStates
 import com.example.Sword.AddingVerseActivity

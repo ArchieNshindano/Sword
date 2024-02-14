@@ -11,33 +11,19 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.compose.rememberNavController
-import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.collectAsLazyPagingItems
 import com.archie.Sword.events.BottomNavigationScreensSharedEvents
 import com.archie.Sword.enums.SortType
-import com.archie.Sword.repositories.database.DaoFunctions
-import com.archie.Sword.repositories.database.DataBaseRepositoryImpl
-import com.archie.Sword.screenViews.homeScreen.overScrollEffect
-import com.archie.Sword.screenViews.mainScreen
+import com.archie.Sword.screenViews.HomeScreenBottomNavigation.mainScreen
 
 import com.archie.Sword.viewModels.BottomNavigationSharedViewModel
 import com.example.Sword.ui.theme.SwordTheme
 
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 
 @ExperimentalMaterial3Api
