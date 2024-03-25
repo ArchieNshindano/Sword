@@ -1,5 +1,7 @@
 package com.archie.Sword.events
 
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.ui.unit.Dp
 import com.archie.Sword.enums.SortType
 
 sealed interface BottomNavigationScreensSharedEvents{
@@ -20,6 +22,7 @@ sealed interface BottomNavigationScreensSharedEvents{
     object ShowAddingVerseFloatingButton: BottomNavigationScreensSharedEvents
     object HideAddingVerseFloatingButton: BottomNavigationScreensSharedEvents
 
+    data class getContentPading(val topDp: Dp,val bottomDp: Dp): BottomNavigationScreensSharedEvents
     data class ChangeSortTypeTo(val sortType: SortType): BottomNavigationScreensSharedEvents
 
 //

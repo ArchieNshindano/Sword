@@ -7,13 +7,13 @@ import androidx.room.RoomDatabase
 
 @Database(
     entities = [Verse::class, Theme::class],
-    version = 1,
+    version = 2,
 
-//    autoMigrations = [
-//
-//        AutoMigration(from = 1, to = 2)
-//
-//    ]
+    autoMigrations = [
+
+        AutoMigration(from = 1, to = 2)
+
+    ]
 
 )
 abstract class VersesDatabase: RoomDatabase() {

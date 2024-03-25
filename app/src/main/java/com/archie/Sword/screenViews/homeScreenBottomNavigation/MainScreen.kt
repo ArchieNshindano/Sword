@@ -1,6 +1,7 @@
-package com.archie.Sword.screenViews.HomeScreenBottomNavigation
+@file:OptIn(ExperimentalFoundationApi::class)
 
-import android.content.Context
+package com.archie.Sword.screenViews.homeScreenBottomNavigation
+
 import android.content.Intent
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxSize
@@ -38,10 +39,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.archie.Sword.daggerHilt.MyApp
 import com.archie.Sword.events.BottomNavigationScreensSharedEvents
 import com.archie.Sword.screenViews.homeScreen.TopAppBarIcon
 import com.archie.Sword.states.BottomNavigationSharedStates
@@ -69,7 +72,10 @@ data class TopAppBarIcon(
 @ExperimentalFoundationApi
 @ExperimentalMaterial3Api
 @Composable
-fun mainScreen(context: Context,navController: NavHostController,state: BottomNavigationSharedStates,onEvent:(BottomNavigationScreensSharedEvents) -> Unit){
+fun mainScreen(navController: NavHostController,state: BottomNavigationSharedStates,onEvent:(BottomNavigationScreensSharedEvents) -> Unit){
+
+
+    val context = LocalContext.current
 
 
     var selectedIndex by rememberSaveable {
@@ -77,6 +83,11 @@ fun mainScreen(context: Context,navController: NavHostController,state: BottomNa
         mutableStateOf(0)
 
     } // SELECTED INDEX ENDS
+
+
+
+
+
 
 
 
@@ -143,7 +154,8 @@ fun mainScreen(context: Context,navController: NavHostController,state: BottomNa
 
     Scaffold(
 
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
 
         topBar = {
@@ -292,11 +304,11 @@ fun mainScreen(context: Context,navController: NavHostController,state: BottomNa
 
         ) { padding ->
 
-          Navigation(
-              context = context,
-              contentPadding = padding,
-              navController = navController
-          )
+
+          val myApp = MyApp()
+
+
+        Navigation( navController = navController, paddingValues = padding )
 
     } // SCAFFOLD ENDS
 

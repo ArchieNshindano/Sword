@@ -32,49 +32,6 @@ class AddingVerseScreenViewModel @Inject constructor(
     val state = _state.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), AddingVerseScreenStates())
 
 
-    private val eventsChannel = Channel<AddingVerseScreenEvents>()
-    val eventFlow =  eventsChannel.receiveAsFlow()
-
-
-    fun triggerSaveVerseEvent(){
-
-        viewModelScope.launch {
-
-            eventsChannel.send(AddingVerseScreenEvents.saveVerse)
-
-        }
-
-    }
-
-
-    fun triggerShowingPopUpMenuEvent(){
-
-        viewModelScope.launch {
-
-            eventsChannel.send(AddingVerseScreenEvents.showPopUpMenu)
-
-        }
-
-    }
-
-
-
-
-
-    fun triggerHidingPopUpMenuEvent(){
-
-        viewModelScope.launch {
-
-            eventsChannel.send(AddingVerseScreenEvents.hidePopUpMenu)
-
-        }
-
-    }
-
-
-
-
-
 
 
     fun saveVerse() {
@@ -93,7 +50,8 @@ class AddingVerseScreenViewModel @Inject constructor(
             photoFilePath = _state.value.photoFilePath,
             themeColor = state.value.themeColour,
             note = state.value.note,
-            isPartOfFavorites = 0
+            isPartOfFavorites = 0,
+            memorised = 0
 
 
         ) // VERSE ENDS
@@ -131,6 +89,34 @@ class AddingVerseScreenViewModel @Inject constructor(
 
 
     }
+
+
+
+
+    fun onEvent(event: AddingVerseScreenEvents){
+
+        when(event){
+            AddingVerseScreenEvents.hidePopUpMenu ->  hidePopUpMenu()
+            AddingVerseScreenEvents.saveVerse ->   saveVerse()
+            AddingVerseScreenEvents.showPopUpMenu ->  showPopUpMenu()
+            AddingVerseScreenEvents.ShowBookSelectionDialog -> showBookSelectionDialog()
+            AddingVerseScreenEvents.HideBookSelectionDialog -> hideBookSelectionDialog()
+            AddingVerseScreenEvents.HideChapterSelectionDialog -> hideChapterSelectionDialog()
+            AddingVerseScreenEvents.HideVerseSelectionDialog ->  hideVerseSelectionDialog()
+            is AddingVerseScreenEvents.SetBookName ->  setBookName(event.bookName)
+            is AddingVerseScreenEvents.SetChapter ->  setChapter(event.chapter)
+            is AddingVerseScreenEvents.SetNote ->  setNote(event.note)
+            is AddingVerseScreenEvents.SetThemeColor -> setThemeColour(event.color)
+            is AddingVerseScreenEvents.SetThemeName -> setThemeName(event.theme)
+            is AddingVerseScreenEvents.SetVerse -> setVerse(event.verse)
+            is AddingVerseScreenEvents.SetVerseNumber -> setVerseNumber(event.verseNumber)
+            AddingVerseScreenEvents.ShowChapterSelectionDialog -> showChapterSelectionDialog()
+            AddingVerseScreenEvents.ShowVerseSelectionDialog ->showVerseSelectionDialog()
+
+        }
+
+    }
+
 
 
 

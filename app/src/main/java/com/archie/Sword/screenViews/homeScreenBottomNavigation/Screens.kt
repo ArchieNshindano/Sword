@@ -1,4 +1,4 @@
-package com.archie.Sword.screenViews.HomeScreenBottomNavigation
+package com.archie.Sword.screenViews.homeScreenBottomNavigation
 
 sealed class Screens(val route: String){
 

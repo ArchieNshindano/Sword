@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Entity
 import androidx.room.Query
+import androidx.room.Update
 import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
 
@@ -29,12 +30,16 @@ interface DaoFunctions {
      fun deleteVerse(verse: Verse)
 
 
+    @Update
+    suspend fun updateVerse(verse: Verse)
+
+
 
 
 
 
     @Upsert
-    suspend fun addTheme(theme: Theme)
+    fun addTheme(theme: Theme)
 
 
     @Query("SELECT * FROM MyThemesTable ORDER BY themeName ASC")
@@ -45,6 +50,13 @@ interface DaoFunctions {
 
     @Delete
     fun deleteTheme(theme: Theme)
+
+
+    @Update
+    suspend fun updateTheme(theme: Theme)
+
+
+
 
 
 

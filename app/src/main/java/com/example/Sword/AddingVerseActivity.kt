@@ -16,6 +16,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.archie.Sword.events.AddingVerseScreenEvents
 import com.archie.Sword.screenViews.addingVerseScreen.addingVerseScreen
+import com.archie.Sword.screenViews.addingVerseScreen.addingVerseScreenLaunched
+import com.archie.Sword.screenViews.addingVerseScreen.eventHandler
 import com.archie.Sword.viewModels.AddingVerseScreenViewModel
 import com.example.Sword.ui.theme.SwordTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,42 +32,24 @@ class AddingVerseActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
 
-        lifecycleScope.launch {
-
-            viewModel.eventFlow.collect{ event->
-
-                 when(event){
-
-
-                     AddingVerseScreenEvents.hidePopUpMenu -> viewModel.hidePopUpMenu()
-                     AddingVerseScreenEvents.saveVerse -> {viewModel.saveVerse()
-                         Log.d("EVENT","SAVING VERSE")}
-                     AddingVerseScreenEvents.showPopUpMenu -> viewModel.showPopUpMenu()
-
-
-                 } // WHEN ENDS
-
-
-
-
-
-            } // COLLECT ENDS
-
-        } // LIFESCOPE ENDS
-
         setContent {
 
 
-            val state = viewModel.state.collectAsStateWithLifecycle()
 
             SwordTheme {
                 // A surface container using the 'background' colorLevelValues from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                     addingVerseScreen(context = this, viewModel = viewModel, state = state.value)
-                }
+//                Surface(
+//                    modifier = Modifier.fillMaxSize(),
+//                    color = MaterialTheme.colorScheme.background
+//                ) {
+                     val state = viewModel.state.collectAsStateWithLifecycle()
+
+
+
+                  addingVerseScreen(onEvent = viewModel::onEvent, state = state.value)
+
+
+//                }
             }
         }
     }

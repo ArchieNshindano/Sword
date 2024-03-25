@@ -2,13 +2,14 @@ package com.archie.Sword.enums
 
 import androidx.compose.ui.graphics.Color
 
-enum class VerseThemes(val colorName: String, val colorLevelValues: List<Color>) {
+enum class VerseThemes(val colorName: String, val colorLevelValues: List<Color>, val id: Int) {
 
 
 
     Trust(
         colorName = "Green",
-        colorLevelValues = ColorStrokes.green.color
+        colorLevelValues = ColorStrokes.green.color,
+        1,
 
     ),
 
@@ -16,7 +17,8 @@ enum class VerseThemes(val colorName: String, val colorLevelValues: List<Color>)
 
     Orange(
         colorName = "Orange",
-        colorLevelValues = ColorStrokes.orange.color
+        colorLevelValues = ColorStrokes.orange.color,
+        2
     ),
 
 
@@ -26,21 +28,24 @@ enum class VerseThemes(val colorName: String, val colorLevelValues: List<Color>)
 
     Love(
         colorName = "Red",
-        colorLevelValues = ColorStrokes.red.color
+        colorLevelValues = ColorStrokes.red.color,
+        3
     ),
 
 
 
     Romance(
         colorName = "Pink",
-        colorLevelValues = ColorStrokes.pink.color
+        colorLevelValues = ColorStrokes.pink.color,
+        3
     ),
 
 
 
     Laziness(
         colorName = "Grey",
-        colorLevelValues = ColorStrokes.grey.color
+        colorLevelValues = ColorStrokes.grey.color,
+        4
     ),
 
 

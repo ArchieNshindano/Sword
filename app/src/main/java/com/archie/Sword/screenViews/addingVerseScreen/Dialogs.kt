@@ -26,12 +26,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.archie.Sword.enums.Books
+import com.archie.Sword.events.AddingVerseScreenEvents
 import com.archie.Sword.states.AddingVerseScreenStates
 import com.archie.Sword.viewModels.AddingVerseScreenViewModel
 
 
 @Composable
-fun bookSelectionDialog(viewModel: AddingVerseScreenViewModel){
+fun bookSelectionDialog(onEvent:(AddingVerseScreenEvents) -> Unit){
 
 
     val books = remember {
@@ -83,9 +84,9 @@ fun bookSelectionDialog(viewModel: AddingVerseScreenViewModel){
 
                                         onClick = {
 
-                                            viewModel.setBookName(book.bookName)
-                                            viewModel.hideBookSelectionDialog()
-                                            viewModel.showChapterSelectionDialog()
+                                            onEvent( AddingVerseScreenEvents.SetBookName(book.bookName) )
+                                            onEvent( AddingVerseScreenEvents.HideBookSelectionDialog )
+                                            onEvent( AddingVerseScreenEvents.ShowChapterSelectionDialog )
 
 
 
@@ -131,7 +132,7 @@ fun bookSelectionDialog(viewModel: AddingVerseScreenViewModel){
 
 
 @Composable
-fun chapterSelectionDialog(viewModel: AddingVerseScreenViewModel,state: AddingVerseScreenStates){
+fun chapterSelectionDialog(onEvent:(AddingVerseScreenEvents) -> Unit, state: AddingVerseScreenStates){
 
 
     Column(
@@ -184,9 +185,9 @@ fun chapterSelectionDialog(viewModel: AddingVerseScreenViewModel,state: AddingVe
                                             onClick = {
 
 
-                                                viewModel.setChapter( chapter.toString() )
-                                                viewModel.hideChapterSelectionDialog()
-                                                viewModel.showVerseSelectionDialog()
+                                                onEvent( AddingVerseScreenEvents.SetChapter( chapter.toString() ) )
+                                                onEvent( AddingVerseScreenEvents.HideChapterSelectionDialog )
+                                                onEvent( AddingVerseScreenEvents.ShowVerseSelectionDialog )
 
 
                                             } // on click ends
@@ -226,7 +227,7 @@ fun chapterSelectionDialog(viewModel: AddingVerseScreenViewModel,state: AddingVe
 
 
 @Composable
-fun verseSelectionDialog(viewModel: AddingVerseScreenViewModel,state: AddingVerseScreenStates){
+fun verseSelectionDialog(onEvent:(AddingVerseScreenEvents) -> Unit, state: AddingVerseScreenStates){
 
 
     Column(
@@ -278,8 +279,8 @@ fun verseSelectionDialog(viewModel: AddingVerseScreenViewModel,state: AddingVers
 
                                             onClick = {
 
-                                                viewModel.setVerseNumber( verse.toString() )
-                                                viewModel.hideVerseSelectionDialog()
+                                                onEvent( AddingVerseScreenEvents.SetVerseNumber( verse.toString() ) )
+                                                onEvent( AddingVerseScreenEvents.HideVerseSelectionDialog )
 
 
 
@@ -310,289 +311,6 @@ fun verseSelectionDialog(viewModel: AddingVerseScreenViewModel,state: AddingVers
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-@Composable
-fun experimentalBookSelectionDialog(){
-
-
-    val books = remember {
-
-        Books.values().toList()
-    }
-
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
-
-
-
-        Dialog(
-            onDismissRequest = { /*TODO*/ },
-        ){
-
-
-            Card(
-                modifier = Modifier.size(300.dp)
-            ){
-
-
-                Text(
-                    text ="Book",
-                    fontSize = 25.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(start = 20.dp, top = 10.dp)
-                )
-
-
-                Divider()
-
-
-                LazyColumn(
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                    verticalArrangement = Arrangement.spacedBy(7.dp),
-                    content = {
-
-                        items(books){book->
-
-
-                            Text(
-                                text = book.bookName,
-                                fontSize = 20.sp,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable(
-
-                                        onClick = {
-
-
-                                        }
-                                    ),
-                                textAlign =  TextAlign.Center
-
-
-                            )
-
-
-
-                        }
-
-                    }
-                )
-
-            }
-
-
-        }
-
-    }
-
-
-
-
-
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-@Composable
-fun experimentalChapterSelectionDialog(){
-
-
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
-
-
-
-        Dialog(
-            onDismissRequest = { /*TODO*/ },
-        ){
-
-
-            Card(
-                modifier = Modifier.size(300.dp)
-            ){
-
-
-                Text(
-                    text ="Chapter",
-                    fontSize = 25.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(start = 20.dp, top = 10.dp)
-                )
-
-
-                Divider()
-
-
-                LazyColumn(
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                    verticalArrangement = Arrangement.spacedBy(7.dp),
-                    content = {
-
-
-
-                        repeat(150) { index ->
-
-                            item {
-                                Text(
-                                    text = "Genesis ${index + 1}",
-                                    fontSize = 20.sp,
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .clickable(
-
-                                            onClick = {
-
-
-                                            } // on click ends
-                                        ),
-                                    textAlign = TextAlign.Center
-
-                                )
-
-                            } // item ends
-
-                        } // repeat ends
-
-
-
-
-
-                    } // Content ends
-                ) // Lazy column ends
-
-            } // Card ends
-
-
-        } // Dialogs ends
-
-    } //  Column ends
-
-
-}
-
-
-
-
-
-
-
-
-
-
-@Composable
-fun experimentalVerseSelectionDialog(){
-
-
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
-
-
-
-        Dialog(
-            onDismissRequest = { /*TODO*/ },
-        ){
-
-
-            Card(
-                modifier = Modifier.size(300.dp)
-            ){
-
-
-                Text(
-                    text ="Verse",
-                    fontSize = 25.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(start = 20.dp, top = 10.dp)
-                )
-
-
-                Divider()
-
-
-                LazyColumn(
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                    verticalArrangement = Arrangement.spacedBy(7.dp),
-                    content = {
-
-
-
-                        repeat(150) { index ->
-
-                            item {
-                                Text(
-                                    text = "Genesis 1:${index+1}",
-                                    fontSize = 20.sp,
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .clickable(
-
-                                            onClick = {
-
-
-                                            } // on click ends
-                                        ),
-                                    textAlign = TextAlign.Center
-
-                                )
-
-                            } // item ends
-
-                        } // repeat ends
-
-
-
-
-
-                    } // Content ends
-                ) // Lazy column ends
-
-            } // Card ends
-
-
-        } // Dialogs ends
-
-    } //  Column ends
-
-
-}
-
-
-
-
-
-
-
-
-
 
 
 

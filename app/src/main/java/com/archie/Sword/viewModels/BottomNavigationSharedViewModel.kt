@@ -1,6 +1,8 @@
 package com.archie.Sword.viewModels
 
 import android.util.Log
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.ui.unit.Dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
@@ -69,26 +71,7 @@ class BottomNavigationSharedViewModel @Inject constructor(
 
     fun onEvent(event: BottomNavigationScreensSharedEvents){
 
-
-        when(event){
-
-            is BottomNavigationScreensSharedEvents.ChangeSortTypeTo -> triggerChangingSortTypeEvent(event.sortType)
-            BottomNavigationScreensSharedEvents.CollapseSearchBar -> triggerCollapsingSearchBarEvent()
-            BottomNavigationScreensSharedEvents.ExpandSearchBar -> triggerExpandingSearchBarEvent()
-            BottomNavigationScreensSharedEvents.HideAddingVerseFloatingButton -> triggerHidingAddVerseFloatingButton()
-            BottomNavigationScreensSharedEvents.HideMenuSideBar -> triggerHidingMenuSideBarEvent()
-            BottomNavigationScreensSharedEvents.HidePopUpMenu -> triggerHidingPopUpMenuEvent()
-            BottomNavigationScreensSharedEvents.ShowAddingVerseFloatingButton -> triggerShowingAddVerseFloatingButton()
-            BottomNavigationScreensSharedEvents.ShowMenuSideBar -> triggerShowingMenuSideBarEvent()
-            BottomNavigationScreensSharedEvents.ShowPopUpMenu -> triggerShowingPopUpMenuEvent()
-            is BottomNavigationScreensSharedEvents.UpdateUiThemeTo -> TODO()
-            is BottomNavigationScreensSharedEvents.TickOrUntickCheckBoxToMemoriseVerse -> {
-                Log.d("CheckBoxOnEvent", event.isCheckBoxTicked.toString())
-
-                triggerTickOrUntickCheckBoxToMemoriseVerseEvent(event.isCheckBoxTicked)
-            }
-        }
-
+          _state.update { it.copy( currentEvent = event) }
 
     }
 
@@ -229,7 +212,7 @@ class BottomNavigationSharedViewModel @Inject constructor(
             Log.d("CheckBoxTrigger", isCheckBoxTicked.toString())
 
             eventsChannel.send(BottomNavigationScreensSharedEvents.TickOrUntickCheckBoxToMemoriseVerse(isCheckBoxTicked))
-
+            Log.d("CheckBoxChannel", "hey")
         }
 
 
@@ -260,9 +243,23 @@ class BottomNavigationSharedViewModel @Inject constructor(
 
 
 
+    suspend fun  getContentPadding(topDp: Dp, bottomDp: Dp){
 
 
-     fun showPopUpMenu(){
+        Log.d("PaddingViewModel", "$topDp   $bottomDp")
+
+
+        _state.update {
+            it.copy(
+                contentPaddingTopDp = topDp,
+                contentPaddingBottomDp = bottomDp
+            )
+        }
+    }
+
+
+
+     suspend fun showPopUpMenu(){
 
 
         _state.update { it.copy(isPopupMenuShowing = true) }
@@ -270,7 +267,7 @@ class BottomNavigationSharedViewModel @Inject constructor(
 
     }
 
-    fun hidePopUpMenu(){
+    suspend fun idePopUpMenu(){
 
 
         _state.update {    it.copy(isPopupMenuShowing = false)    }
@@ -279,28 +276,28 @@ class BottomNavigationSharedViewModel @Inject constructor(
     }
 
 
-    fun showMenuSideBar(){
+    suspend fun showMenuSideBar(){
 
         _state.update {     it.copy(isMenuSideBarShowing = false)    }
 
     }
 
 
-    fun hideMenuSideBar(){
+    suspend fun hideMenuSideBar(){
 
         _state.update {     it.copy(isMenuSideBarShowing = false)     }
 
     }
 
 
-    fun expandSearchBar(){
+    suspend fun  expandSearchBar(){
 
         _state.update {      it.copy(isSearchBarExpanded = true)     }
 
     }
 
 
-    fun collapseSearchBar(){
+    suspend fun collapseSearchBar(){
 
         _state.update {      it.copy(isSearchBarExpanded = false)     }
 
@@ -308,21 +305,21 @@ class BottomNavigationSharedViewModel @Inject constructor(
 
 
 
-    fun showAddingVerseFloatingButton(){
+    suspend fun showAddingVerseFloatingButton(){
 
-        _state.update {      it.copy(showingAddingVerseFloatingButton = true)     }
-
-    }
-
-    fun hideAddingVerseFloatingButton(){
-
-        _state.update {      it.copy(showingAddingVerseFloatingButton = false)     }
+        _state.update {      it.copy(isAddingVerseFloatingButtonShowing = true)     }
 
     }
 
+    suspend fun  hideAddingVerseFloatingButton(){
+
+        _state.update {      it.copy(isAddingVerseFloatingButtonShowing = false)     }
+
+    }
 
 
-    fun changeSortTypeTo(sortType: SortType){
+
+    suspend fun  changeSortTypeTo(sortType: SortType){
 
 
         _state.update {      it.copy(sortType =  sortType)     }
@@ -330,7 +327,7 @@ class BottomNavigationSharedViewModel @Inject constructor(
     }
 
 
-    fun updateUiThemeTo(theme: String){
+    suspend fun updateUiThemeTo(theme: String){
 
 
         _state.update {      it.copy(lastOpenedTheme = theme)     }
@@ -338,7 +335,7 @@ class BottomNavigationSharedViewModel @Inject constructor(
     }
 
 
-    fun tickOrUntickMemoriseVerseCheckBox(isCheckBoxTicked: Boolean){
+    suspend fun tickOrUntickMemoriseVerseCheckBox(isCheckBoxTicked: Boolean){
 
 
         Log.d("CheckBoxTrigger", isCheckBoxTicked.toString())
@@ -371,4 +368,9 @@ class BottomNavigationSharedViewModel @Inject constructor(
 
 
 
+
+
+
 }
+
+

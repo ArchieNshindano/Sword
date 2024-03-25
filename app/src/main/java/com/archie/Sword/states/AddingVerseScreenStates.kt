@@ -1,5 +1,7 @@
 package com.archie.Sword.states
 
+import com.archie.Sword.events.AddingVerseScreenEvents
+
 data class AddingVerseScreenStates(
 
     val bookName: String = "Genesis",
@@ -26,6 +28,8 @@ data class AddingVerseScreenStates(
 
     val showingPopupMenu: Boolean = false,
     val hidingPopupMenu: Boolean = true,
+
+    val event: AddingVerseScreenEvents = AddingVerseScreenEvents.hidePopUpMenu
 
 
 

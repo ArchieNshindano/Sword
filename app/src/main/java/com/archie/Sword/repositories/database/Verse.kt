@@ -26,6 +26,9 @@ data class Verse(
     @ColumnInfo(name = "note", defaultValue = " ")
     val note: String,
 
+    @ColumnInfo(name = "Memorise Count", defaultValue = "0")
+    val memorised: Int ,
+
 
 
     @PrimaryKey(autoGenerate = true)

@@ -15,14 +15,7 @@ class DataBaseRepositoryImpl @Inject constructor( val daos: DaoFunctions): DataB
     override fun getVersesByDate() = daos.getVersesByDate()
 
     override fun deleteVerse(verse: Verse) = daos.deleteVerse(verse)
-
-
-
-
-
-
-
-
+    override suspend fun updateVerse(verse: Verse) = daos.updateVerse(verse)
 
     override suspend fun addTheme(theme: Theme) = daos.addTheme(theme)
 
@@ -30,5 +23,6 @@ class DataBaseRepositoryImpl @Inject constructor( val daos: DaoFunctions): DataB
 
     override fun getThemeByDate(): Flow<Theme> = daos.getThemeByDate()
     override fun deleteTheme(theme: Theme) = daos.deleteTheme(theme)
+    override suspend fun updateTheme(theme: Theme) = daos.updateTheme(theme)
 
 }
