@@ -72,7 +72,7 @@ data class TopAppBarIcon(
 @ExperimentalFoundationApi
 @ExperimentalMaterial3Api
 @Composable
-fun mainScreen(navController: NavHostController,state: BottomNavigationSharedStates,onEvent:(BottomNavigationScreensSharedEvents) -> Unit){
+fun mainScreen(navController: NavHostController){
 
 
     val context = LocalContext.current
@@ -111,7 +111,7 @@ fun mainScreen(navController: NavHostController,state: BottomNavigationSharedSta
             selectedIcon = Icons.Filled.DateRange,
             unselectedIcon = Icons.Outlined.DateRange,
             hasNews = false,
-            screenId = Screens.NotesScreen.route
+            screenId = Screens.ThemeScreen.route
         ),
 
         BottomNavigationItem(
@@ -180,8 +180,8 @@ fun mainScreen(navController: NavHostController,state: BottomNavigationSharedSta
 
                         IconButton(onClick = {
 
-                            if(iconInfo.description == "More")
-                                onEvent(BottomNavigationScreensSharedEvents.ShowPopUpMenu)
+//                            if(iconInfo.description == "More")
+//                                onEvent(BottomNavigationScreensSharedEvents.ShowPopUpMenu)
 
                         }
                         ) {
@@ -198,8 +198,10 @@ fun mainScreen(navController: NavHostController,state: BottomNavigationSharedSta
 
 
                     DropdownMenu(
-                        expanded = state.isPopupMenuShowing,
-                        onDismissRequest = {  onEvent(BottomNavigationScreensSharedEvents.HidePopUpMenu) },
+                        expanded = false,
+                        onDismissRequest = {
+//                            onEvent(BottomNavigationScreensSharedEvents.HidePopUpMenu)
+                                           },
 //                        modifier = Modifier.width(100.dp)
                     ) {
 
@@ -305,7 +307,7 @@ fun mainScreen(navController: NavHostController,state: BottomNavigationSharedSta
         ) { padding ->
 
 
-          val myApp = MyApp()
+
 
 
         Navigation( navController = navController, paddingValues = padding )

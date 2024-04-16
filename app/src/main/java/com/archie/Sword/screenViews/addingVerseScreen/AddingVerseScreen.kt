@@ -625,6 +625,8 @@ fun bottomScreen(onEvent:(AddingVerseScreenEvents) -> Unit, state: AddingVerseSc
 
                     Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show()
 
+                    onEvent(AddingVerseScreenEvents.saveVerse)
+
                 },
                 shape = RoundedCornerShape(10.dp),
                 modifier = Modifier

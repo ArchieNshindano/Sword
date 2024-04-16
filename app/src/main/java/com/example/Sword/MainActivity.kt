@@ -25,7 +25,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val viewModel: BottomNavigationSharedViewModel by viewModels()
+//    private val viewModel: BottomNavigationSharedViewModel by viewModels()
 
 
 
@@ -80,15 +80,11 @@ class MainActivity : ComponentActivity() {
 
         setContent {
 
-            val state = viewModel.state.collectAsStateWithLifecycle()
+//            val state = viewModel.state.collectAsStateWithLifecycle()
 //            val pagingItems = viewModel.allVerses.flow.collectAsLazyPagingItems()
             val navController = rememberNavController()
 
-          mainScreen(
-              navController = navController,
-              state.value,
-              viewModel::onEvent
-          )
+          mainScreen(navController = navController)
 
 
         }

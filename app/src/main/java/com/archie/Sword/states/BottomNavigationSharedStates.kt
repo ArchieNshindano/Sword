@@ -1,10 +1,12 @@
 package com.archie.Sword.states
 
+import androidx.collection.arrayMapOf
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.archie.Sword.enums.SortType
 import com.archie.Sword.events.BottomNavigationScreensSharedEvents
+import com.archie.Sword.repositories.database.Verse
 
 data class BottomNavigationSharedStates(
 
@@ -14,7 +16,22 @@ data class BottomNavigationSharedStates(
     val showingDynamicWords: Boolean = true,
     val showingVerseGuesser: Boolean = true,
 
-    val isCheckBoxTicked: Boolean = false,
+    val isCheckBoxTicked: MutableMap<String, Boolean> = arrayMapOf(),
+
+    val verse: Verse = Verse(
+        "",
+        "",
+        "",
+        0,
+        0,
+        "",
+        "",
+        "",
+        0,
+        "",
+        0,
+        0,
+        ""),
 
     val isMenuSideBarShowing: Boolean = true,
 

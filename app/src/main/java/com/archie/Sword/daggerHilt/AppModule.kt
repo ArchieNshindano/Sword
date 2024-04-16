@@ -2,6 +2,7 @@ package com.archie.Sword.daggerHilt
 
 import android.content.Context
 import android.util.Log
+import androidx.lifecycle.SavedStateHandle
 import androidx.room.Room
 import com.archie.Sword.repositories.database.Migration_2_3
 import com.archie.Sword.repositories.database.VersesDatabase
@@ -15,6 +16,8 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+
+
 
     @Provides
     @Singleton

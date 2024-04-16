@@ -1,40 +1,56 @@
 package com.archie.Sword.viewModels
 
+import android.os.Build
 import android.util.Log
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.Dp
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.archie.Sword.events.BottomNavigationScreensSharedEvents
 import com.archie.Sword.enums.SortType
 import com.archie.Sword.repositories.database.DataBaseRepositoryImpl
+import com.archie.Sword.repositories.database.Verse
 import com.archie.Sword.states.BottomNavigationSharedStates
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.time.chrono.ChronoPeriod
+import java.time.temporal.ChronoField
+import java.time.temporal.ChronoUnit
+import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
 class BottomNavigationSharedViewModel @Inject constructor(
 
-    val daoFunctions: DataBaseRepositoryImpl
+    val daoFunctions: DataBaseRepositoryImpl,
+
 
 ): ViewModel() {
 
 
 
 
-  private val _state = MutableStateFlow(BottomNavigationSharedStates())
+    private val _state = MutableStateFlow(BottomNavigationSharedStates())
 
 
-  val state = _state.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), BottomNavigationSharedStates())
+    val state = _state.asStateFlow()
 
 
     val allVerses = Pager(
@@ -57,11 +73,17 @@ class BottomNavigationSharedViewModel @Inject constructor(
 
 
 
-            daoFunctions.getVersesByDate()
+             daoFunctions.getVersesByDate()
+
+
+
+
 
 
 
  }// PAGER ENDS
+
+
 
 
     private val eventsChannel = Channel<BottomNavigationScreensSharedEvents>()
@@ -72,6 +94,7 @@ class BottomNavigationSharedViewModel @Inject constructor(
     fun onEvent(event: BottomNavigationScreensSharedEvents){
 
           _state.update { it.copy( currentEvent = event) }
+
 
     }
 
@@ -206,14 +229,14 @@ class BottomNavigationSharedViewModel @Inject constructor(
 
 
 
-    fun triggerTickOrUntickCheckBoxToMemoriseVerseEvent(isCheckBoxTicked: Boolean)
-    = viewModelScope.launch {
-
-            Log.d("CheckBoxTrigger", isCheckBoxTicked.toString())
-
-            eventsChannel.send(BottomNavigationScreensSharedEvents.TickOrUntickCheckBoxToMemoriseVerse(isCheckBoxTicked))
-            Log.d("CheckBoxChannel", "hey")
-        }
+//    fun triggerTickOrUntickCheckBoxToMemoriseVerseEvent(isCheckBoxTicked: Boolean)
+//    = viewModelScope.launch {
+//
+//            Log.d("CheckBoxTrigger", isCheckBoxTicked.toString())
+//
+//            eventsChannel.send(BottomNavigationScreensSharedEvents.TickOrUntickCheckBoxToMemoriseVerse(isCheckBoxTicked))
+//            Log.d("CheckBoxChannel", "hey")
+//        }
 
 
 
@@ -267,7 +290,7 @@ class BottomNavigationSharedViewModel @Inject constructor(
 
     }
 
-    suspend fun idePopUpMenu(){
+    suspend fun hidePopUpMenu(){
 
 
         _state.update {    it.copy(isPopupMenuShowing = false)    }
@@ -335,13 +358,29 @@ class BottomNavigationSharedViewModel @Inject constructor(
     }
 
 
-    suspend fun tickOrUntickMemoriseVerseCheckBox(isCheckBoxTicked: Boolean){
+
+     fun setVerse(verse: Verse){
+
+         _state.update { it.copy( verse = verse) }
+     }
 
 
-        Log.d("CheckBoxTrigger", isCheckBoxTicked.toString())
 
 
-        _state.update {      it.copy(isCheckBoxTicked = isCheckBoxTicked)     }
+
+      fun updateVerse(verse: Verse){
+
+
+         viewModelScope.launch {
+
+                 daoFunctions.addVerse(verse)
+         }
+     }
+
+     fun tickOrUntickMemoriseVerseCheckBox(verseTag: String, isCheckBoxTicked: Boolean){
+
+         _state.value.isCheckBoxTicked[verseTag] = isCheckBoxTicked
+
 
     }
 
@@ -353,6 +392,38 @@ class BottomNavigationSharedViewModel @Inject constructor(
 
 
 
+
+
+
+    fun upDateAllVerses(pagedItems: LazyPagingItems<Verse>){
+
+
+        pagedItems.itemSnapshotList.forEach{ verse->
+
+
+            val dateToday = SimpleDateFormat("dd-MM-yyyy").format(Date())
+
+
+//            if(Build.VERSION.SDK)
+//
+//
+//            if (verse?.memorisedTodayDate != ) {
+//
+//
+//
+//
+//            }
+//
+
+
+
+
+        }
+
+
+
+
+    }
 
 
 

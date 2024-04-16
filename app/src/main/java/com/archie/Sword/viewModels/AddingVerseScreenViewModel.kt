@@ -7,10 +7,8 @@ import com.archie.Sword.repositories.database.DataBaseRepositoryImpl
 import com.archie.Sword.repositories.database.Verse
 import com.archie.Sword.states.AddingVerseScreenStates
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -51,7 +49,9 @@ class AddingVerseScreenViewModel @Inject constructor(
             themeColor = state.value.themeColour,
             note = state.value.note,
             isPartOfFavorites = 0,
-            memorised = 0
+            memorisedToday = 0,
+            memorised = 0,
+            memorisedTodayDate = null
 
 
         ) // VERSE ENDS

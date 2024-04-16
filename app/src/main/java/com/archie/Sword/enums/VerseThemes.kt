@@ -2,7 +2,7 @@ package com.archie.Sword.enums
 
 import androidx.compose.ui.graphics.Color
 
-enum class VerseThemes(val colorName: String, val colorLevelValues: List<Color>, val id: Int) {
+enum class VerseThemes(val colorName: String?, val colorLevelValues: List<Color>, val id: Int) {
 
 
 
@@ -47,6 +47,13 @@ enum class VerseThemes(val colorName: String, val colorLevelValues: List<Color>,
         colorLevelValues = ColorStrokes.grey.color,
         4
     ),
+
+
+    None(
+        colorName = "None",
+        colorLevelValues = listOf(),
+        0
+    )
 
 
 

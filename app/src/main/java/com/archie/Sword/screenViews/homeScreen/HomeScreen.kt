@@ -7,6 +7,7 @@ package com.archie.Sword.screenViews.homeScreen
 
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
@@ -22,6 +23,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.overscroll
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Card
@@ -32,8 +34,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -58,6 +63,8 @@ import com.archie.Sword.states.BottomNavigationSharedStates
 import com.example.Sword.R
 import com.example.Sword.ui.theme.SwordTheme
 import kotlinx.coroutines.flow.flowOf
+import java.text.SimpleDateFormat
+import java.util.Date
 
 //viewModel: BottomNavigationSharedViewModel,state: BottomNavigationSharedStates,pagingData: T,event: BottomNavigationScreensSharedEvents,context: Context
 
@@ -83,15 +90,17 @@ val list: List<Verse> = listOf(
         photoFilePath = "",
         themeColor = "",
         note = "",
-        isPartOfFavorites = 0,
-        memorised = 0
+        isPartOfFavorites = 1,
+        memorisedToday = 0,
+        memorised = 0,
+        memorisedTodayDate = null
 
 
     ),
 
     Verse(
         bookName = "Job",
-        chapterAndVerseNumber = "1:1",
+        chapterAndVerseNumber = "1:3",
         verse = "hjjhjhrfrjjdndnjnjnv n  sbkbskdc ssv",
         date = System.currentTimeMillis(),
         themeName = "Trust",
@@ -100,12 +109,14 @@ val list: List<Verse> = listOf(
         themeColor = "",
         note = "",
         isPartOfFavorites = 0,
-        memorised = 0
+        memorisedToday = 0,
+        memorised = 0,
+        memorisedTodayDate = null
 
     ),
     Verse(
         bookName = "Job",
-        chapterAndVerseNumber = "1:1",
+        chapterAndVerseNumber = "1:6",
         verse = "hjjhjhrfrjjdndnjnjnv n  sbkbskdc ssv",
         date = System.currentTimeMillis(),
         themeName = "Trust",
@@ -114,12 +125,30 @@ val list: List<Verse> = listOf(
         themeColor = "",
         note = "",
         isPartOfFavorites = 0,
-        memorised = 0
+        memorisedToday = 0,
+        memorised = 0,
+        memorisedTodayDate = null
 
     ),
     Verse(
         bookName = "Job",
-        chapterAndVerseNumber = "1:1",
+        chapterAndVerseNumber = "1:8",
+        verse = "hjjhjhrfrjjdndnjnjnv n  sbkbskdc ssv",
+        date = System.currentTimeMillis(),
+        themeName = "Trust",
+        bookPosition = 1,
+        photoFilePath = "",
+        themeColor = "",
+        note = "",
+        isPartOfFavorites = 1,
+        memorisedToday = 0,
+        memorised = 0,
+        memorisedTodayDate = null
+
+    ),
+    Verse(
+        bookName = "Job",
+        chapterAndVerseNumber = "1:9",
         verse = "hjjhjhrfrjjdndnjnjnv n  sbkbskdc ssv",
         date = System.currentTimeMillis(),
         themeName = "Trust",
@@ -128,12 +157,14 @@ val list: List<Verse> = listOf(
         themeColor = "",
         note = "",
         isPartOfFavorites = 0,
-        memorised = 0
+        memorisedToday = 0,
+        memorised = 0,
+        memorisedTodayDate = null
 
     ),
     Verse(
         bookName = "Job",
-        chapterAndVerseNumber = "1:1",
+        chapterAndVerseNumber = "1:10",
         verse = "hjjhjhrfrjjdndnjnjnv n  sbkbskdc ssv",
         date = System.currentTimeMillis(),
         themeName = "Trust",
@@ -142,26 +173,14 @@ val list: List<Verse> = listOf(
         themeColor = "",
         note = "",
         isPartOfFavorites = 0,
-        memorised = 0
-
-    ),
-    Verse(
-        bookName = "Job",
-        chapterAndVerseNumber = "1:1",
-        verse = "hjjhjhrfrjjdndnjnjnv n  sbkbskdc ssv",
-        date = System.currentTimeMillis(),
-        themeName = "Trust",
-        bookPosition = 1,
-        photoFilePath = "",
-        themeColor = "",
-        note = "",
-        isPartOfFavorites = 0,
-        memorised = 0
+        memorisedToday = 0,
+        memorised = 0,
+        memorisedTodayDate = null
 
     ),
     Verse(
         bookName = "Luke",
-        chapterAndVerseNumber = "1:1",
+        chapterAndVerseNumber = "2:1",
         verse = "hjjhjhrfrjjdndnjnjnv n  sbkbskdc ssv",
         date = System.currentTimeMillis(),
         themeName = "Laziness",
@@ -169,8 +188,10 @@ val list: List<Verse> = listOf(
         photoFilePath = "",
         themeColor = "",
         note = "",
-        isPartOfFavorites = 0,
-        memorised = 0
+        isPartOfFavorites = 1,
+        memorisedToday = 0,
+        memorised = 0,
+        memorisedTodayDate = null
 
     ),
     Verse(
@@ -184,7 +205,9 @@ val list: List<Verse> = listOf(
         themeColor = "",
         note = "",
         isPartOfFavorites = 0,
-        memorised = 0
+        memorisedToday = 0,
+        memorised = 0,
+        memorisedTodayDate = null
 
     ),
     Verse(
@@ -197,8 +220,10 @@ val list: List<Verse> = listOf(
         photoFilePath = "",
         themeColor = "",
         note = "",
-        isPartOfFavorites = 0,
-        memorised = 0
+        isPartOfFavorites = 1,
+        memorisedToday = 0,
+        memorised = 0,
+        memorisedTodayDate = null
 
     )
 )
@@ -210,9 +235,51 @@ val list: List<Verse> = listOf(
 fun homeScreenContent(state: BottomNavigationSharedStates, onEvent: (BottomNavigationScreensSharedEvents) -> Unit, pagingItems: LazyPagingItems<Verse>, contentPadding: PaddingValues){
 
 
+
+
+
+
+
+
+
+
+
     val corountineScope = rememberCoroutineScope()
     val listState = rememberLazyListState()
     val overscrollEffect = remember(corountineScope) { VerticalOverscroll(corountineScope) }
+
+//    val allVerses by remember {
+//
+//        mutableStateOf(
+//
+//            (0..pagingItems.itemCount-1).map {index ->
+//
+//                val verse = pagingItems[index]
+//
+//               if(verse != null)
+//                Verse(
+//                    verse = verse.verse,
+//                    bookName = verse.bookName,
+//                    chapterAndVerseNumber = verse.chapterAndVerseNumber,
+//
+//                    bookPosition = verse.bookPosition,
+//                    date = verse.date,
+//                    themeName = verse.themeName,
+//                    themeColor = verse.themeColor,
+//
+//                    photoFilePath = verse.photoFilePath,
+//                    isPartOfFavorites = verse.isPartOfFavorites,
+//                    note = verse.note,
+//                    memorised = verse.memorised ,
+//                    memorisedToday = verse.memorisedToday,
+//                    id = verse.id
+//                )
+//
+//
+//            }
+//        )
+//    }
+
 
 
 
@@ -221,7 +288,7 @@ fun homeScreenContent(state: BottomNavigationSharedStates, onEvent: (BottomNavig
     LazyColumn(
             state = listState,
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(10.dp),
+            verticalArrangement = Arrangement.spacedBy(15.dp),
 
             modifier = Modifier
 //                .fillMaxSize()
@@ -393,19 +460,30 @@ fun homeScreenContent(state: BottomNavigationSharedStates, onEvent: (BottomNavig
 
                 items(
 
-                    items =  pagingItems.itemSnapshotList,
+                    items = pagingItems.itemSnapshotList,
                     key = { verse ->
 
-                        verse?.id  ?: 0
+                        verse?.id ?: 0
                     }
 
-//                    list
 
                 ) { verse->
 
 
+                    val verseTag = "${verse?.bookName} ${verse?.chapterAndVerseNumber}"
 
-                    verseHolder(onEvent = onEvent, state = state , verse = verse)
+
+                    LaunchedEffect(state.isCheckBoxTicked) {
+
+                        Log.d("Check Box Holder ", "$verseTag :${state.isCheckBoxTicked.contains(verseTag)}")
+
+
+                    }
+
+
+                        verseHolder(onEvent = onEvent, state = state , verse = verse)
+
+
 
 
 
@@ -414,13 +492,13 @@ fun homeScreenContent(state: BottomNavigationSharedStates, onEvent: (BottomNavig
 
                 items(
 
-                    list
+                    list.size
 
-                ) { verse->
+                ) { index ->
 
 
 
-                    verseHolder(onEvent = onEvent, state = state , verse = verse)
+                    verseHolder(onEvent = onEvent, state = state , verse = list[index])
 
 
 
@@ -438,10 +516,65 @@ fun homeScreenContent(state: BottomNavigationSharedStates, onEvent: (BottomNavig
 
 
 
-
-
 @Composable
 fun verseHolder(onEvent:(BottomNavigationScreensSharedEvents) -> Unit, state: BottomNavigationSharedStates, verse: Verse?){
+
+
+    val verseTag = "${verse?.bookName} ${verse?.chapterAndVerseNumber}"
+
+
+    val dateMemorised = remember {
+
+        mutableStateOf("")
+    }
+
+
+
+
+
+
+
+    val checkBoxState = rememberSaveable(key = verseTag){
+
+        var thisState = false
+
+        if(verse?.memorisedToday == 1)
+            thisState = true
+
+        mutableStateOf(thisState)
+
+    }
+
+
+
+
+
+
+    val memorisedTodayDate = remember {
+
+        mutableStateOf("")
+    }
+
+
+
+
+
+
+
+
+
+
+
+    val isPartOfFavourites = rememberSaveable(key = verseTag ) {
+
+        var thisState = false
+
+        if(verse?.isPartOfFavorites == 1)
+           thisState = true
+
+        mutableStateOf(thisState)
+    }
+
 
 
 
@@ -465,7 +598,7 @@ fun verseHolder(onEvent:(BottomNavigationScreensSharedEvents) -> Unit, state: Bo
         Column {
 
             Text(
-                text = "${verse?.bookName}",
+                text = verseTag ,
                 fontSize = 30.sp,
                 fontFamily = FontFamily.Cursive,
                 modifier = Modifier.padding(start = 10.dp)
@@ -514,14 +647,60 @@ fun verseHolder(onEvent:(BottomNavigationScreensSharedEvents) -> Unit, state: Bo
                 modifier = Modifier.fillMaxWidth()
             ) {
 
-                IconButton(onClick = { /*TODO*/ }) {
 
-                    Icon(
-                        imageVector = Icons.Default.FavoriteBorder,
-                        contentDescription = null
-                    )
 
-                }
+                    IconButton(
+                        onClick = {
+
+
+                            var isPartOfFavoritesValue = 0
+
+                            isPartOfFavourites.value = !isPartOfFavourites.value
+
+                            if (isPartOfFavourites.value)
+                                isPartOfFavoritesValue = 1
+
+
+
+                            onEvent(
+                                    BottomNavigationScreensSharedEvents.UpdateVerse(
+
+                                        Verse(
+                                            bookName = verse?.bookName ?: "",
+                                            chapterAndVerseNumber = verse?.chapterAndVerseNumber
+                                                ?: "",
+                                            verse = verse?.verse ?: "",
+                                            date = verse?.date ?: 0,
+                                            themeName = verse?.themeName ?: "",
+                                            bookPosition = verse?.bookPosition ?: 0,
+                                            photoFilePath = verse?.photoFilePath ?: "",
+                                            themeColor = verse?.themeColor ?: "",
+                                            note = verse?.note ?: "",
+                                            isPartOfFavorites = isPartOfFavoritesValue,
+                                            memorisedToday = 0,
+                                            memorised = 0,
+                                            id = verse?.id ?: 0,
+                                            memorisedTodayDate = verse?.memorisedTodayDate
+
+
+                                        ) // VERSE ENDS
+
+                                    )
+
+                                )
+
+
+
+                        }
+                    ) {
+
+                        Icon(
+                            imageVector = if (verse?.isPartOfFavorites == 1) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                            contentDescription = "Favorites"
+                        )
+
+                    }
+
 
                 IconButton(onClick = { /*TODO*/ }) {
 
@@ -536,23 +715,88 @@ fun verseHolder(onEvent:(BottomNavigationScreensSharedEvents) -> Unit, state: Bo
                 Row(
 
                     modifier = Modifier.padding(start = 115.dp)
+
                 ) {
 
                     Text(
                         text = "Memorise Today",
-                        modifier = Modifier.padding(top = 15.dp)
+                        modifier = Modifier
+                            .padding(top = 15.dp)
+                            .clickable {
+
+
+//
+//                            onEvent(BottomNavigationScreensSharedEvents.TickOrUntickCheckBoxToMemoriseVerse(verseTag,!checkBoxState ) )
+                            }
                     )
-                    Checkbox(
-                        checked = state.isCheckBoxTicked,
-                        onCheckedChange = { isCheckBoxTicked ->
-
-                            Log.d("CheckBoxContent", isCheckBoxTicked.toString())
 
 
-                            onEvent(BottomNavigationScreensSharedEvents.TickOrUntickCheckBoxToMemoriseVerse(isCheckBoxTicked))
-                        }
 
-                    )
+                        Checkbox(
+                            checked = checkBoxState.value,
+                            onCheckedChange = { isCheckBoxTicked ->
+
+                                checkBoxState.value = isCheckBoxTicked
+
+                                var memorisedToday = 0
+
+
+
+                                if (isCheckBoxTicked) {
+
+                                    memorisedToday = 1
+                                    val simpleDateFormat = SimpleDateFormat("dd-MM-yyyy")
+
+                                    memorisedTodayDate.value = simpleDateFormat.format(Date())
+
+                                }
+
+                                else
+                                    memorisedTodayDate.value = verse?.memorisedTodayDate ?: ""
+
+
+
+
+
+                                onEvent(
+                                    BottomNavigationScreensSharedEvents.UpdateVerse(
+
+                                        Verse(
+                                            bookName = verse?.bookName ?: "",
+                                            chapterAndVerseNumber = verse?.chapterAndVerseNumber
+                                                ?: "",
+                                            verse = verse?.verse ?: "",
+                                            date = verse?.date ?: 0,
+                                            themeName = verse?.themeName ?: "",
+                                            bookPosition = verse?.bookPosition ?: 0,
+                                            photoFilePath = verse?.photoFilePath ?: "",
+                                            themeColor = verse?.themeColor ?: "",
+                                            note = verse?.note ?: "",
+                                            isPartOfFavorites = verse?.isPartOfFavorites ?: 0,
+                                            memorisedToday = memorisedToday,
+                                            memorised = 0,
+                                            id = verse?.id ?: 0,
+                                            memorisedTodayDate = memorisedTodayDate.value,
+
+
+                                        ) // VERSE ENDS
+
+                                    )
+
+                                )
+                            }
+
+                        )
+
+
+
+
+
+
+
+
+
+
 
                 }
 
@@ -564,6 +808,8 @@ fun verseHolder(onEvent:(BottomNavigationScreensSharedEvents) -> Unit, state: Bo
 
     } // CARD ENDS
 }
+
+
 
 
 

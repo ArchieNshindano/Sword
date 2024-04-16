@@ -132,7 +132,7 @@ dependencies {
 
     // ViewModel Compose
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1"
-
+    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0"
 
 
 

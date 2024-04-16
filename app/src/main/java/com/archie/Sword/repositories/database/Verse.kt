@@ -27,8 +27,13 @@ data class Verse(
     val note: String,
 
     @ColumnInfo(name = "Memorise Count", defaultValue = "0")
-    val memorised: Int ,
+    val memorised: Int,
 
+    @ColumnInfo(name = "Memorised Today", defaultValue = "0")
+    val memorisedToday: Int,
+
+    @ColumnInfo(name = "Memorised Date", defaultValue = "")
+    val memorisedTodayDate: String?,
 
 
     @PrimaryKey(autoGenerate = true)

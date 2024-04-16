@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -30,7 +31,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -68,11 +71,7 @@ fun ThemeScreen(onEvent:(BottomNavigationScreensSharedEvents) -> Unit, state: Bo
 
 
 
-    val contentPadding = remember {
-
-        paddingValues
-    }
-
+    val contentPadding by rememberUpdatedState(newValue = paddingValues)
 
 
     val tabRowItems = remember {
@@ -172,8 +171,8 @@ fun ThemeScreen(onEvent:(BottomNavigationScreensSharedEvents) -> Unit, state: Bo
 
             when(index){
 
-                0 -> manageScreenTabItem()
-                1 -> viewScreenTabItem(onEvent = onEvent, state = state, pagingItems = pagingItems)
+                0 -> themeGridScreenTabItem()
+                1 -> versesScreenTabItem(onEvent = onEvent, state = state, pagingItems = pagingItems, screen = Screens.ThemeScreen)
             }
 
         } // HORIZONTAL PAGER ENDS
@@ -192,7 +191,7 @@ fun ThemeScreen(onEvent:(BottomNavigationScreensSharedEvents) -> Unit, state: Bo
 
 
 @Composable
-fun manageScreenTabItem() {
+fun themeGridScreenTabItem() {
 
 
     val list: List<String> =
@@ -200,7 +199,11 @@ fun manageScreenTabItem() {
 
 
     val themes = remember {
-        VerseThemes.values().toList()
+     VerseThemes.values().toList().filter {
+
+         it.name != "None"
+     }
+
 
     }
 
@@ -244,7 +247,7 @@ fun manageScreenTabItem() {
 //                                )
 //                            }
 
-//                            shape = RectangleShape
+                            shape = RoundedCornerShape(topEnd = 10.dp, topStart = 10.dp)
 
                         ) {
                             Box(
@@ -275,12 +278,12 @@ fun manageScreenTabItem() {
                         Text(
                             text = theme.name,
                             modifier = Modifier
-                                .fillMaxWidth()
                                 .border(
-                                    width = 0.1.dp,
+                                    width = 1.dp,
                                     brush = Brush.verticalGradient(theme.colorLevelValues),
-                                    shape = RoundedCornerShape(5.dp)
+                                    shape = RoundedCornerShape(bottomEnd = 5.dp, bottomStart = 5.dp)
                                 )
+                                .width(150.dp)
                                 ,
                             fontSize = 20.sp
                         )
@@ -305,11 +308,35 @@ fun manageScreenTabItem() {
 
 
 @Composable
-fun viewScreenTabItem(onEvent: (BottomNavigationScreensSharedEvents) -> kotlin.Unit, state: BottomNavigationSharedStates, pagingItems: LazyPagingItems<Verse>){
+fun versesScreenTabItem(onEvent: (BottomNavigationScreensSharedEvents) -> kotlin.Unit, state: BottomNavigationSharedStates, pagingItems: LazyPagingItems<Verse>, screen: Screens){
+
+     val verses = remember {
+
+         mutableStateOf(listOf<Verse?>())
+     }
+
+
+    if (screen.route == Screens.ThemeScreen.route)
+       verses.value = pagingItems.itemSnapshotList
+
+    else if(screen.route == Screens.FavoritesScreen.route)
+        verses.value = pagingItems.itemSnapshotList.filter { verse ->
+
+            verse?.isPartOfFavorites == 1
+        }
+
 
 
     val themes =  remember {
         VerseThemes.values().toList()
+    }
+
+    val newList = remember {
+
+        list.filter {
+
+            it.isPartOfFavorites == 1
+        }
     }
 
     LazyColumn(
@@ -332,32 +359,26 @@ fun viewScreenTabItem(onEvent: (BottomNavigationScreensSharedEvents) -> kotlin.U
 
                 }
 
-                items(
-                   items =  pagingItems.itemSnapshotList,
-//                    key = { verse ->
-//
-//
-//
-//
-//                        (verse?.id   ?: 0)
-//                    }
-
-                ){ verse ->
+                items( items = verses.value){ verse ->
 
                        if(verse?.themeName == theme.name)
-                        verseHolder(onEvent = onEvent, state = state, verse = verse )
+                        verseHolder(onEvent = onEvent, state = state, verse = verse)
+
+                       else if (verse?.themeName.isNullOrBlank() && theme.name.equals("None") )
+                           verseHolder(onEvent = onEvent, state = state, verse = verse)
 
 
 
 
                 }
 
+
                 items(
-                    list
+                    newList
                 ){ verse ->
 
                     if(verse?.themeName == theme.name)
-                        verseHolder(onEvent = onEvent, state = state, verse = verse )
+                        verseHolder(onEvent = onEvent, state = state, verse = verse)
 
 
 
@@ -369,6 +390,8 @@ fun viewScreenTabItem(onEvent: (BottomNavigationScreensSharedEvents) -> kotlin.U
 
 
             }
+
+
 
 
         }

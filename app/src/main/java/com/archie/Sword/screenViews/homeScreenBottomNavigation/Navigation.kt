@@ -28,6 +28,13 @@ import com.archie.Sword.viewModels.BottomNavigationSharedViewModel
 @Composable
 fun Navigation(navController: NavHostController, paddingValues: PaddingValues){
 
+    val viewModel: BottomNavigationSharedViewModel = hiltViewModel()
+    val state = viewModel.state.collectAsStateWithLifecycle()
+    val pagingItems = viewModel.allVerses.flow.collectAsLazyPagingItems()
+
+    eventHandler(state = state.value, viewModel = viewModel)
+
+
     val contentPadding = remember {
 
         paddingValues
@@ -40,12 +47,12 @@ fun Navigation(navController: NavHostController, paddingValues: PaddingValues){
 
         composable(route = Screens.HomeScreen.route){
 
-            val viewModel = it.sharedViewModel<BottomNavigationSharedViewModel>(navController = navController)
-            val state = viewModel.state.collectAsStateWithLifecycle()
-            val pagingItems = viewModel.allVerses.flow.collectAsLazyPagingItems()
+//            val viewModel = it.sharedViewModel<BottomNavigationSharedViewModel>(navController = navController)
+//            val state = viewModel.state.collectAsStateWithLifecycle()
+//            val pagingItems = viewModel.allVerses.flow.collectAsLazyPagingItems()
 
 
-            eventHandler(state = state.value, viewModel = viewModel)
+
 
             homeScreenContent (state = state.value,viewModel::onEvent,pagingItems,contentPadding)
 
@@ -54,14 +61,14 @@ fun Navigation(navController: NavHostController, paddingValues: PaddingValues){
 
 
 
-        composable(route = Screens.NotesScreen.route){
+        composable(route = Screens.ThemeScreen.route){
 
-            val viewModel = it.sharedViewModel<BottomNavigationSharedViewModel>(navController = navController)
-            val state = viewModel.state.collectAsStateWithLifecycle()
-            val pagingItems = viewModel.allVerses.flow.collectAsLazyPagingItems()
+//            val viewModel = it.sharedViewModel<BottomNavigationSharedViewModel>(navController = navController)
+//            val state = viewModel.state.collectAsStateWithLifecycle()
+//            val pagingItems = viewModel.allVerses.flow.collectAsLazyPagingItems()
 
 
-            eventHandler(state = state.value, viewModel = viewModel)
+//            eventHandler(state = state.value, viewModel = viewModel)
 
             ThemeScreen(onEvent = viewModel::onEvent , state = state.value,contentPadding, pagingItems)
 
@@ -70,13 +77,13 @@ fun Navigation(navController: NavHostController, paddingValues: PaddingValues){
 
         composable(route = Screens.FavoritesScreen.route){
 
-            val viewModel = it.sharedViewModel<BottomNavigationSharedViewModel>(navController = navController)
-            val state = viewModel.state.collectAsStateWithLifecycle()
-            val pagingItems = viewModel.allVerses.flow.collectAsLazyPagingItems()
-
-
-
-            eventHandler(state = state.value, viewModel = viewModel)
+//            val viewModel = it.sharedViewModel<BottomNavigationSharedViewModel>(navController = navController)
+//            val state = viewModel.state.collectAsStateWithLifecycle()
+//            val pagingItems = viewModel.allVerses.flow.collectAsLazyPagingItems()
+//
+//
+//
+//            eventHandler(state = state.value, viewModel = viewModel)
             favoritesScreen(onEvent = viewModel::onEvent , state = state.value,contentPadding,pagingItems)
         }
 
@@ -106,11 +113,11 @@ inline fun eventHandler(state: BottomNavigationSharedStates,viewModel: BottomNav
             BottomNavigationScreensSharedEvents.ExpandSearchBar -> viewModel.expandSearchBar()
             BottomNavigationScreensSharedEvents.HideAddingVerseFloatingButton -> viewModel.hideAddingVerseFloatingButton()
             BottomNavigationScreensSharedEvents.HideMenuSideBar -> viewModel.hideMenuSideBar()
-            BottomNavigationScreensSharedEvents.HidePopUpMenu -> viewModel.idePopUpMenu()
+            BottomNavigationScreensSharedEvents.HidePopUpMenu -> viewModel.hidePopUpMenu()
             BottomNavigationScreensSharedEvents.ShowAddingVerseFloatingButton -> viewModel.showAddingVerseFloatingButton()
             BottomNavigationScreensSharedEvents.ShowMenuSideBar -> viewModel.showMenuSideBar()
             BottomNavigationScreensSharedEvents.ShowPopUpMenu -> viewModel.showPopUpMenu()
-            is BottomNavigationScreensSharedEvents.TickOrUntickCheckBoxToMemoriseVerse -> viewModel.tickOrUntickMemoriseVerseCheckBox(event.isCheckBoxTicked)
+            is BottomNavigationScreensSharedEvents.TickOrUntickCheckBoxToMemoriseVerse -> viewModel.tickOrUntickMemoriseVerseCheckBox(event.verseTag, event.isCheckBoxTicked)
             is BottomNavigationScreensSharedEvents.UpdateUiThemeTo -> viewModel.updateUiThemeTo(event.theme)
             is BottomNavigationScreensSharedEvents.getContentPading -> {
 
@@ -119,6 +126,10 @@ inline fun eventHandler(state: BottomNavigationSharedStates,viewModel: BottomNav
                 viewModel.getContentPadding(event.topDp, event.bottomDp)
 
             }
+
+            is BottomNavigationScreensSharedEvents.SetVerse -> viewModel.setVerse(event.verse)
+            is BottomNavigationScreensSharedEvents.UpdateVerse -> viewModel.updateVerse(event.verse)
+            is BottomNavigationScreensSharedEvents.IsPartOfFavorites -> TODO()
         }
 
 

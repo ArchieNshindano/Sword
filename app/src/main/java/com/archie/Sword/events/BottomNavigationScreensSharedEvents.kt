@@ -1,15 +1,19 @@
 package com.archie.Sword.events
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.ui.unit.Dp
 import com.archie.Sword.enums.SortType
+import com.archie.Sword.repositories.database.Verse
 
 sealed interface BottomNavigationScreensSharedEvents{
 
     data class UpdateUiThemeTo(val theme: String): BottomNavigationScreensSharedEvents
 
     object ShowPopUpMenu: BottomNavigationScreensSharedEvents
-    data class TickOrUntickCheckBoxToMemoriseVerse(val isCheckBoxTicked: Boolean): BottomNavigationScreensSharedEvents
+    data class TickOrUntickCheckBoxToMemoriseVerse(val verseTag: String, val isCheckBoxTicked: Boolean): BottomNavigationScreensSharedEvents
+
+    data class SetVerse(val verse: Verse): BottomNavigationScreensSharedEvents
+
+
 
     object HidePopUpMenu: BottomNavigationScreensSharedEvents
 
@@ -25,6 +29,9 @@ sealed interface BottomNavigationScreensSharedEvents{
     data class getContentPading(val topDp: Dp,val bottomDp: Dp): BottomNavigationScreensSharedEvents
     data class ChangeSortTypeTo(val sortType: SortType): BottomNavigationScreensSharedEvents
 
+    data class UpdateVerse(val verse: Verse): BottomNavigationScreensSharedEvents
+
+    data class IsPartOfFavorites(val isPartOfFavorites: Boolean): BottomNavigationScreensSharedEvents
 //
 //    //Fragments
 //    object launchHome: BottomNavigationScreensSharedEvents

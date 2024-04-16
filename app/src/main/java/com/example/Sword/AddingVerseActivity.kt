@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.archie.Sword.events.AddingVerseScreenEvents
@@ -32,11 +33,14 @@ class AddingVerseActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
 
+
+
+
         setContent {
 
 
 
-            SwordTheme {
+//            SwordTheme {
                 // A surface container using the 'background' colorLevelValues from the theme
 //                Surface(
 //                    modifier = Modifier.fillMaxSize(),
@@ -50,7 +54,7 @@ class AddingVerseActivity : ComponentActivity() {
 
 
 //                }
-            }
+//            }
         }
     }
 }
