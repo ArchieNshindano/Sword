@@ -129,7 +129,8 @@ inline fun eventHandler(state: BottomNavigationSharedStates,viewModel: BottomNav
 
             is BottomNavigationScreensSharedEvents.SetVerse -> viewModel.setVerse(event.verse)
             is BottomNavigationScreensSharedEvents.UpdateVerse -> viewModel.updateVerse(event.verse)
-            is BottomNavigationScreensSharedEvents.IsPartOfFavorites -> TODO()
+            is BottomNavigationScreensSharedEvents.DeleteVerse -> viewModel.deleteVerse(event.verse)
+            is BottomNavigationScreensSharedEvents.IsSwipeToDeleteEnabled -> viewModel.isSwipeToDeleteEnabled(event.isSwipeToDeleteEnabled)
         }
 
 

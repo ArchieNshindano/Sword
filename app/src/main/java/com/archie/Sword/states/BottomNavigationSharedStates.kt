@@ -48,7 +48,9 @@ data class BottomNavigationSharedStates(
     val contentPaddingBottomDp: Dp = 0.dp,
 
     //EVENTS
-    val currentEvent: BottomNavigationScreensSharedEvents = BottomNavigationScreensSharedEvents.UpdateUiThemeTo("Theme")
+    val currentEvent: BottomNavigationScreensSharedEvents = BottomNavigationScreensSharedEvents.UpdateUiThemeTo("Theme"),
+
+    val isSwipeToDeleteEnabled: Boolean = false
 
 
 

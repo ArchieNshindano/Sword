@@ -388,45 +388,16 @@ class BottomNavigationSharedViewModel @Inject constructor(
 
 
 
+    fun deleteVerse(verse: Verse){
 
+            viewModelScope.launch {
 
-
-
-
-
-
-    fun upDateAllVerses(pagedItems: LazyPagingItems<Verse>){
-
-
-        pagedItems.itemSnapshotList.forEach{ verse->
-
-
-            val dateToday = SimpleDateFormat("dd-MM-yyyy").format(Date())
-
-
-//            if(Build.VERSION.SDK)
-//
-//
-//            if (verse?.memorisedTodayDate != ) {
-//
-//
-//
-//
-//            }
-//
-
-
-
-
-        }
-
-
-
+                daoFunctions.deleteVerse(verse)
+            }
 
     }
 
-
-
+    fun isSwipeToDeleteEnabled(isSwipeToDeleteEnabled: Boolean) = _state.update { it.copy(isSwipeToDeleteEnabled = isSwipeToDeleteEnabled) }
 
 
 

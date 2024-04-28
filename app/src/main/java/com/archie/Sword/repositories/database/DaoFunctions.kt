@@ -27,7 +27,7 @@ interface DaoFunctions {
     fun getVersesByDate(): PagingSource<Int,Verse>
 
     @Delete
-     fun deleteVerse(verse: Verse)
+    suspend fun deleteVerse(verse: Verse)
 
 
     @Update

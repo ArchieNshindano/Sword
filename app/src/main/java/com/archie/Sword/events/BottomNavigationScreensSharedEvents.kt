@@ -31,7 +31,10 @@ sealed interface BottomNavigationScreensSharedEvents{
 
     data class UpdateVerse(val verse: Verse): BottomNavigationScreensSharedEvents
 
-    data class IsPartOfFavorites(val isPartOfFavorites: Boolean): BottomNavigationScreensSharedEvents
+    data class DeleteVerse(val verse: Verse): BottomNavigationScreensSharedEvents
+
+    data class IsSwipeToDeleteEnabled(val isSwipeToDeleteEnabled: Boolean): BottomNavigationScreensSharedEvents
+
 //
 //    //Fragments
 //    object launchHome: BottomNavigationScreensSharedEvents
@@ -49,7 +52,7 @@ sealed interface BottomNavigationScreensSharedEvents{
 
 
 //    object saveVerse: BottomNavigationScreensSharedEvents
-//    data class deleteVerse(val verse: Verse): BottomNavigationScreensSharedEvents
+
 //    data class enterBook(val bookName: String): BottomNavigationScreensSharedEvents
 //    data class enterVerse(val verse: String): BottomNavigationScreensSharedEvents
 //    data class enterVerseNum(val chapterAndVerseNumber: String): BottomNavigationScreensSharedEvents

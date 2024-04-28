@@ -15,7 +15,7 @@ interface DataBaseRepository {
 
     fun getVersesByDate(): PagingSource<Int,Verse>
 
-    fun deleteVerse(verse: Verse)
+    suspend fun deleteVerse(verse: Verse)
     suspend fun updateVerse(theme: Verse)
 
 

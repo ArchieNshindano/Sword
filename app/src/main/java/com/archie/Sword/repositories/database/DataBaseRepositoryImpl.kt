@@ -14,7 +14,7 @@ class DataBaseRepositoryImpl @Inject constructor( val daos: DaoFunctions): DataB
 
     override fun getVersesByDate() = daos.getVersesByDate()
 
-    override fun deleteVerse(verse: Verse) = daos.deleteVerse(verse)
+    override suspend fun deleteVerse(verse: Verse) = daos.deleteVerse(verse)
     override suspend fun updateVerse(verse: Verse) = daos.updateVerse(verse)
 
     override suspend fun addTheme(theme: Theme) = daos.addTheme(theme)
