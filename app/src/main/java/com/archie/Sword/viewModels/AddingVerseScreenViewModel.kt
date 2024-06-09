@@ -243,9 +243,9 @@ class AddingVerseScreenViewModel @Inject constructor(
     }
 
 
-    fun setThemeName(themeName: String, isThemeSelected: Boolean){
+    fun setThemeName(themeName: String, isAThemeSelected: Boolean){
 
-        _state.update {    it.copy(themeName = themeName, isAThemeSelected = isThemeSelected)     }
+        _state.update {    it.copy(isAThemeSelected = isAThemeSelected, themeName = themeName)    }
 
 
  }

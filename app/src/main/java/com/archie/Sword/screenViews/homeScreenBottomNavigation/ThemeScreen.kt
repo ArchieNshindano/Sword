@@ -1,4 +1,5 @@
 @file:OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class,
+    ExperimentalFoundationApi::class, ExperimentalFoundationApi::class,
     ExperimentalFoundationApi::class, ExperimentalFoundationApi::class
 )
 
@@ -6,10 +7,8 @@ package com.archie.Sword.screenViews.homeScreenBottomNavigation
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -40,10 +39,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
@@ -57,7 +54,6 @@ import com.archie.Sword.events.BottomNavigationScreensSharedEvents
 import com.archie.Sword.repositories.database.Verse
 import com.archie.Sword.screenViews.homeScreen.list
 import com.archie.Sword.screenViews.homeScreen.themedVerseHolder
-import com.archie.Sword.screenViews.homeScreen.verseHolder
 import com.archie.Sword.states.BottomNavigationSharedStates
 import kotlinx.coroutines.flow.flowOf
 
@@ -145,7 +141,6 @@ fun ThemeScreen(onEvent:(BottomNavigationScreensSharedEvents) -> Unit, state: Bo
                     selected = index == selectedTabIndex,
                     text = { Text(
                         text = item.title,
-                        color = Color.Black,
                         ) },
                     onClick = {
 
@@ -195,18 +190,9 @@ fun ThemeScreen(onEvent:(BottomNavigationScreensSharedEvents) -> Unit, state: Bo
 @Composable
 fun themeGridScreenTabItem(onEvent: (BottomNavigationScreensSharedEvents) -> Unit) {
 
-
-    val list: List<String> =
-        listOf("hvhdvbjhbhj", "jhbhbhbb ehbeeuue", "hshuibbwfhbhrfbhb", "khjkbkbbb")
-
-
     val themes = remember {
-     VerseThemes.values().toList().filter {
 
-         it.name != "None"
-     }
-
-
+     VerseThemes.values().toList()
     }
 
 
@@ -252,7 +238,9 @@ fun themeGridScreenTabItem(onEvent: (BottomNavigationScreensSharedEvents) -> Uni
                             shape = RoundedCornerShape(topEnd = 10.dp, topStart = 10.dp),
                             onClick = {
 
+                                if(theme.name != "None")
                                 onEvent(BottomNavigationScreensSharedEvents.UpdateUiThemeTo(theme.name))
+
                             }
 
                         ) {
@@ -321,14 +309,14 @@ fun themeGridScreenTabItem(onEvent: (BottomNavigationScreensSharedEvents) -> Uni
 @Composable
 fun versesScreenTabItem(onEvent: (BottomNavigationScreensSharedEvents) -> kotlin.Unit, state: BottomNavigationSharedStates, pagingItems: LazyPagingItems<Verse>, screen: Screens){
 
-     val verses = remember {
+    val verses = remember {
 
-         mutableStateOf(listOf<Verse?>())
-     }
+        mutableStateOf(listOf<Verse?>())
+    }
 
 
     if (screen.route == Screens.ThemeScreen.route)
-       verses.value = pagingItems.itemSnapshotList
+        verses.value = pagingItems.itemSnapshotList
 
     else if(screen.route == Screens.FavoritesScreen.route)
         verses.value = pagingItems.itemSnapshotList.filter { verse ->
@@ -341,6 +329,8 @@ fun versesScreenTabItem(onEvent: (BottomNavigationScreensSharedEvents) -> kotlin
     val themes =  remember {
         VerseThemes.values().toList()
     }
+
+
 
     val newList = remember {
 
@@ -360,39 +350,95 @@ fun versesScreenTabItem(onEvent: (BottomNavigationScreensSharedEvents) -> kotlin
 
             themes.forEachIndexed{ index, theme ->
 
+                val themeVerses = verses.value.filter { verse ->
 
-                stickyHeader {
-
-
-
-                    stickyHeader(title = theme.name)
-
-
-                }
-
-                items( items = verses.value){ verse ->
-
-                       if(verse?.themeName == theme.name)
-                           themedVerseHolder(onEvent = onEvent, state = state, verse = verse)
-
-                       else if (verse?.themeName.isNullOrBlank() && theme.name.equals("None") )
-                           themedVerseHolder(onEvent = onEvent, state = state, verse = verse)
-
-
-
+                    verse?.themeName == theme.name
                 }
 
 
-                items(
-                    newList
-                ){ verse ->
+                val versesWithNoTheme = verses.value.filter { verse ->
 
-                    if(verse?.themeName == theme.name)
-                        themedVerseHolder(onEvent = onEvent, state = state, verse = verse)
-
-
-
+                        verse?.themeName.isNullOrBlank() || theme.name.equals("None")
                 }
+
+                val themeVersesDemo = list.filter { verse ->
+
+                    verse.themeName == theme.name
+                }
+
+                val versesWithNoThemeDemo = list.filter { verse ->
+
+                        verse.themeName.isNullOrBlank() || theme.name.equals("None")
+                }
+
+
+
+                val isNoThemeListNotEmpty = versesWithNoTheme.isNotEmpty() || versesWithNoThemeDemo.isNotEmpty()
+
+
+
+                when(themeVerses.isNotEmpty() || themeVersesDemo.isNotEmpty()){
+
+                    true -> {
+
+                        stickyHeader {
+
+
+
+
+                            stickyHeader(title = theme.name)
+
+
+                        }
+
+                        items( items = themeVerses){ verse ->
+
+                                themedVerseHolder(onEvent = onEvent, state = state, verse = verse)
+
+                        }
+
+
+                        items(
+                            themeVersesDemo
+                        ){ verse ->
+
+                                themedVerseHolder(onEvent = onEvent, state = state, verse = verse)
+
+
+
+                        }
+
+
+
+
+
+
+                    }
+
+
+
+                    false -> {
+
+
+                          if(isNoThemeListNotEmpty)
+                            stickyHeader {  stickyHeader(title = "No Theme")   }
+
+                            items( items = versesWithNoTheme) { verse ->
+
+                                themedVerseHolder(onEvent = onEvent, state = state, verse = verse)
+                            }
+
+                            items( items = versesWithNoThemeDemo) { verse ->
+
+                                themedVerseHolder(onEvent = onEvent, state = state, verse = verse)
+                            }
+
+
+
+
+                    }
+                }
+
 
 
 
@@ -411,12 +457,12 @@ fun versesScreenTabItem(onEvent: (BottomNavigationScreensSharedEvents) -> kotlin
 }
 
 
+
 @Composable
 fun stickyHeader(title: String){
 
     Column(
         modifier = Modifier
-            .background(Color.White)
     ) {
         Text(
             text = " "+ title,

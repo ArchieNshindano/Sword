@@ -1,0 +1,25 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <item>
+
+<!--        BAAA04-->
+        <color android:color="#000000" />
+    </item>
+
+    <item >
+
+        <bitmap
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:gravity="center"
+            android:src="@drawable/sword_dark" />
+
+
+
+    </item>
+
+
+
+</layer-list>

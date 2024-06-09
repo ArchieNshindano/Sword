@@ -39,10 +39,7 @@ object AppModule {
 
 
 
-
-
-
-            override fun onOpen(db: SupportSQLiteDatabase) {
+        override fun onOpen(db: SupportSQLiteDatabase) {
                 super.onOpen(db)
                 Log.d("Database", "Database Opened")
             }

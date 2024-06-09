@@ -1,5 +1,5 @@
 @file:OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class,
-    ExperimentalFoundationApi::class
+    ExperimentalFoundationApi::class, ExperimentalFoundationApi::class
 )
 
 package com.archie.Sword.screenViews.homeScreenBottomNavigation
@@ -65,6 +65,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.archie.Sword.events.BottomNavigationScreensSharedEvents
 import com.archie.Sword.repositories.database.Verse
+import com.archie.Sword.screenViews.favouritesScreen.notesHolder
 import com.archie.Sword.screenViews.homeScreen.TopAppBarIcon
 import com.archie.Sword.screenViews.homeScreen.list
 import com.archie.Sword.screenViews.homeScreen.verseHolder
@@ -106,10 +107,6 @@ fun mainScreen(navController: NavHostController, state: BottomNavigationSharedSt
         mutableStateOf(0)
 
     } // SELECTED INDEX ENDS
-
-
-
-
 
 
 
@@ -173,8 +170,7 @@ fun mainScreen(navController: NavHostController, state: BottomNavigationSharedSt
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
 
     val query =  remember { mutableStateOf("") }
-    val versesFromSearch = remember { mutableStateOf(listOf<Verse>()) }
-
+    
     Scaffold(
 
         modifier = Modifier
@@ -262,7 +258,11 @@ fun mainScreen(navController: NavHostController, state: BottomNavigationSharedSt
                             key = { verse -> "${verse.verseTag} ${verse.id}" }
                         ) { verse ->
 
-                            verseHolder(onEvent = onEvent, state = state, verse = verse)
+                            SwordTheme(verseTheme = state.lastOpenedTheme, isContainerVerseHolder = true) {
+                                
+                                notesHolder(onEvent = onEvent, state = state, verse = verse, isContentANote = false )
+                                
+                            }
 
                         } // ITEMS ENDS
 
@@ -456,7 +456,7 @@ fun GreetingPreview(
 
 ) {
 
-    SwordTheme(verseTheme = "Glory", darkTheme = false) {
+    SwordTheme(verseTheme = "Love", darkTheme = true) {
         mainScreen(
             navController = rememberNavController(),
             state = BottomNavigationSharedStates(isSearchBarActive = false, verses = list),

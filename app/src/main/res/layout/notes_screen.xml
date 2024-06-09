@@ -3,12 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NotesScreenFragment">
+    tools:context=".SettingsScreenActivity">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="@string/hello_blank_fragment" />
+
+    <ImageView
+        android:layout_width="229dp"
+        android:layout_height="271dp"
+        android:src="@drawable/sword"
+
+        />
 
 </FrameLayout>

@@ -2,4 +2,15 @@
 <resources>
 
     <style name="Theme.Sword" parent="android:Theme.Material.Light.NoActionBar" />
+
+
+    <style name="Theme.SplashScreen" parent="android:Theme.Material.Light.NoActionBar">
+
+        <item name="android:windowBackground">@drawable/splash_screen</item>
+
+        <item name="android:statusBarColor">#FF6E5D00</item>
+
+    </style>
+
+
 </resources>

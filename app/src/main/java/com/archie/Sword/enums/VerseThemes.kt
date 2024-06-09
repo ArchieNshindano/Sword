@@ -58,6 +58,13 @@ enum class VerseThemes( val pictureId: Int, val color: List<Color>, val id: Int)
     ),
 
 
+    None(
+        pictureId = R.mipmap.none,
+        ColorStrokes.grey.color,
+        0
+    )
+
+
 
 
 

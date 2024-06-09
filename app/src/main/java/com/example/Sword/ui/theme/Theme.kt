@@ -35,9 +35,9 @@ fun SwordTheme(
 
     verseTheme: String,
     isContainerVerseHolder: Boolean = false,
-    darkTheme: Boolean = false /*isSystemInDarkTheme()*/,
+    darkTheme: Boolean =isSystemInDarkTheme(),
     // Dynamic colorLevelValues is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit,
 ) {
 
@@ -61,7 +61,7 @@ fun SwordTheme(
             }
 
             else
-                gloryLightScheme
+                if (darkTheme) gloryDarkScheme else gloryLightScheme
 
         }
 
@@ -71,6 +71,7 @@ fun SwordTheme(
         SideEffect {
             val window = (view.context as Activity).window
             window.statusBarColor = colorScheme.primary.toArgb()
+            
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
         }
     }

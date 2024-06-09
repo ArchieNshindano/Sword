@@ -16,7 +16,21 @@ import androidx.compose.ui.unit.sp
 //        letterSpacing = 0.5.sp
 //    )
 
-val Typography = Typography()
+
+
+val Typography = Typography(
+
+//    titleLarge = TextStyle(
+//        fontWeight = FontWeight.Medium,
+//        fontSize = 48.sp,
+//        letterSpacing = 0.sp
+//    ),
+//    titleSmall = TextStyle(
+//        fontWeight = FontWeight.Normal,
+//        fontSize = 20.sp,
+//        letterSpacing = 0.15.sp
+//    )
+)
     /* Other default text styles to override
     titleLarge = TextStyle(
         fontFamily = FontFamily.Default,

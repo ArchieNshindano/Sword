@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.Sword" parent="android:Theme.Material.Light.NoActionBar" />
+
+
+    <style name="Theme.SplashScreen" parent="android:ThemeOverlay.Material.Dark">
+
+        <item name="android:windowBackground">@drawable/splash_screen_dark</item>
+
+        <item name="android:statusBarColor">#000000</item>
+
+    </style>
+
+
+</resources>

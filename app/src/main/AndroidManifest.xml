@@ -14,31 +14,37 @@
         android:theme="@style/Theme.Sword"
         tools:targetApi="31">
         <activity
-            android:name=".SettingsScreenActivity"
-            android:exported="false"
-            android:label="@string/title_activity_settings_screen"
-            android:theme="@style/Theme.Sword" />
-        <activity
-            android:name=".ThemeActivity"
-            android:exported="false"
-            android:label="@string/title_activity_theme"
-            android:theme="@style/Theme.Sword" />
-        <activity
             android:name=".AddingVerseActivity"
             android:exported="false"
             android:label="@string/title_activity_adding_verse"
             android:theme="@style/Theme.Sword" />
         <activity
             android:name=".MainActivity"
+            android:exported="false"
+            android:label="@string/title_activity_main"
+            android:theme="@style/Theme.Sword" />
+
+        <activity
+            android:name=".SplashScreenActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Sword">
+            android:theme="@style/Theme.SplashScreen"
+            android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
+
+
+        <activity
+            android:name=".SettingsScreenActivity"
+            android:exported="false"
+            android:label="@string/title_activity_settings_screen"
+            android:theme="@style/Theme.Sword" />
     </application>
 
 </manifest>

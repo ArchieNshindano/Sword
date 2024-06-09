@@ -6,10 +6,13 @@
 
 package com.archie.Sword.screenViews.homeScreen
 
+import CustomComponent
 import android.content.Intent
 import android.util.Log
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.scrollable
@@ -18,7 +21,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -90,99 +95,99 @@ data class TopAppBarIcon(
 
 
 
-val list: List<Verse> = emptyList()
-//val list: List<Verse> = listOf(
-//
-//    Verse(
-//        verseTag = "Matthew",
-//        verse = "hjjhjhrfrjjdndnjnjnv n  ssv",
-//        date = System.currentTimeMillis(),
-//        themeName = "Love",
-//        bookPosition = 1,
-//        photoFilePath = "",
-//        themeColor = "",
-//        note = "",
-//        isPartOfFavorites = 1,
-//        memorisedToday = 0,
-//        memorisedCount = 0,
-//        memorisedTodayDate = null
-//
-//
-//    ),
-//
-//    Verse(
-//        verseTag = "Job 1:3",
-//        verse = "hjjhjhrfrjjdndnjnjnv n  sbkbskdc ssv",
-//        date = System.currentTimeMillis(),
-//        themeName = "Trust",
-//        bookPosition = 1,
-//        photoFilePath = "",
-//        themeColor = "",
-//        note = "",
-//        isPartOfFavorites = 0,
-//        memorisedToday = 0,
-//        memorisedCount = 0,
-//        memorisedTodayDate = null
-//
-//    ),
-//
-//    Verse(
-//    verseTag = "Job 1:6",
-//    verse = "hjjhjhrfrjjdndnjnjnv n  sbkbskdc ssv",
-//    date = System.currentTimeMillis(),
-//    themeName = "Glory",
-//    bookPosition = 1,
-//    photoFilePath = "",
-//    themeColor = "",
-//    note = "",
-//    isPartOfFavorites = 0,
-//    memorisedToday = 0,
-//    memorisedCount = 0,
-//    memorisedTodayDate = null
-//),
-//Verse(
-//    verseTag = "Job 1:8",
-//    verse = "hjjhjhrfrjjdndnjnjnv n  sbkbskdc ssv",
-//    date = System.currentTimeMillis(),
-//    themeName = "Romance",
-//    bookPosition = 1,
-//    photoFilePath = "",
-//    themeColor = "",
-//    note = "",
-//    isPartOfFavorites = 1,
-//    memorisedToday = 0,
-//    memorisedCount = 0,
-//    memorisedTodayDate = null
-//),
-//Verse(
-//    verseTag = "Job 1:9",
-//    verse = "hjjhjhrfrjjdndnjnjnv n  sbkbskdc ssv",
-//    date = System.currentTimeMillis(),
-//    themeName = "Trust",
-//    bookPosition = 1,
-//    photoFilePath = "",
-//    themeColor = "",
-//    note = "",
-//    isPartOfFavorites = 0,
-//    memorisedToday = 0,
-//    memorisedCount = 0,
-//    memorisedTodayDate = null
-//),
-//Verse(
-//    verseTag = "Job 1:10",
-//    verse = "hjjhjhrfrjjdndnjnjnv n  sbkbskdc ssv",
-//    date = System.currentTimeMillis(),
-//    themeName = "Wisdom",
-//    bookPosition = 1,
-//    photoFilePath = "",
-//    themeColor = "",
-//    note = "",
-//    isPartOfFavorites = 1,
-//    memorisedToday = 0,
-//    memorisedCount = 0,
-//    memorisedTodayDate = null
-//),
-//)
+//val list: List<Verse> = emptyList()
+val list: List<Verse> = listOf(
+
+    Verse(
+        verseTag = "Matthew",
+        verse = "hjjhjhrfrjjdndnjnjnv n  ssv",
+        date = System.currentTimeMillis(),
+        themeName = "Love",
+        bookPosition = 1,
+        photoFilePath = "",
+        themeColor = "",
+        note = "",
+        isPartOfFavorites = 1,
+        memorisedToday = 0,
+        memorisedCount = 0,
+        memorisedTodayDate = null
+
+
+    ),
+
+    Verse(
+        verseTag = "Job 1:3",
+        verse = "hjjhjhrfrjjdndnjnjnv n  sbkbskdc ssv",
+        date = System.currentTimeMillis(),
+        themeName = "Trust",
+        bookPosition = 1,
+        photoFilePath = "",
+        themeColor = "",
+        note = "",
+        isPartOfFavorites = 0,
+        memorisedToday = 0,
+        memorisedCount = 0,
+        memorisedTodayDate = null
+
+    ),
+
+    Verse(
+    verseTag = "Job 1:6",
+    verse = "hjjhjhrfrjjdndnjnjnv n  sbkbskdc ssv",
+    date = System.currentTimeMillis(),
+    themeName = "Glory",
+    bookPosition = 1,
+    photoFilePath = "",
+    themeColor = "",
+    note = "",
+    isPartOfFavorites = 0,
+    memorisedToday = 0,
+    memorisedCount = 0,
+    memorisedTodayDate = null
+),
+Verse(
+    verseTag = "Job 1:8",
+    verse = "hjjhjhrfrjjdndnjnjnv n  sbkbskdc ssv",
+    date = System.currentTimeMillis(),
+    themeName = "Romance",
+    bookPosition = 1,
+    photoFilePath = "",
+    themeColor = "",
+    note = "",
+    isPartOfFavorites = 1,
+    memorisedToday = 0,
+    memorisedCount = 0,
+    memorisedTodayDate = null
+),
+Verse(
+    verseTag = "Job 1:9",
+    verse = "hjjhjhrfrjjdndnjnjnv n  sbkbskdc ssv",
+    date = System.currentTimeMillis(),
+    themeName = "Trust",
+    bookPosition = 1,
+    photoFilePath = "",
+    themeColor = "",
+    note = "",
+    isPartOfFavorites = 0,
+    memorisedToday = 0,
+    memorisedCount = 0,
+    memorisedTodayDate = null
+),
+Verse(
+    verseTag = "Job 1:10",
+    verse = "hjjhjhrfrjjdndnjnjnv n  sbkbskdc ssv",
+    date = System.currentTimeMillis(),
+    themeName = "Wisdom",
+    bookPosition = 1,
+    photoFilePath = "",
+    themeColor = "",
+    note = "",
+    isPartOfFavorites = 1,
+    memorisedToday = 0,
+    memorisedCount = 0,
+    memorisedTodayDate = null
+),
+)
 
 
 @ExperimentalFoundationApi
@@ -223,152 +228,77 @@ fun homeScreenContent(state: BottomNavigationSharedStates, onEvent: (BottomNavig
             content = {
 
 
-                item {
-
-
-                        Column(
-                            modifier = Modifier.padding(top = 10.dp)
-                        ) {
-
-
-                            Row(
-                                modifier = Modifier.align(Alignment.CenterHorizontally)
-                            ) {
-
-                                Icon(
-                                    painter = painterResource(id = R.drawable.outline_wb_sunny_24),
-                                    contentDescription = ""
-                                )
-                                Text(
-                                    text = "Good morning, Archie",
-                                    fontFamily = FontFamily.Serif,
-                                    fontSize = 20.sp,
-                                    modifier = Modifier
-                                        .padding(start = 10.dp, bottom = 10.dp)
-                                        .align(Alignment.CenterVertically)
-
-                                )
-
-
-                            } // Row ENDs
-
-
-                            Text(
-                                text = "When you were slaves of sin you were free" +
-                                        " from righteousness what did you gain from " +
-                                        "the things that you are now ashamed of ?" +
-                                        " the result of those things is death",
-                                fontFamily = FontFamily.Serif,
-                                fontWeight = FontWeight.Thin,
-                                fontSize = 20.sp,
-                                modifier = Modifier
-                                    .padding(start = 50.dp)
-                                    .align(Alignment.CenterHorizontally)
-                                    .width(280.dp)
-                            )
-
-
-
-                            Text(
-                                text = "Guess which verse? (Click)",
-                                fontFamily = FontFamily.Serif,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 20.sp,
-                                modifier = Modifier
-                                    .padding(start = 50.dp, top = 10.dp)
-                                    .align(Alignment.CenterHorizontally)
-                                    .width(280.dp)
-                            )
-
-
-                        }
-
-
-                }
-
-
-//            item {
-//
-//                themeSelection()
-//            }
-
-
-                item {
-
-                    Row(
-                        modifier = Modifier.padding(top= 30.dp)
-                    ){
-                        Text(
-                            text = "Let's",
-
-                            fontSize = 20.sp,
-                            modifier = Modifier.padding(
-                                top = 30.dp, end = 10.dp
-                            )
-                        )
-
-                        Text(
-                            text = "Go",
-
-                            fontSize = 50.sp,
-                            modifier = Modifier.padding(
-                                bottom = 20.dp
-                            )
-                        )
-
-                    }
-                }
-
-
 
 
                 item {
 
 
                     Card(
-                        modifier = Modifier.width(200.dp),
+                        modifier = Modifier
+                            .width(362.dp)
+                            .height(200.dp)
+
+                            ,
+
+                        colors = CardDefaults.cardColors(
+                            MaterialTheme.colorScheme.background,
+                        ),
+
+                        elevation = CardDefaults.cardElevation(5.dp)
                     ) {
 
-                        Column(
-                            modifier = Modifier.fillMaxWidth()
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
                         ) {
 
-                            Text(
-                                text = "Memorised",
-                                modifier = Modifier.align(Alignment.CenterHorizontally)
-                            )
 
-                            Text(
-                                text = buildAnnotatedString {
+                            Column{
 
-                                    withStyle(SpanStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold)){
-                                        append("5")
+                                Text(
+                                    text = "Rooky",
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    modifier = Modifier
+                                        .align(Alignment.CenterHorizontally)
+                                        .padding(top = 20.dp)
+                                    //.padding(end = 40.dp)
+                                )
 
-                                    }
+                                CustomComponent(
+                                    canvasSize = 150.dp,
+                                    backgroundIndicatorStrokeWidth = 30f,
+                                    foregroundIndicatorStrokeWidth = 60f,
+                                    smallText = "Memorised",
+                                    bigTextSuffix = "/100",
+                                    indicatorValue = 50,
+                                    maxIndicatorValue = 100,
 
-                                    append(" Verses")
+                                    )
 
-                                },
-                                modifier = Modifier.align(Alignment.CenterHorizontally),
-                            )
 
-                            Text(
-                                text = buildAnnotatedString {
+                            }
 
-                                    append("Crown: ")
-                                    withStyle(SpanStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold)){
 
-                                        append("Rooky")
-                                    }
-                                },
-                                modifier = Modifier
-                                    .align(Alignment.CenterHorizontally)
-                                //.padding(end = 40.dp)
-                            )
+                           DynamicSentence(mainText = "Died", mainWord =  "for Me", sentenceFormat = 4)
+
+//                            Column(
+//                                modifier = Modifier.fillMaxWidth()
+//                            ) {
+//
+//
+//
+//
+//                            }
+
                         }
-
                     }
                 }
+
+
+
+
+
 
 
                 items(
@@ -529,6 +459,27 @@ fun verseHolder(onEvent:(BottomNavigationScreensSharedEvents) -> Unit, state: Bo
 
                         onEvent(BottomNavigationScreensSharedEvents.IsSwipeToDeleteEnabled(true))
 
+                    },
+
+                    onDoubleTap = {
+
+                        if ((verse?.themeName != "None") || !verse.themeName.isNullOrBlank())
+                            onEvent(
+                                BottomNavigationScreensSharedEvents.UpdateUiThemeTo(
+                                    verse?.themeName ?: ""
+                                )
+                            )
+                    },
+
+                    onTap = {
+
+                        if ((verse?.themeName != "None") || !verse.themeName.isNullOrBlank())
+                            onEvent(
+                                BottomNavigationScreensSharedEvents.UpdateUiThemeTo(
+                                    verse?.themeName ?: ""
+                                )
+                            )
+
                     }
                 )
 
@@ -540,10 +491,10 @@ fun verseHolder(onEvent:(BottomNavigationScreensSharedEvents) -> Unit, state: Bo
             defaultElevation = 0.dp
         ),
 
-        onClick = {
+        colors = CardDefaults.cardColors(
+//            MaterialTheme.colorScheme.background.copy(alpha = 0.9f),
+        )
 
-            onEvent(BottomNavigationScreensSharedEvents.UpdateUiThemeTo(verse?.themeName ?: ""))
-        }
 
     ) {
 
@@ -756,7 +707,7 @@ fun GreetingPreview(
 ) {
 
 
-    SwordTheme(verseTheme = "Love") {
+    SwordTheme(verseTheme = "Trust") {
 
          homeScreenContent(
              state =  BottomNavigationSharedStates(),

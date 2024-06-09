@@ -208,16 +208,15 @@ enum class ColorStrokes(val color: List<Color>) {
     yellow(
 
         listOf(
-            "#e0f2f1".color,
-            "#d3eefe".color,
-            "#c6ebef".color,
-            "#b9e4e8".color,
-            "#aed7e1".color,
-            "#a1cabe".color,
-            "#94bccb".color,
-            "#87aeb4".color,
-            "#7aa09d".color,
-            "#6d9286".color
+            "#fffde7".color,
+            "#fff9c4".color,
+            "#fff59d".color,
+            "#fff176".color,
+            "#ffee58".color,
+            "#ffeb3b".color,
+            "#fdd835".color,
+            "#fbc02d".color,
+
         )
 
     ),
