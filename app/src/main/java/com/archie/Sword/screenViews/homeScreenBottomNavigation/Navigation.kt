@@ -7,16 +7,17 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.LazyPagingItems
 import com.archie.Sword.events.BottomNavigationScreensSharedEvents
+import com.archie.Sword.repositories.database.Verse
 import com.archie.Sword.screenViews.favouritesScreen.favoritesScreen
 import com.archie.Sword.screenViews.homeScreen.homeScreenContent
 import com.archie.Sword.states.BottomNavigationSharedStates
@@ -26,19 +27,11 @@ import com.archie.Sword.viewModels.BottomNavigationSharedViewModel
 @ExperimentalFoundationApi
 @ExperimentalMaterial3Api
 @Composable
-fun Navigation(navController: NavHostController, paddingValues: PaddingValues){
-
-    val viewModel: BottomNavigationSharedViewModel = hiltViewModel()
-    val state = viewModel.state.collectAsStateWithLifecycle()
-    val pagingItems = viewModel.allVerses.flow.collectAsLazyPagingItems()
-
-    eventHandler(state = state.value, viewModel = viewModel)
+fun Navigation(navController: NavHostController, paddingValues: PaddingValues, state: BottomNavigationSharedStates, onEvent:(BottomNavigationScreensSharedEvents) -> Unit, pagingItems: LazyPagingItems<Verse>){
 
 
-    val contentPadding = remember {
 
-        paddingValues
-    }
+    val contentPadding = rememberUpdatedState(newValue = paddingValues)
 
 
 
@@ -54,7 +47,7 @@ fun Navigation(navController: NavHostController, paddingValues: PaddingValues){
 
 
 
-            homeScreenContent (state = state.value,viewModel::onEvent,pagingItems,contentPadding)
+            homeScreenContent (state = state,onEvent,pagingItems,contentPadding)
 
 
         }
@@ -70,7 +63,7 @@ fun Navigation(navController: NavHostController, paddingValues: PaddingValues){
 
 //            eventHandler(state = state.value, viewModel = viewModel)
 
-            ThemeScreen(onEvent = viewModel::onEvent , state = state.value,contentPadding, pagingItems)
+            ThemeScreen(onEvent = onEvent , state = state,contentPadding, pagingItems)
 
         }
 
@@ -84,7 +77,7 @@ fun Navigation(navController: NavHostController, paddingValues: PaddingValues){
 //
 //
 //            eventHandler(state = state.value, viewModel = viewModel)
-            favoritesScreen(onEvent = viewModel::onEvent , state = state.value,contentPadding,pagingItems)
+            favoritesScreen(onEvent = onEvent , state = state,contentPadding,pagingItems)
         }
 
 
@@ -109,26 +102,18 @@ inline fun eventHandler(state: BottomNavigationSharedStates,viewModel: BottomNav
 
         when(event){
             is BottomNavigationScreensSharedEvents.ChangeSortTypeTo -> viewModel.changeSortTypeTo(event.sortType)
-            BottomNavigationScreensSharedEvents.CollapseSearchBar -> viewModel.collapseSearchBar()
-            BottomNavigationScreensSharedEvents.ExpandSearchBar -> viewModel.expandSearchBar()
-            BottomNavigationScreensSharedEvents.HideAddingVerseFloatingButton -> viewModel.hideAddingVerseFloatingButton()
-            BottomNavigationScreensSharedEvents.HideMenuSideBar -> viewModel.hideMenuSideBar()
-            BottomNavigationScreensSharedEvents.HidePopUpMenu -> viewModel.hidePopUpMenu()
-            BottomNavigationScreensSharedEvents.ShowAddingVerseFloatingButton -> viewModel.showAddingVerseFloatingButton()
-            BottomNavigationScreensSharedEvents.ShowMenuSideBar -> viewModel.showMenuSideBar()
-            BottomNavigationScreensSharedEvents.ShowPopUpMenu -> viewModel.showPopUpMenu()
-            is BottomNavigationScreensSharedEvents.TickOrUntickCheckBoxToMemoriseVerse -> viewModel.tickOrUntickMemoriseVerseCheckBox(event.verseTag, event.isCheckBoxTicked)
+            is BottomNavigationScreensSharedEvents.CollapseSearchBar -> viewModel.collapseSearchBar()
+            is BottomNavigationScreensSharedEvents.ExpandSearchBar -> viewModel.expandSearchBar()
+            is BottomNavigationScreensSharedEvents.HideAddingVerseFloatingButton -> viewModel.hideAddingVerseFloatingButton()
+            is BottomNavigationScreensSharedEvents.HideMenuSideBar -> viewModel.hideMenuSideBar()
+            is BottomNavigationScreensSharedEvents.HidePopUpMenu -> viewModel.hidePopUpMenu()
+            is BottomNavigationScreensSharedEvents.ShowAddingVerseFloatingButton -> viewModel.showAddingVerseFloatingButton()
+            is BottomNavigationScreensSharedEvents.ShowMenuSideBar -> viewModel.showMenuSideBar()
+            is BottomNavigationScreensSharedEvents.ShowPopUpMenu -> viewModel.showPopUpMenu()
             is BottomNavigationScreensSharedEvents.UpdateUiThemeTo -> viewModel.updateUiThemeTo(event.theme)
-            is BottomNavigationScreensSharedEvents.getContentPading -> {
-
-                Log.d("EventLaunched", "${event.topDp}  ${event.bottomDp}")
-
-                viewModel.getContentPadding(event.topDp, event.bottomDp)
-
-            }
-
+            is BottomNavigationScreensSharedEvents.SearchFor -> viewModel.searchFor(event.searchQuery)
             is BottomNavigationScreensSharedEvents.SetVerse -> viewModel.setVerse(event.verse)
-            is BottomNavigationScreensSharedEvents.UpdateVerse -> viewModel.updateVerse(event.verse)
+            is BottomNavigationScreensSharedEvents.UpdateVerse -> viewModel.upDateVerse(event.verse)
             is BottomNavigationScreensSharedEvents.DeleteVerse -> viewModel.deleteVerse(event.verse)
             is BottomNavigationScreensSharedEvents.IsSwipeToDeleteEnabled -> viewModel.isSwipeToDeleteEnabled(event.isSwipeToDeleteEnabled)
         }

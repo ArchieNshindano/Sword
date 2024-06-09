@@ -1,39 +1,30 @@
 package com.archie.Sword.viewModels
 
-import android.os.Build
 import android.util.Log
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.unit.Dp
-import androidx.lifecycle.SavedStateHandle
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
-import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.collectAsLazyPagingItems
 import com.archie.Sword.events.BottomNavigationScreensSharedEvents
 import com.archie.Sword.enums.SortType
 import com.archie.Sword.repositories.database.DataBaseRepositoryImpl
 import com.archie.Sword.repositories.database.Verse
 import com.archie.Sword.states.BottomNavigationSharedStates
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.scopes.ViewModelScoped
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapLatest
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.flow.singleOrNull
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.time.chrono.ChronoPeriod
-import java.time.temporal.ChronoField
-import java.time.temporal.ChronoUnit
-import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
@@ -45,24 +36,21 @@ class BottomNavigationSharedViewModel @Inject constructor(
 ): ViewModel() {
 
 
-
-
     private val _state = MutableStateFlow(BottomNavigationSharedStates())
-
 
     val state = _state.asStateFlow()
 
 
     val allVerses = Pager(
 
-     config = PagingConfig(
+        config = PagingConfig(
 
-         pageSize = 60,
-         enablePlaceholders = true,
-         maxSize = 200
+            pageSize = 60,
+            enablePlaceholders = true,
+            maxSize = 200
 
-     ) // PAGING CONFIG ENDS
- ) {
+        ) // PAGING CONFIG ENDS
+    ) {
 
 //      when(_state.value.sortType){
 //
@@ -72,344 +60,157 @@ class BottomNavigationSharedViewModel @Inject constructor(
 //      }
 
 
-
-             daoFunctions.getVersesByDate()
-
+        daoFunctions.getVersesByDate()
 
 
+    }// PAGER ENDS
 
 
+    fun onEvent(event: BottomNavigationScreensSharedEvents) {
 
-
- }// PAGER ENDS
-
-
-
-
-    private val eventsChannel = Channel<BottomNavigationScreensSharedEvents>()
-    val eventFlow = eventsChannel.receiveAsFlow()
-
-
-
-    fun onEvent(event: BottomNavigationScreensSharedEvents){
-
-          _state.update { it.copy( currentEvent = event) }
+        _state.update { it.copy(currentEvent = event) }
 
 
     }
 
 
-    private fun triggerShowingPopUpMenuEvent(){
 
-         viewModelScope.launch {
+    fun searchFor(searchQuery: String) {
 
-             eventsChannel.send(BottomNavigationScreensSharedEvents.ShowPopUpMenu)
-
-         }
-
-    }
-
-
-
-
-
-    private fun triggerHidingPopUpMenuEvent(){
 
         viewModelScope.launch {
 
-            eventsChannel.send(BottomNavigationScreensSharedEvents.HidePopUpMenu)
 
-        }
-    }
+            try {
 
+               val verses1 = daoFunctions.searchDatabaseUsingVerseTag("*$searchQuery*")
+                val verses2 = daoFunctions.searchDatabaseUsingVerse("*$searchQuery*")
+                val verses3 = daoFunctions.searchDatabaseUsingThemeName("*$searchQuery*")
+                val verses4 = daoFunctions.searchDatabaseUsingNotes("*$searchQuery*")
 
+                combine(verses1, verses2, verses3, verses4) { v1, v2, v3, v4 ->
 
+                    v1 + v2 + v3 + v4
 
+                }.collectLatest { verses ->
 
+                    _state.update { it.copy(verses = verses) }
 
-    private fun triggerShowingMenuSideBarEvent(){
-
-        viewModelScope.launch {
-
-            eventsChannel.send(BottomNavigationScreensSharedEvents.ShowMenuSideBar)
-
-        }
-
-    }
+                }  // COLLECT LATEST ENDS
 
 
+            }
+
+            catch (e: Exception) {
+
+              TODO()
+                }  // TRY CATCH ENDS
+
+            }  // VIEW MODEL SCOPE ENDS
+
+        } // SEARCH FOR ENDS
 
 
-
-    private fun triggerHidingMenuSideBarEvent(){
-
-        viewModelScope.launch {
-
-            eventsChannel.send(BottomNavigationScreensSharedEvents.HideMenuSideBar)
-
-        }
-
-    }
+        fun showPopUpMenu() {
 
 
+            _state.update { it.copy(isPopupMenuShowing = true) }
 
-
-
-
-    private fun triggerExpandingSearchBarEvent(){
-
-        viewModelScope.launch {
-
-            eventsChannel.send(BottomNavigationScreensSharedEvents.ExpandSearchBar)
 
         }
 
-    }
+        fun hidePopUpMenu() {
 
 
+            _state.update { it.copy(isPopupMenuShowing = false) }
 
-
-
-    private fun triggerCollapsingSearchBarEvent(){
-
-        viewModelScope.launch {
-
-            eventsChannel.send(BottomNavigationScreensSharedEvents.CollapseSearchBar)
-
-        }
-
-    }
-
-
-
-
-
-
-
-    private fun triggerShowingAddVerseFloatingButton(){
-
-        viewModelScope.launch {
-
-            eventsChannel.send(BottomNavigationScreensSharedEvents.ShowAddingVerseFloatingButton)
-
-        }
-
-    }
-
-
-
-
-
-    private fun triggerHidingAddVerseFloatingButton(){
-
-        viewModelScope.launch {
-
-            eventsChannel.send(BottomNavigationScreensSharedEvents.ShowAddingVerseFloatingButton)
-
-        }
-
-    }
-
-
-
-
-
-
-    private fun triggerChangingSortTypeEvent(sortType: SortType){
-
-        viewModelScope.launch {
-
-            eventsChannel.send(BottomNavigationScreensSharedEvents.ChangeSortTypeTo(sortType))
 
         }
 
 
-    }
+        fun showMenuSideBar() {
 
+            _state.update { it.copy(isMenuSideBarShowing = false) }
 
-
-
-//    fun triggerTickOrUntickCheckBoxToMemoriseVerseEvent(isCheckBoxTicked: Boolean)
-//    = viewModelScope.launch {
-//
-//            Log.d("CheckBoxTrigger", isCheckBoxTicked.toString())
-//
-//            eventsChannel.send(BottomNavigationScreensSharedEvents.TickOrUntickCheckBoxToMemoriseVerse(isCheckBoxTicked))
-//            Log.d("CheckBoxChannel", "hey")
-//        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    suspend fun  getContentPadding(topDp: Dp, bottomDp: Dp){
-
-
-        Log.d("PaddingViewModel", "$topDp   $bottomDp")
-
-
-        _state.update {
-            it.copy(
-                contentPaddingTopDp = topDp,
-                contentPaddingBottomDp = bottomDp
-            )
         }
-    }
 
 
+        fun hideMenuSideBar() {
 
-     suspend fun showPopUpMenu(){
+            _state.update { it.copy(isMenuSideBarShowing = false) }
 
+        }
 
-        _state.update { it.copy(isPopupMenuShowing = true) }
 
+        fun expandSearchBar() {
 
-    }
+            _state.update { it.copy(isSearchBarActive = true) }
 
-    suspend fun hidePopUpMenu(){
+        }
 
 
-        _state.update {    it.copy(isPopupMenuShowing = false)    }
+        fun collapseSearchBar() {
 
+            _state.update { it.copy(isSearchBarActive = false) }
 
-    }
+        }
 
 
-    suspend fun showMenuSideBar(){
+        fun showAddingVerseFloatingButton() {
 
-        _state.update {     it.copy(isMenuSideBarShowing = false)    }
+            _state.update { it.copy(isAddingVerseFloatingButtonShowing = true) }
 
-    }
+        }
 
+        fun hideAddingVerseFloatingButton() {
 
-    suspend fun hideMenuSideBar(){
+            _state.update { it.copy(isAddingVerseFloatingButtonShowing = false) }
 
-        _state.update {     it.copy(isMenuSideBarShowing = false)     }
+        }
 
-    }
 
+        fun changeSortTypeTo(sortType: SortType) {
 
-    suspend fun  expandSearchBar(){
 
-        _state.update {      it.copy(isSearchBarExpanded = true)     }
+            _state.update { it.copy(sortType = sortType) }
 
-    }
+        }
 
 
-    suspend fun collapseSearchBar(){
+        fun updateUiThemeTo(theme: String) {
 
-        _state.update {      it.copy(isSearchBarExpanded = false)     }
 
-    }
+            _state.update { it.copy(lastOpenedTheme = theme) }
 
+        }
 
 
-    suspend fun showAddingVerseFloatingButton(){
+        fun setVerse(verse: Verse) = _state.update { it.copy(verse = verse) }
 
-        _state.update {      it.copy(isAddingVerseFloatingButtonShowing = true)     }
 
-    }
+        fun EmptyVerseListVerse() = _state.update { it.copy(verses = emptyList()) }
 
-    suspend fun  hideAddingVerseFloatingButton(){
+        fun upDateVerse(verse: Verse) {
 
-        _state.update {      it.copy(isAddingVerseFloatingButtonShowing = false)     }
+            viewModelScope.launch {
 
-    }
+                daoFunctions.addVerse(verse)
+            }
 
+        }
 
 
-    suspend fun  changeSortTypeTo(sortType: SortType){
-
-
-        _state.update {      it.copy(sortType =  sortType)     }
-
-    }
-
-
-    suspend fun updateUiThemeTo(theme: String){
-
-
-        _state.update {      it.copy(lastOpenedTheme = theme)     }
-
-    }
-
-
-
-     fun setVerse(verse: Verse){
-
-         _state.update { it.copy( verse = verse) }
-     }
-
-
-
-
-
-      fun updateVerse(verse: Verse){
-
-
-         viewModelScope.launch {
-
-                 daoFunctions.addVerse(verse)
-         }
-     }
-
-     fun tickOrUntickMemoriseVerseCheckBox(verseTag: String, isCheckBoxTicked: Boolean){
-
-         _state.value.isCheckBoxTicked[verseTag] = isCheckBoxTicked
-
-
-    }
-
-
-
-
-
-    fun deleteVerse(verse: Verse){
+        fun deleteVerse(verse: Verse) {
 
             viewModelScope.launch {
 
                 daoFunctions.deleteVerse(verse)
             }
 
-    }
+        }
 
-    fun isSwipeToDeleteEnabled(isSwipeToDeleteEnabled: Boolean) = _state.update { it.copy(isSwipeToDeleteEnabled = isSwipeToDeleteEnabled) }
-
-
-
-
-
-
-
-
-
-
-
-
+        fun isSwipeToDeleteEnabled(isSwipeToDeleteEnabled: Boolean) =
+            _state.update { it.copy(isSwipeToDeleteEnabled = isSwipeToDeleteEnabled) }
 
 
 

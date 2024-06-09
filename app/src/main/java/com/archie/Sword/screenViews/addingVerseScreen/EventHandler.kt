@@ -44,12 +44,12 @@ fun eventHandler(state: AddingVerseScreenStates, viewModel: AddingVerseScreenVie
             is AddingVerseScreenEvents.SetChapter -> viewModel.setChapter(event.chapter)
             is AddingVerseScreenEvents.SetNote -> viewModel.setNote(event.note)
             is AddingVerseScreenEvents.SetThemeColor -> viewModel.setThemeColour(event.color)
-            is AddingVerseScreenEvents.SetThemeName -> viewModel.setThemeName(event.theme)
+            is AddingVerseScreenEvents.SetThemeName -> viewModel.setThemeName(event.theme, event.isThemeSelected)
             is AddingVerseScreenEvents.SetVerse -> viewModel.setVerse(event.verse)
             is AddingVerseScreenEvents.SetVerseNumber -> viewModel.setVerseNumber(event.verseNumber)
             AddingVerseScreenEvents.ShowChapterSelectionDialog -> viewModel.showChapterSelectionDialog()
             AddingVerseScreenEvents.ShowVerseSelectionDialog -> viewModel.showVerseSelectionDialog()
-
+            is AddingVerseScreenEvents.SetBookPosition -> viewModel.setBookPosition(event.position)
         }
 
 

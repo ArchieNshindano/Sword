@@ -25,7 +25,6 @@ import androidx.compose.ui.window.Dialog
 import com.archie.Sword.enums.Books
 import com.archie.Sword.events.AddingVerseScreenEvents
 import com.archie.Sword.states.AddingVerseScreenStates
-import com.archie.Sword.viewModels.AddingVerseScreenViewModel
 
 
 @Composable
@@ -86,6 +85,7 @@ fun bookSelectionDialog(onEvent:(AddingVerseScreenEvents) -> Unit){
                                         onClick = {
 
                                             onEvent( AddingVerseScreenEvents.SetBookName(book.bookName) )
+                                            onEvent( AddingVerseScreenEvents.SetBookPosition(book.bookPosition) )
                                             onEvent( AddingVerseScreenEvents.HideBookSelectionDialog )
                                             onEvent( AddingVerseScreenEvents.ShowChapterSelectionDialog )
 
@@ -269,10 +269,10 @@ fun verseSelectionDialog(onEvent:(AddingVerseScreenEvents) -> Unit, state: Addin
 
                             item {
 
-                                val verse = index+1
+                                val verseNumber = index+1
 
                                 Text(
-                                    text = "${state.bookName} ${state.chapter}:$verse",
+                                    text = "${state.bookName} ${state.chapter}:$verseNumber",
                                     fontSize = 20.sp,
                                     modifier = Modifier
                                         .fillMaxWidth()
@@ -280,7 +280,7 @@ fun verseSelectionDialog(onEvent:(AddingVerseScreenEvents) -> Unit, state: Addin
 
                                             onClick = {
 
-                                                onEvent( AddingVerseScreenEvents.SetVerseNumber( verse.toString() ) )
+                                                onEvent( AddingVerseScreenEvents.SetVerseNumber( verseNumber.toString() ) )
                                                 onEvent( AddingVerseScreenEvents.HideVerseSelectionDialog )
 
 

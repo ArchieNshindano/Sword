@@ -1,5 +1,6 @@
 package com.example.Sword
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -33,28 +34,22 @@ class AddingVerseActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
 
-
+        val intentObject = intent
+        val lastOpenedTheme = intentObject.getStringExtra("lastOpenedTheme")
 
 
         setContent {
 
-
-
-//            SwordTheme {
-                // A surface container using the 'background' colorLevelValues from the theme
-//                Surface(
-//                    modifier = Modifier.fillMaxSize(),
-//                    color = MaterialTheme.colorScheme.background
-//                ) {
-                     val state = viewModel.state.collectAsStateWithLifecycle()
+            val state = viewModel.state.collectAsStateWithLifecycle()
 
 
 
-                  addingVerseScreen(onEvent = viewModel::onEvent, state = state.value)
+                  SwordTheme(verseTheme = if(state.value.isAThemeSelected) state.value.themeName else lastOpenedTheme!!) {
 
+                      addingVerseScreen(onEvent = viewModel::onEvent, state = state.value)
 
-//                }
-//            }
+                }
+
         }
     }
 }
@@ -70,7 +65,5 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview2() {
-    SwordTheme {
-        Greeting("Android")
-    }
+
 }

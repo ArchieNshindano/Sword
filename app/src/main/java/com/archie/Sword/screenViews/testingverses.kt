@@ -87,7 +87,7 @@ fun listOfVerses(){
 @Composable
 fun GreetingPreview() {
 
-    SwordTheme {
+    SwordTheme(verseTheme = "Trust") {
         listOfVerses()
     }
 }

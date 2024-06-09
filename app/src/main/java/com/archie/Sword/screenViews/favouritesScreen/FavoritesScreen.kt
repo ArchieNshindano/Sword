@@ -19,9 +19,11 @@ import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,13 +55,8 @@ data class FavoritesScreenScreenTabRow(
 @ExperimentalFoundationApi
 @ExperimentalMaterial3Api
 @Composable
-fun favoritesScreen(onEvent:(BottomNavigationScreensSharedEvents) -> Unit, state: BottomNavigationSharedStates, paddingValues: PaddingValues, pagingItems: LazyPagingItems<Verse>){
+fun favoritesScreen(onEvent:(BottomNavigationScreensSharedEvents) -> Unit, state: BottomNavigationSharedStates, contentPadding: State<PaddingValues>, pagingItems: LazyPagingItems<Verse>){
 
-
-    val contentPadding = remember {
-
-        paddingValues
-    }
 
 
 
@@ -83,10 +80,7 @@ fun favoritesScreen(onEvent:(BottomNavigationScreensSharedEvents) -> Unit, state
     }
 
 
-    val filteredItems = pagingItems.itemSnapshotList.filter {verse ->
 
-         verse?.isPartOfFavorites == 1
-    }
 
 
 
@@ -126,7 +120,7 @@ fun favoritesScreen(onEvent:(BottomNavigationScreensSharedEvents) -> Unit, state
 
     Column(
 
-        modifier = Modifier.padding(contentPadding)
+        modifier = Modifier.padding(contentPadding.value)
     ) {
 
 
@@ -196,93 +190,6 @@ fun favoritesScreen(onEvent:(BottomNavigationScreensSharedEvents) -> Unit, state
 }
 
 
-@Composable
-fun favoritesTabItem(state: BottomNavigationSharedStates, onEvent: (BottomNavigationScreensSharedEvents) -> Unit, pagingItems: LazyPagingItems<Verse>, paddingValues: PaddingValues ){
-
-
-    val contentPadding  = remember {
-        paddingValues
-    }
-
-    LazyColumn(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(15.dp),
-
-        modifier = Modifier
-               .fillMaxSize(),
-
-//            .overscroll(overscrollEffect)
-//            .scrollable(
-//                orientation = Orientation.Vertical,
-//                reverseDirection = true,
-//                state = listState,
-//                overscrollEffect = overscrollEffect
-//            ),
-        contentPadding = contentPadding,
-
-        content = {
-
-
-            items(
-
-                    items =  pagingItems.itemSnapshotList,
-                    key = { verse ->
-
-                        verse?.id  ?: 0
-                    }
-
-
-            ) { verse->
-
-
-
-                verseHolder(onEvent = onEvent, state = state , verse = verse)
-
-
-
-            } // ITEMS ENDS
-
-
-            items(
-
-                list
-
-            ) { verse->
-
-
-
-                verseHolder(onEvent = onEvent, state = state , verse = verse)
-
-
-
-            } // ITEMS ENDS
-
-        } // CONTENT ENDS
-
-    ) // LAZY COLUMN ENDS
-
-
-
-
-}
-
-
-@Composable
-fun notesTabItem(){
-
-
-
-}
-
-
-@Composable
-fun practiceTabItem(){
-
-
-
-
-
-}
 
 
 @ExperimentalFoundationApi
@@ -291,7 +198,13 @@ fun practiceTabItem(){
 @Preview(showBackground = true, showSystemUi = true)
 fun previewThis(){
 
-    favoritesScreen(onEvent = {}, state = BottomNavigationSharedStates(), paddingValues = PaddingValues() , pagingItems = flowOf(
+    favoritesScreen(
+        onEvent = {},
+        state = BottomNavigationSharedStates(),
+        contentPadding = rememberUpdatedState(
+        newValue = PaddingValues()
+    ),
+        pagingItems = flowOf(
         PagingData.from(emptyList<Verse>()))
         .collectAsLazyPagingItems())
 }

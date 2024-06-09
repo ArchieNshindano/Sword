@@ -174,19 +174,19 @@ enum class ColorStrokes(val color: List<Color>) {
     ),
 
 
-    orange(
-    listOf(
-        "#fff3e0".color,
-        "#ffe0b2".color,
-        "#ffcc80".color,
-        "#ffb74d".color,
-        "#ffa726".color,
-        "#ff9800".color,
-        "#fb8c00".color,
-        "#f57c00".color,
-        "#ef6c00".color,
-        "#e65100".color
-    )
+    ember(
+        listOf(
+            "#ff6f00".color,
+            "#ff8f00".color,
+            "#ffa000".color,
+            "#ffb300".color,
+            "#ffc107".color,
+            "#ffca28".color,
+            "#ffd54f".color,
+            "#ffe082".color,
+            "#ffecb3".color,
+            "#fff8e1".color
+        )
 
     ),
 
@@ -203,6 +203,24 @@ enum class ColorStrokes(val color: List<Color>) {
 //        "#ffe0b2".color,
 //        "#fff3e0".color
 //    )
+
+
+    yellow(
+
+        listOf(
+            "#e0f2f1".color,
+            "#d3eefe".color,
+            "#c6ebef".color,
+            "#b9e4e8".color,
+            "#aed7e1".color,
+            "#a1cabe".color,
+            "#94bccb".color,
+            "#87aeb4".color,
+            "#7aa09d".color,
+            "#6d9286".color
+        )
+
+    ),
 
 }
 

@@ -14,6 +14,11 @@ interface DataBaseRepository {
     fun getVersesByTheme(): PagingSource<Int,Verse>
 
     fun getVersesByDate(): PagingSource<Int,Verse>
+    fun searchDatabaseUsingVerseTag(searchQuery: String):  Flow<List<Verse>>
+    fun searchDatabaseUsingVerse(searchQuery: String):  Flow<List<Verse>>
+    fun searchDatabaseUsingThemeName(searchQuery: String): Flow<List<Verse>>
+    fun searchDatabaseUsingNotes(searchQuery: String): Flow<List<Verse>>
+
 
     suspend fun deleteVerse(verse: Verse)
     suspend fun updateVerse(theme: Verse)

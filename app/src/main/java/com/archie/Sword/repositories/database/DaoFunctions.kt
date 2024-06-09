@@ -3,11 +3,11 @@ package com.archie.Sword.repositories.database
 import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Delete
-import androidx.room.Entity
 import androidx.room.Query
 import androidx.room.Update
 import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
+
 
 @Dao
 interface DaoFunctions {
@@ -25,6 +25,40 @@ interface DaoFunctions {
 
     @Query("SELECT * FROM MyVersesTable ORDER BY date ASC")
     fun getVersesByDate(): PagingSource<Int,Verse>
+
+
+
+    @Query("""
+    SELECT * FROM MyVersesTable
+    JOIN SearchQueryTable ON MyVersesTable.id == SearchQueryTable.rowid
+    WHERE SearchQueryTable.verseTag MATCH :searchQuery 
+    """)
+    fun searchDatabaseUsingVerseTag(searchQuery: String): Flow< List<Verse> >
+
+    @Query("""
+    SELECT * FROM MyVersesTable
+    JOIN SearchQueryTable ON MyVersesTable.id == SearchQueryTable.rowid
+    WHERE SearchQueryTable.verse MATCH :searchQuery 
+    """)
+    fun searchDatabaseUsingVerse(searchQuery: String): Flow < List<Verse> >
+
+
+    @Query("""
+    SELECT * FROM MyVersesTable
+    JOIN SearchQueryTable ON MyVersesTable.id == SearchQueryTable.rowid
+    WHERE SearchQueryTable.themeName MATCH :searchQuery 
+    """)
+    fun searchDatabaseUsingThemeName(searchQuery: String): Flow < List<Verse> >
+
+    @Query("""
+    SELECT * FROM MyVersesTable
+    JOIN SearchQueryTable ON MyVersesTable.id == SearchQueryTable.rowid
+    WHERE SearchQueryTable.note MATCH :searchQuery 
+    """)
+    fun searchDatabaseUsingNotes(searchQuery: String): Flow < List<Verse> >
+
+
+
 
     @Delete
     suspend fun deleteVerse(verse: Verse)

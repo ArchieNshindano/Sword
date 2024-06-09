@@ -1,6 +1,5 @@
 package com.archie.Sword.repositories.database
 
-import androidx.paging.PagingSource
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -13,6 +12,14 @@ class DataBaseRepositoryImpl @Inject constructor( val daos: DaoFunctions): DataB
     override fun getVersesByTheme() = daos.getVersesByTheme()
 
     override fun getVersesByDate() = daos.getVersesByDate()
+
+    override fun searchDatabaseUsingVerseTag(searchQuery: String):Flow < List<Verse> > = daos.searchDatabaseUsingVerseTag(searchQuery)
+
+    override fun searchDatabaseUsingVerse(searchQuery: String): Flow < List<Verse> > = daos.searchDatabaseUsingVerse(searchQuery)
+    override fun searchDatabaseUsingThemeName(searchQuery: String): Flow < List<Verse> > = daos.searchDatabaseUsingThemeName(searchQuery)
+    override fun searchDatabaseUsingNotes(searchQuery: String): Flow < List<Verse> > = daos.searchDatabaseUsingNotes(searchQuery)
+
+
 
     override suspend fun deleteVerse(verse: Verse) = daos.deleteVerse(verse)
     override suspend fun updateVerse(verse: Verse) = daos.updateVerse(verse)

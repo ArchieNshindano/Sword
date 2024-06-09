@@ -24,7 +24,7 @@ data class AddingVerseScreenStates(
 
     val bookPosition: Byte = 0,
 
-    val doesThemeExist: Boolean = true,
+    val isAThemeSelected: Boolean = false,
 
     val showingPopupMenu: Boolean = false,
     val hidingPopupMenu: Boolean = true,

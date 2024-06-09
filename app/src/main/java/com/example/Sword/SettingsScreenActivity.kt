@@ -16,7 +16,7 @@ class SettingsScreenActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            SwordTheme {
+            SwordTheme("Trust") {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -33,7 +33,5 @@ class SettingsScreenActivity : ComponentActivity() {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview4() {
-    SwordTheme {
 
-    }
 }

@@ -19,8 +19,10 @@ package com.archie.Sword.screenViews.addingVerseScreen
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.FlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -57,12 +59,15 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -186,6 +191,10 @@ fun topScreen(onEvent:(AddingVerseScreenEvents) -> Unit, state: AddingVerseScree
         VerseThemes.values().toList()
     }
 
+    val isThemeSelected = remember {
+
+        mutableStateOf(false)
+    }
 
 
 
@@ -225,11 +234,6 @@ fun topScreen(onEvent:(AddingVerseScreenEvents) -> Unit, state: AddingVerseScree
                 elevation = CardDefaults.cardElevation(
 
                     hoveredElevation = 0.dp
-                ),
-
-                colors = CardDefaults.cardColors(
-
-                    containerColor = Colors.milkyWhite.color
                 )
 
             ) {
@@ -339,53 +343,88 @@ fun topScreen(onEvent:(AddingVerseScreenEvents) -> Unit, state: AddingVerseScree
 
                     items(themes) { theme ->
 
-                        Card(
-                            shape = RoundedCornerShape(20.dp),
+                        Column(
                             modifier = Modifier
-                                .size(width = 105.dp, height = 105.dp),
-                            elevation = CardDefaults.cardElevation(
+                                .padding(bottom = 10.dp)
+                                .clickable {
 
+                                    isThemeSelected.value = !isThemeSelected.value
 
-                                defaultElevation = 1.dp
-                            ),
-                            colors = CardDefaults.cardColors(
+                                    onEvent(AddingVerseScreenEvents.SetThemeName(theme.name, isThemeSelected.value))
 
-                                containerColor = Color.White
-                            ),
-                            onClick = {
-
-                                onEvent(AddingVerseScreenEvents.SetThemeName(theme.name))
-                            }
+                                }
                         ) {
-
-
-                            Box(
+                            Card(
                                 modifier = Modifier
-                                    .fillMaxSize()
-                                    .background(
-                                        brush = Brush.verticalGradient(theme.colorLevelValues.reversed())
-                                    )
+                                    .size(150.dp),
+//                            .graphicsLayer {
+//                                // Calculate the absolute offset for the current page from the
+//                                // scroll position. We use the absolute value which allows us to mirror
+//                                // any effects for both directions
+//                                val pageOffset = (
+//                                        (pagerState.currentPage - pageIndex) + pagerState
+//                                            .currentPageOffsetFraction
+//                                        ).absoluteValue
+//
+//                                // We animate the alpha, between 50% and 100%
+//                                alpha = androidx.compose.ui.util.lerp(
+//                                    start = 0.5f,
+//                                    stop = 1f,
+//                                    fraction = 1f - pageOffset.coerceIn(0f, 1f)
+//                                )
+//                            }
+
+                                shape = RoundedCornerShape(topEnd = 10.dp, topStart = 10.dp)
+
                             ) {
+//                            Box(
+//                                modifier = Modifier
+//                                    .fillMaxSize()
+//
+//                            ) {
+//
+//                                Column(modifier = Modifier.fillMaxSize()) {
+//
+//                                    Text(
+//                                        text = "",
+//                                        modifier = Modifier
+//                                            .align(Alignment.CenterHorizontally)
+//                                            .padding(top = 40.dp),
+//                                        fontSize = 20.sp,
+//                                        fontWeight = FontWeight.Bold
+//
+//                                    ) // TEXT ENDS
+//
+//                                } // COLUMN ENDS
+//
+//                            } // BOX ENDS
 
-                                Column(modifier = Modifier.fillMaxSize()) {
-
-                                    Text(
-                                        text = theme.name,
-                                        modifier = Modifier
-                                            .align(Alignment.CenterHorizontally)
-                                            .padding(top = 40.dp),
-                                        fontSize = 20.sp,
-                                        fontWeight = Bold
-
-                                    ) // TEXT ENDS
-
-                                } // COLUMN ENDS
-
-                            } // BOX ENDS
+                                Image(
+                                    painter = painterResource(id = theme.pictureId),
+                                    contentDescription = null,
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentScale = ContentScale.Crop
+                                )
+                            }
 
 
-                        } // CARD WNDS
+                            Text(
+                                text = theme.name,
+                                modifier = Modifier
+                                    .border(
+                                        width = 1.dp,
+                                        brush = Brush.verticalGradient(theme.color),
+                                        shape = RoundedCornerShape(
+                                            bottomEnd = 5.dp,
+                                            bottomStart = 5.dp
+                                        )
+                                    )
+                                    .width(150.dp)
+                                ,
+                                fontSize = 20.sp
+                            )
 
+                            }
 
                     } // ITEMS ENDS
 
@@ -592,13 +631,16 @@ fun bottomScreen(onEvent:(AddingVerseScreenEvents) -> Unit, state: AddingVerseSc
 
                     Text(text = "What would you want to say or add?")
                 },
-               colors = TextFieldDefaults.textFieldColors(
+               colors = TextFieldDefaults.colors().copy(
 
-                   containerColor = Color.Transparent,
-                   focusedIndicatorColor = Color.Transparent,
-                   unfocusedIndicatorColor = Color.Transparent,
-                   disabledIndicatorColor = Color.Transparent
-               ),
+                     focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        disabledIndicatorColor = Color.Transparent,
+                   focusedContainerColor = Color.Transparent,
+                   unfocusedContainerColor = Color.Transparent,
+
+                ),
+
                 modifier = Modifier
                     .border(
                         width = 1.dp,

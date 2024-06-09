@@ -24,7 +24,7 @@ class ThemeActivity : ComponentActivity() {
         setContent {
 
             val state = viewModel.state.collectAsStateWithLifecycle()
-            SwordTheme {
+            SwordTheme("Trust") {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -41,7 +41,5 @@ class ThemeActivity : ComponentActivity() {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview3() {
-    SwordTheme {
 
-    }
 }

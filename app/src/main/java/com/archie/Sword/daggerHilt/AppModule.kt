@@ -1,9 +1,13 @@
 package com.archie.Sword.daggerHilt
 
+import android.content.ContentValues
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
+import androidx.room.CoroutinesRoom
 import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.archie.Sword.repositories.database.Migration_2_3
 import com.archie.Sword.repositories.database.VersesDatabase
 import dagger.Module
@@ -26,9 +30,25 @@ object AppModule {
         klass = VersesDatabase::class.java,
         name = "My Verses Database"
 
-    )
-//        .addMigrations(Migration_2_3)
-        .build()
+    ).addCallback(callback = object : RoomDatabase.Callback() {
+        override fun onCreate(db: SupportSQLiteDatabase) {
+            super.onCreate(db)
+
+
+        }
+
+
+
+
+
+
+            override fun onOpen(db: SupportSQLiteDatabase) {
+                super.onOpen(db)
+                Log.d("Database", "Database Opened")
+            }
+        }
+
+    ).build()
 
 
     @Provides

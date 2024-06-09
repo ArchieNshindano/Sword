@@ -1,6 +1,5 @@
 package com.archie.Sword.events
 
-import androidx.compose.ui.unit.Dp
 import com.archie.Sword.enums.SortType
 import com.archie.Sword.repositories.database.Verse
 
@@ -9,8 +8,6 @@ sealed interface BottomNavigationScreensSharedEvents{
     data class UpdateUiThemeTo(val theme: String): BottomNavigationScreensSharedEvents
 
     object ShowPopUpMenu: BottomNavigationScreensSharedEvents
-    data class TickOrUntickCheckBoxToMemoriseVerse(val verseTag: String, val isCheckBoxTicked: Boolean): BottomNavigationScreensSharedEvents
-
     data class SetVerse(val verse: Verse): BottomNavigationScreensSharedEvents
 
 
@@ -26,12 +23,15 @@ sealed interface BottomNavigationScreensSharedEvents{
     object ShowAddingVerseFloatingButton: BottomNavigationScreensSharedEvents
     object HideAddingVerseFloatingButton: BottomNavigationScreensSharedEvents
 
-    data class getContentPading(val topDp: Dp,val bottomDp: Dp): BottomNavigationScreensSharedEvents
+    data class SearchFor(val searchQuery: String): BottomNavigationScreensSharedEvents
     data class ChangeSortTypeTo(val sortType: SortType): BottomNavigationScreensSharedEvents
 
     data class UpdateVerse(val verse: Verse): BottomNavigationScreensSharedEvents
 
+
     data class DeleteVerse(val verse: Verse): BottomNavigationScreensSharedEvents
+
+
 
     data class IsSwipeToDeleteEnabled(val isSwipeToDeleteEnabled: Boolean): BottomNavigationScreensSharedEvents
 

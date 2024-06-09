@@ -38,9 +38,10 @@ class AddingVerseScreenViewModel @Inject constructor(
 //            return
 
 
+        val verseTag = _state.value.bookName +" "+_state.value.chapter+":"+_state.value.verseNumber
+
         val verse =  Verse(
-            bookName = _state.value.bookName,
-            chapterAndVerseNumber = _state.value.chapter + ":" + _state.value.verseNumber,
+            verseTag = verseTag,
             verse = _state.value.verse,
             date = System.currentTimeMillis(),
             themeName = _state.value.themeName,
@@ -50,7 +51,7 @@ class AddingVerseScreenViewModel @Inject constructor(
             note = state.value.note,
             isPartOfFavorites = 0,
             memorisedToday = 0,
-            memorised = 0,
+            memorisedCount = 0,
             memorisedTodayDate = null
 
 
@@ -107,12 +108,12 @@ class AddingVerseScreenViewModel @Inject constructor(
             is AddingVerseScreenEvents.SetChapter ->  setChapter(event.chapter)
             is AddingVerseScreenEvents.SetNote ->  setNote(event.note)
             is AddingVerseScreenEvents.SetThemeColor -> setThemeColour(event.color)
-            is AddingVerseScreenEvents.SetThemeName -> setThemeName(event.theme)
+            is AddingVerseScreenEvents.SetThemeName -> setThemeName(event.theme, event.isThemeSelected)
             is AddingVerseScreenEvents.SetVerse -> setVerse(event.verse)
             is AddingVerseScreenEvents.SetVerseNumber -> setVerseNumber(event.verseNumber)
             AddingVerseScreenEvents.ShowChapterSelectionDialog -> showChapterSelectionDialog()
             AddingVerseScreenEvents.ShowVerseSelectionDialog ->showVerseSelectionDialog()
-
+            is AddingVerseScreenEvents.SetBookPosition -> setBookPosition(event.position)
         }
 
     }
@@ -242,11 +243,12 @@ class AddingVerseScreenViewModel @Inject constructor(
     }
 
 
-    fun setThemeName(themeName: String){
+    fun setThemeName(themeName: String, isThemeSelected: Boolean){
 
-        _state.update {    it.copy(themeName = themeName)     }
+        _state.update {    it.copy(themeName = themeName, isAThemeSelected = isThemeSelected)     }
 
-    }
+
+ }
 
 
     fun setThemeColour(colour: String){
@@ -266,8 +268,11 @@ class AddingVerseScreenViewModel @Inject constructor(
 
     fun setConditionForThemeExistence(condition: Boolean){
 
-        _state.update {    it.copy(doesThemeExist = condition)     }
+        _state.update {    it.copy(isAThemeSelected = condition)     }
     }
+
+
+    fun setBookPosition(bookPosition: Byte) = _state.update { it.copy(bookPosition = bookPosition) }
 
 
 

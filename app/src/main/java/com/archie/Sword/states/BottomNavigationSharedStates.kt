@@ -1,7 +1,6 @@
 package com.archie.Sword.states
 
 import androidx.collection.arrayMapOf
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.archie.Sword.enums.SortType
@@ -21,7 +20,6 @@ data class BottomNavigationSharedStates(
     val verse: Verse = Verse(
         "",
         "",
-        "",
         0,
         0,
         "",
@@ -33,9 +31,9 @@ data class BottomNavigationSharedStates(
         0,
         ""),
 
-    val isMenuSideBarShowing: Boolean = true,
+    val isMenuSideBarShowing: Boolean = false,
 
-    val isSearchBarExpanded: Boolean = true,
+    val isSearchBarActive: Boolean = false,
 
     val isAddingVerseFloatingButtonShowing: Boolean = true,
 
@@ -50,11 +48,12 @@ data class BottomNavigationSharedStates(
     //EVENTS
     val currentEvent: BottomNavigationScreensSharedEvents = BottomNavigationScreensSharedEvents.UpdateUiThemeTo("Theme"),
 
-    val isSwipeToDeleteEnabled: Boolean = false
+    val isSwipeToDeleteEnabled: Boolean = false,
+
+    val verses: List<Verse> = listOf(),
 
 
 
 
 
-
-)
+    )

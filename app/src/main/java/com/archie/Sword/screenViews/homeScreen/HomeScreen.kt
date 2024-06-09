@@ -9,23 +9,14 @@ package com.archie.Sword.screenViews.homeScreen
 import android.content.Intent
 import android.util.Log
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -35,7 +26,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.overscroll
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Share
@@ -45,18 +35,15 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.SwipeToDismissBox
-import androidx.compose.material3.SwipeToDismissBoxState
-import androidx.compose.material3.SwipeToDismissBoxValue
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -85,7 +72,6 @@ import com.archie.Sword.repositories.database.Verse
 import com.archie.Sword.states.BottomNavigationSharedStates
 import com.example.Sword.R
 import com.example.Sword.ui.theme.SwordTheme
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flowOf
 
 import org.threeten.bp.LocalDate
@@ -104,12 +90,11 @@ data class TopAppBarIcon(
 
 
 
-
-val list: List<Verse> = listOf()
+val list: List<Verse> = emptyList()
+//val list: List<Verse> = listOf(
 //
 //    Verse(
-//        bookName = "Matthew",
-//        chapterAndVerseNumber = "1:1",
+//        verseTag = "Matthew",
 //        verse = "hjjhjhrfrjjdndnjnjnv n  ssv",
 //        date = System.currentTimeMillis(),
 //        themeName = "Love",
@@ -119,15 +104,14 @@ val list: List<Verse> = listOf()
 //        note = "",
 //        isPartOfFavorites = 1,
 //        memorisedToday = 0,
-//        memorised = 0,
+//        memorisedCount = 0,
 //        memorisedTodayDate = null
 //
 //
 //    ),
 //
 //    Verse(
-//        bookName = "Job",
-//        chapterAndVerseNumber = "1:3",
+//        verseTag = "Job 1:3",
 //        verse = "hjjhjhrfrjjdndnjnjnv n  sbkbskdc ssv",
 //        date = System.currentTimeMillis(),
 //        themeName = "Trust",
@@ -137,135 +121,74 @@ val list: List<Verse> = listOf()
 //        note = "",
 //        isPartOfFavorites = 0,
 //        memorisedToday = 0,
-//        memorised = 0,
+//        memorisedCount = 0,
 //        memorisedTodayDate = null
 //
 //    ),
-//    Verse(
-//        bookName = "Job",
-//        chapterAndVerseNumber = "1:6",
-//        verse = "hjjhjhrfrjjdndnjnjnv n  sbkbskdc ssv",
-//        date = System.currentTimeMillis(),
-//        themeName = "Trust",
-//        bookPosition = 1,
-//        photoFilePath = "",
-//        themeColor = "",
-//        note = "",
-//        isPartOfFavorites = 0,
-//        memorisedToday = 0,
-//        memorised = 0,
-//        memorisedTodayDate = null
 //
-//    ),
 //    Verse(
-//        bookName = "Job",
-//        chapterAndVerseNumber = "1:8",
-//        verse = "hjjhjhrfrjjdndnjnjnv n  sbkbskdc ssv",
-//        date = System.currentTimeMillis(),
-//        themeName = "Trust",
-//        bookPosition = 1,
-//        photoFilePath = "",
-//        themeColor = "",
-//        note = "",
-//        isPartOfFavorites = 1,
-//        memorisedToday = 0,
-//        memorised = 0,
-//        memorisedTodayDate = null
-//
-//    ),
-//    Verse(
-//        bookName = "Job",
-//        chapterAndVerseNumber = "1:9",
-//        verse = "hjjhjhrfrjjdndnjnjnv n  sbkbskdc ssv",
-//        date = System.currentTimeMillis(),
-//        themeName = "Trust",
-//        bookPosition = 1,
-//        photoFilePath = "",
-//        themeColor = "",
-//        note = "",
-//        isPartOfFavorites = 0,
-//        memorisedToday = 0,
-//        memorised = 0,
-//        memorisedTodayDate = null
-//
-//    ),
-//    Verse(
-//        bookName = "Job",
-//        chapterAndVerseNumber = "1:10",
-//        verse = "hjjhjhrfrjjdndnjnjnv n  sbkbskdc ssv",
-//        date = System.currentTimeMillis(),
-//        themeName = "Trust",
-//        bookPosition = 1,
-//        photoFilePath = "",
-//        themeColor = "",
-//        note = "",
-//        isPartOfFavorites = 0,
-//        memorisedToday = 0,
-//        memorised = 0,
-//        memorisedTodayDate = null
-//
-//    ),
-//    Verse(
-//        bookName = "Luke",
-//        chapterAndVerseNumber = "2:1",
-//        verse = "hjjhjhrfrjjdndnjnjnv n  sbkbskdc ssv",
-//        date = System.currentTimeMillis(),
-//        themeName = "Laziness",
-//        bookPosition = 1,
-//        photoFilePath = "",
-//        themeColor = "",
-//        note = "",
-//        isPartOfFavorites = 1,
-//        memorisedToday = 0,
-//        memorised = 0,
-//        memorisedTodayDate = null
-//
-//    ),
-//    Verse(
-//        bookName = "Song Of Solomon",
-//        chapterAndVerseNumber = "1:1",
-//        verse = "hjjhjhrfrjjdndnjnjnv n  sbkbskdc ssv",
-//        date = System.currentTimeMillis(),
-//        themeName = "Orange",
-//        bookPosition = 1,
-//        photoFilePath = "",
-//        themeColor = "",
-//        note = "",
-//        isPartOfFavorites = 0,
-//        memorisedToday = 0,
-//        memorised = 0,
-//        memorisedTodayDate = null
-//
-//    ),
-//    Verse(
-//        bookName = "Acts",
-//        chapterAndVerseNumber = "1:1",
-//        verse = "hjjhjhrfrjjdndnjnjnv n  sbkbskdc ssv",
-//        date = System.currentTimeMillis(),
-//        themeName = "Romance",
-//        bookPosition = 1,
-//        photoFilePath = "",
-//        themeColor = "",
-//        note = "",
-//        isPartOfFavorites = 1,
-//        memorisedToday = 0,
-//        memorised = 0,
-//        memorisedTodayDate = null
-//
-//    )
+//    verseTag = "Job 1:6",
+//    verse = "hjjhjhrfrjjdndnjnjnv n  sbkbskdc ssv",
+//    date = System.currentTimeMillis(),
+//    themeName = "Glory",
+//    bookPosition = 1,
+//    photoFilePath = "",
+//    themeColor = "",
+//    note = "",
+//    isPartOfFavorites = 0,
+//    memorisedToday = 0,
+//    memorisedCount = 0,
+//    memorisedTodayDate = null
+//),
+//Verse(
+//    verseTag = "Job 1:8",
+//    verse = "hjjhjhrfrjjdndnjnjnv n  sbkbskdc ssv",
+//    date = System.currentTimeMillis(),
+//    themeName = "Romance",
+//    bookPosition = 1,
+//    photoFilePath = "",
+//    themeColor = "",
+//    note = "",
+//    isPartOfFavorites = 1,
+//    memorisedToday = 0,
+//    memorisedCount = 0,
+//    memorisedTodayDate = null
+//),
+//Verse(
+//    verseTag = "Job 1:9",
+//    verse = "hjjhjhrfrjjdndnjnjnv n  sbkbskdc ssv",
+//    date = System.currentTimeMillis(),
+//    themeName = "Trust",
+//    bookPosition = 1,
+//    photoFilePath = "",
+//    themeColor = "",
+//    note = "",
+//    isPartOfFavorites = 0,
+//    memorisedToday = 0,
+//    memorisedCount = 0,
+//    memorisedTodayDate = null
+//),
+//Verse(
+//    verseTag = "Job 1:10",
+//    verse = "hjjhjhrfrjjdndnjnjnv n  sbkbskdc ssv",
+//    date = System.currentTimeMillis(),
+//    themeName = "Wisdom",
+//    bookPosition = 1,
+//    photoFilePath = "",
+//    themeColor = "",
+//    note = "",
+//    isPartOfFavorites = 1,
+//    memorisedToday = 0,
+//    memorisedCount = 0,
+//    memorisedTodayDate = null
+//),
 //)
 
 
 @ExperimentalFoundationApi
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun homeScreenContent(state: BottomNavigationSharedStates, onEvent: (BottomNavigationScreensSharedEvents) -> Unit, pagingItems: LazyPagingItems<Verse>, contentPadding: PaddingValues){
-
-
-
-
-
-
+fun homeScreenContent(state: BottomNavigationSharedStates, onEvent: (BottomNavigationScreensSharedEvents) -> Unit, pagingItems: LazyPagingItems<Verse>, contentPadding: State<PaddingValues>){
 
 
 
@@ -274,38 +197,6 @@ fun homeScreenContent(state: BottomNavigationSharedStates, onEvent: (BottomNavig
     val corountineScope = rememberCoroutineScope()
     val listState = rememberLazyListState()
     val overscrollEffect = remember(corountineScope) { VerticalOverscroll(corountineScope) }
-
-//    val allVerses by remember {
-//
-//        mutableStateOf(
-//
-//            (0..pagingItems.itemCount-1).map {index ->
-//
-//                val verse = pagingItems[index]
-//
-//               if(verse != null)
-//                Verse(
-//                    verse = verse.verse,
-//                    bookName = verse.bookName,
-//                    chapterAndVerseNumber = verse.chapterAndVerseNumber,
-//
-//                    bookPosition = verse.bookPosition,
-//                    date = verse.date,
-//                    themeName = verse.themeName,
-//                    themeColor = verse.themeColor,
-//
-//                    photoFilePath = verse.photoFilePath,
-//                    isPartOfFavorites = verse.isPartOfFavorites,
-//                    note = verse.note,
-//                    memorised = verse.memorised ,
-//                    memorisedToday = verse.memorisedToday,
-//                    id = verse.id
-//                )
-//
-//
-//            }
-//        )
-//    }
 
 
 
@@ -327,7 +218,7 @@ fun homeScreenContent(state: BottomNavigationSharedStates, onEvent: (BottomNavig
                     state = listState,
                     overscrollEffect = overscrollEffect
                 ),
-            contentPadding = contentPadding,
+            contentPadding = contentPadding.value,
 
             content = {
 
@@ -436,11 +327,6 @@ fun homeScreenContent(state: BottomNavigationSharedStates, onEvent: (BottomNavig
 
                     Card(
                         modifier = Modifier.width(200.dp),
-                        colors = CardDefaults.cardColors(
-
-                            containerColor = Color.White
-                        )
-
                     ) {
 
                         Column(
@@ -489,7 +375,7 @@ fun homeScreenContent(state: BottomNavigationSharedStates, onEvent: (BottomNavig
 
                     items = pagingItems.itemSnapshotList,
                     key = { verse ->
-                        "${verse?.bookName} ${verse?.chapterAndVerseNumber} ${verse?.id}"
+                        "${verse?.verseTag}  ${verse?.id}"
                     }
 
 
@@ -505,7 +391,7 @@ fun homeScreenContent(state: BottomNavigationSharedStates, onEvent: (BottomNavig
                      ) {
 
 
-                         verseHolder(onEvent = onEvent, state = state, verse = verse)
+                            themedVerseHolder(onEvent = onEvent, state = state, verse = verse)
 
 
                      }
@@ -519,9 +405,7 @@ fun homeScreenContent(state: BottomNavigationSharedStates, onEvent: (BottomNavig
                  }
 
                  else
-                     verseHolder(onEvent = onEvent, state = state, verse = verse)
-
-
+                        themedVerseHolder(onEvent = onEvent, state = state, verse = verse)
 
 
                 } // ITEMS ENDS
@@ -535,8 +419,7 @@ fun homeScreenContent(state: BottomNavigationSharedStates, onEvent: (BottomNavig
 
 
 
-                    verseHolder(onEvent = onEvent, state = state , verse = list[index])
-
+                    themedVerseHolder(onEvent = onEvent, state = state, verse = list[index])
 
 
                 } // ITEMS ENDS
@@ -550,6 +433,15 @@ fun homeScreenContent(state: BottomNavigationSharedStates, onEvent: (BottomNavig
 }
 
 
+@Composable
+fun themedVerseHolder(onEvent:(BottomNavigationScreensSharedEvents) -> Unit, state: BottomNavigationSharedStates, verse: Verse?){
+
+    SwordTheme(verseTheme = verse?.themeName ?: "", isContainerVerseHolder = true) {
+
+        verseHolder(onEvent = onEvent, state = state, verse = verse)
+
+    }
+}
 
 
 
@@ -557,7 +449,7 @@ fun homeScreenContent(state: BottomNavigationSharedStates, onEvent: (BottomNavig
 fun verseHolder(onEvent:(BottomNavigationScreensSharedEvents) -> Unit, state: BottomNavigationSharedStates, verse: Verse?){
 
 
-    val verseTag = "${verse?.bookName} ${verse?.chapterAndVerseNumber}"
+    val verseTag = verse?.verseTag ?: ""
 
 
 
@@ -593,15 +485,15 @@ fun verseHolder(onEvent:(BottomNavigationScreensSharedEvents) -> Unit, state: Bo
             val period = Period.between(from, currentDate)
             // Get the current date
 
-            Log.d("Dates", "${verse.bookName} ${verse.chapterAndVerseNumber} Today: ${currentDate}  Yesterday: ${from} ${period.days}")
+            Log.d("Dates", "${verse.verseTag}  Today: ${currentDate}  Yesterday: ${from} ${period.days}")
 
             if (period.days == 1) {
                 // If the difference is 1 day or more, reset memorisedToday to 0
 
-                var memorised = verse.memorised
+                var memorised = verse.memorisedCount
 
                 onEvent(
-                    BottomNavigationScreensSharedEvents.UpdateVerse( verse.copy(memorisedToday = 0, memorised = ++memorised, memorisedTodayDate = "") )
+                    BottomNavigationScreensSharedEvents.UpdateVerse( verse.copy(memorisedToday = 0, memorisedCount = ++memorised) )
                 )
             }
 
@@ -647,10 +539,11 @@ fun verseHolder(onEvent:(BottomNavigationScreensSharedEvents) -> Unit, state: Bo
 
             defaultElevation = 0.dp
         ),
-        colors = CardDefaults.cardColors(
 
-            containerColor = Color.White
-        )
+        onClick = {
+
+            onEvent(BottomNavigationScreensSharedEvents.UpdateUiThemeTo(verse?.themeName ?: ""))
+        }
 
     ) {
 
@@ -680,7 +573,7 @@ fun verseHolder(onEvent:(BottomNavigationScreensSharedEvents) -> Unit, state: Bo
 
                     withStyle(style = SpanStyle(fontSize = 28.sp)) {
 
-                        append("${verse?.memorised} times")
+                        append("${verse?.memorisedCount} times")
 
 
                     }
@@ -758,7 +651,7 @@ fun verseHolder(onEvent:(BottomNavigationScreensSharedEvents) -> Unit, state: Bo
 
                         val sendIntent: Intent = Intent().apply {
                             action = Intent.ACTION_SEND
-                            putExtra(Intent.EXTRA_TEXT, "${verse?.bookName} ${verse?.chapterAndVerseNumber} \n ${verse?.verse}")
+                            putExtra(Intent.EXTRA_TEXT, "${verse?.verseTag} \n ${verse?.verse}")
                             putExtra(Intent.EXTRA_TITLE, "Share Verse")
                             type = "text/plain"
 
@@ -797,7 +690,7 @@ fun verseHolder(onEvent:(BottomNavigationScreensSharedEvents) -> Unit, state: Bo
                             onCheckedChange = { isCheckBoxTicked ->
 
                                 var memorisedToday = 0
-                                var memorisedTodayDate = ""
+                                var memorisedTodayDate = verse?.memorisedTodayDate
 
                                 if (isCheckBoxTicked) {
 
@@ -857,20 +750,20 @@ fun verseHolder(onEvent:(BottomNavigationScreensSharedEvents) -> Unit, state: Bo
 
 
 
-@Preview(showBackground = true, wallpaper = Wallpapers.NONE, showSystemUi = true, apiLevel = 33)
+@Preview(showBackground = true, wallpaper = Wallpapers.NONE, showSystemUi = true, apiLevel = 27)
 @Composable
 fun GreetingPreview(
 ) {
 
 
-    SwordTheme {
+    SwordTheme(verseTheme = "Love") {
 
          homeScreenContent(
              state =  BottomNavigationSharedStates(),
              onEvent = {},
              pagingItems = flowOf(PagingData.from(emptyList<Verse>()))
                  .collectAsLazyPagingItems(),
-             PaddingValues()
+             rememberUpdatedState(newValue = PaddingValues())
 
          )
     }

@@ -5,6 +5,7 @@
 package com.archie.Sword.screenViews.homeScreenBottomNavigation
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -29,6 +30,7 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -39,6 +41,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -52,6 +56,7 @@ import com.archie.Sword.enums.VerseThemes
 import com.archie.Sword.events.BottomNavigationScreensSharedEvents
 import com.archie.Sword.repositories.database.Verse
 import com.archie.Sword.screenViews.homeScreen.list
+import com.archie.Sword.screenViews.homeScreen.themedVerseHolder
 import com.archie.Sword.screenViews.homeScreen.verseHolder
 import com.archie.Sword.states.BottomNavigationSharedStates
 import kotlinx.coroutines.flow.flowOf
@@ -66,12 +71,9 @@ data class ThemeScreenTabRow(
 @ExperimentalFoundationApi
 @ExperimentalMaterial3Api
 @Composable
-fun ThemeScreen(onEvent:(BottomNavigationScreensSharedEvents) -> Unit, state: BottomNavigationSharedStates, paddingValues: PaddingValues, pagingItems: LazyPagingItems<Verse>){
+fun ThemeScreen(onEvent:(BottomNavigationScreensSharedEvents) -> Unit, state: BottomNavigationSharedStates, contentPadding: State<PaddingValues>, pagingItems: LazyPagingItems<Verse>){
 
 
-
-
-    val contentPadding by rememberUpdatedState(newValue = paddingValues)
 
 
     val tabRowItems = remember {
@@ -124,7 +126,7 @@ fun ThemeScreen(onEvent:(BottomNavigationScreensSharedEvents) -> Unit, state: Bo
 
     Column(
 
-        modifier = Modifier.padding(contentPadding)
+        modifier = Modifier.padding(contentPadding.value)
     ) {
 
 
@@ -171,7 +173,7 @@ fun ThemeScreen(onEvent:(BottomNavigationScreensSharedEvents) -> Unit, state: Bo
 
             when(index){
 
-                0 -> themeGridScreenTabItem()
+                0 -> themeGridScreenTabItem(onEvent)
                 1 -> versesScreenTabItem(onEvent = onEvent, state = state, pagingItems = pagingItems, screen = Screens.ThemeScreen)
             }
 
@@ -191,7 +193,7 @@ fun ThemeScreen(onEvent:(BottomNavigationScreensSharedEvents) -> Unit, state: Bo
 
 
 @Composable
-fun themeGridScreenTabItem() {
+fun themeGridScreenTabItem(onEvent: (BottomNavigationScreensSharedEvents) -> Unit) {
 
 
     val list: List<String> =
@@ -247,32 +249,41 @@ fun themeGridScreenTabItem() {
 //                                )
 //                            }
 
-                            shape = RoundedCornerShape(topEnd = 10.dp, topStart = 10.dp)
+                            shape = RoundedCornerShape(topEnd = 10.dp, topStart = 10.dp),
+                            onClick = {
+
+                                onEvent(BottomNavigationScreensSharedEvents.UpdateUiThemeTo(theme.name))
+                            }
 
                         ) {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .background(
-                                        brush = Brush.verticalGradient(theme.colorLevelValues.reversed())
-                                    )
-                            ) {
+//                            Box(
+//                                modifier = Modifier
+//                                    .fillMaxSize()
+//
+//                            ) {
+//
+//                                Column(modifier = Modifier.fillMaxSize()) {
+//
+//                                    Text(
+//                                        text = "",
+//                                        modifier = Modifier
+//                                            .align(Alignment.CenterHorizontally)
+//                                            .padding(top = 40.dp),
+//                                        fontSize = 20.sp,
+//                                        fontWeight = FontWeight.Bold
+//
+//                                    ) // TEXT ENDS
+//
+//                                } // COLUMN ENDS
+//
+//                            } // BOX ENDS
 
-                                Column(modifier = Modifier.fillMaxSize()) {
-
-                                    Text(
-                                        text = "",
-                                        modifier = Modifier
-                                            .align(Alignment.CenterHorizontally)
-                                            .padding(top = 40.dp),
-                                        fontSize = 20.sp,
-                                        fontWeight = FontWeight.Bold
-
-                                    ) // TEXT ENDS
-
-                                } // COLUMN ENDS
-
-                            } // BOX ENDS
+                            Image(
+                                painter = painterResource(id = theme.pictureId),
+                                contentDescription = null,
+                                modifier = Modifier.fillMaxSize(),
+                                contentScale = ContentScale.Crop
+                            )
                         }
 
                         Text(
@@ -280,7 +291,7 @@ fun themeGridScreenTabItem() {
                             modifier = Modifier
                                 .border(
                                     width = 1.dp,
-                                    brush = Brush.verticalGradient(theme.colorLevelValues),
+                                    brush = Brush.verticalGradient(theme.color),
                                     shape = RoundedCornerShape(bottomEnd = 5.dp, bottomStart = 5.dp)
                                 )
                                 .width(150.dp)
@@ -362,11 +373,10 @@ fun versesScreenTabItem(onEvent: (BottomNavigationScreensSharedEvents) -> kotlin
                 items( items = verses.value){ verse ->
 
                        if(verse?.themeName == theme.name)
-                        verseHolder(onEvent = onEvent, state = state, verse = verse)
+                           themedVerseHolder(onEvent = onEvent, state = state, verse = verse)
 
                        else if (verse?.themeName.isNullOrBlank() && theme.name.equals("None") )
-                           verseHolder(onEvent = onEvent, state = state, verse = verse)
-
+                           themedVerseHolder(onEvent = onEvent, state = state, verse = verse)
 
 
 
@@ -378,8 +388,7 @@ fun versesScreenTabItem(onEvent: (BottomNavigationScreensSharedEvents) -> kotlin
                 ){ verse ->
 
                     if(verse?.themeName == theme.name)
-                        verseHolder(onEvent = onEvent, state = state, verse = verse)
-
+                        themedVerseHolder(onEvent = onEvent, state = state, verse = verse)
 
 
 
@@ -430,7 +439,7 @@ fun showThis(){
    ThemeScreen(
        onEvent = {},
        state = BottomNavigationSharedStates(),
-       paddingValues = PaddingValues(),
+       contentPadding = rememberUpdatedState(newValue = PaddingValues()),
        pagingItems = flowOf(PagingData.from(emptyList<Verse>()))
            .collectAsLazyPagingItems(),
    )

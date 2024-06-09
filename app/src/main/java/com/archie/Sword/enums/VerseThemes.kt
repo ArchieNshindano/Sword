@@ -1,59 +1,61 @@
 package com.archie.Sword.enums
 
 import androidx.compose.ui.graphics.Color
+import com.example.Sword.R
 
-enum class VerseThemes(val colorName: String?, val colorLevelValues: List<Color>, val id: Int) {
+enum class VerseThemes( val pictureId: Int, val color: List<Color>, val id: Int) {
 
 
 
     Trust(
-        colorName = "Green",
-        colorLevelValues = ColorStrokes.green.color,
+        pictureId = R.mipmap.trust,
+        color = ColorStrokes.green.color,
         1,
 
     ),
 
 
 
-    Orange(
-        colorName = "Orange",
-        colorLevelValues = ColorStrokes.orange.color,
+    Strength(
+        pictureId = R.mipmap.strength1,
+        ColorStrokes.ember.color.reversed(),
         2
     ),
 
 
 
-
-
-
     Love(
-        colorName = "Red",
-        colorLevelValues = ColorStrokes.red.color,
+        pictureId = R.mipmap.cross,
+        ColorStrokes.red.color,
         3
     ),
 
 
 
     Romance(
-        colorName = "Pink",
-        colorLevelValues = ColorStrokes.pink.color,
+        pictureId = R.mipmap.romance,
+        ColorStrokes.pink.color,
         3
     ),
 
 
-
-    Laziness(
-        colorName = "Grey",
-        colorLevelValues = ColorStrokes.grey.color,
-        4
+    Wisdom(
+        pictureId = R.mipmap.wisdom,
+        ColorStrokes.lightBlue.color,
+        0
     ),
 
-
-    None(
-        colorName = "None",
-        colorLevelValues = listOf(),
+    Sin(
+        pictureId = R.mipmap.sin3,
+        ColorStrokes.grey.color,
         0
-    )
+    ),
+
+    Glory(
+        pictureId = R.mipmap.glory5,
+        ColorStrokes.yellow.color,
+        0
+    ),
 
 
 
