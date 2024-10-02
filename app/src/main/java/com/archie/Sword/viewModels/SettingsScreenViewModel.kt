@@ -2,240 +2,87 @@ package com.archie.Sword.viewModels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.archie.Sword.enums.SortType
 import com.archie.Sword.events.SettingsScreenEvents
+import com.archie.Sword.repositories.database.SettingsDataBaseRepositoryImpl
 import com.archie.Sword.states.SettingsScreenStates
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SettingsScreenViewModel @Inject constructor(): ViewModel() {
+class SettingsScreenViewModel @Inject constructor(
 
-    val _state = MutableStateFlow(SettingsScreenStates())
+    val daoFunctionsForSettings: SettingsDataBaseRepositoryImpl
+): ViewModel() {
+
+    private val _state = MutableStateFlow(SettingsScreenStates())
     val state = _state.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), SettingsScreenStates())
 
 
-    private val eventsChannel = Channel<SettingsScreenEvents>()
-    val eventFlow = eventsChannel.receiveAsFlow()
 
 
 
-    fun triggerSetThemeToEvent(thisTheme: String){
-
-        viewModelScope.launch {
-
-            eventsChannel.send(SettingsScreenEvents.setThemeTo(thisTheme))
-
-        }
-
-
-    }
-
-
-
-
-
-
-
-    fun triggerTurnOnDarkModeEvent(){
-
-        viewModelScope.launch {
-
-            eventsChannel.send(SettingsScreenEvents.turnOnDarkMode)
-
-        }
-
-
-    }
-
-
-
-
-
-
-
-    fun triggerShowVerseOfTheDayEvent(){
-
-        viewModelScope.launch {
-
-            eventsChannel.send(SettingsScreenEvents.showVerseOfTheDay)
-
-        }
-
-
-    }
-
-
-
-
-
-
-
-
-
-
-    fun triggerhideVerseOfTheDayEvent(){
-
-        viewModelScope.launch {
-
-            eventsChannel.send(SettingsScreenEvents.hideVerseOfTheDay)
-
-        }
-
-
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    fun triggerShowThemesEvent(){
-
-        viewModelScope.launch {
-
-            eventsChannel.send(SettingsScreenEvents.showThemes)
-
-        }
-
-
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-    fun triggerHideThemesEvent(){
-
-        viewModelScope.launch {
-
-            eventsChannel.send(SettingsScreenEvents.hideThemes)
-
-        }
-
-
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-    fun triggerShowDynamicHeaderEvent(){
-
-        viewModelScope.launch {
-
-            eventsChannel.send(SettingsScreenEvents.showDynamicHeader)
-
-        }
-
-
-    }
-
-
-
-
-
-
-
-
-
-
-
-    fun triggerHideDynamicHeaderEvent(){
-
-        viewModelScope.launch {
-
-            eventsChannel.send(SettingsScreenEvents.hideDynamicHeader)
-
-        }
-
-
-    }
-
-
-
-
-
-
-
-
-
-
-
-    fun triggerShowEncouragementEvent(){
-
-        viewModelScope.launch {
-
-            eventsChannel.send(SettingsScreenEvents.showEncouragement)
-
-        }
-
-
-    }
-
-
-
-
-
-
-
-
-
-
-
-    fun triggerHideEncouragementEvent(){
-
-        viewModelScope.launch {
-
-            eventsChannel.send(SettingsScreenEvents.hideEncouragement)
-
-        }
-
-
-    }
-
-
-
-
-
-
-    fun dynamicThemeButtonToggled(){
+    fun toggleDynamicThemeButton(isDynamicThemeEnabled: Boolean){
 
 
         _state.update {
 
             it.copy(
 
-                isDynamicThemeButtonToggled = true
+                isDynamicThemeSelected = isDynamicThemeEnabled
+            )  // COPY ENDS
+
+        } // UPDATE ENDS
+
+
+    }   // FUNCTION ENDS
+
+
+
+
+
+    fun toggleVerseOfTheDayButton(isVerseOfTheDayEnabled: Boolean) {
+
+        _state.update {
+
+            it.copy(
+
+                isShowVerseOfTheDayButtonToggled = isVerseOfTheDayEnabled
+            )  // COPY ENDS
+
+        } // UPDATE ENDS
+
+    } // FUNCTION ENDS
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    fun toggleDynamicSentenceButton(isShowDynamicSentenceEnabled: Boolean){
+
+
+        _state.update {
+
+            it.copy(
+
+                isShowDynamicSentenceButtonToggled = isShowDynamicSentenceEnabled
             )  // COPY ENDS
 
         } // UPDATE ENDS
@@ -245,23 +92,54 @@ class SettingsScreenViewModel @Inject constructor(): ViewModel() {
 
 
 
-
-
-
-
-
-
-    fun dynamicThemeButtonUntoggled(){
-
+   fun setContrastTo(contrast: String) {
 
         _state.update {
 
             it.copy(
 
-                isDynamicThemeButtonToggled = false
+                contrast = contrast
             )  // COPY ENDS
 
         } // UPDATE ENDS
+
+    } // FUNCTION ENDS
+
+
+    fun  setSortTypeTo(sortType: String) {
+
+        _state.update {
+
+            it.copy(
+
+                sortType = sortType
+            )  // COPY ENDS
+
+        } // UPDATE ENDS
+
+    } // FUNCTION ENDS
+
+
+
+    fun  setSystemThemeTo(theme: String) {
+
+        _state.update {
+
+            it.copy(
+
+                theme = theme
+            )  // COPY ENDS
+
+        } // UPDATE ENDS
+
+    } // FUNCTION ENDS
+
+
+
+
+    fun onEvent(event: SettingsScreenEvents) {
+
+        _state.update { it.copy(event = event) }
 
 
     }
@@ -272,226 +150,6 @@ class SettingsScreenViewModel @Inject constructor(): ViewModel() {
 
 
 
-
-
-    fun darkThemeButtonToggled(){
-
-
-        _state.update {
-
-            it.copy(
-
-                isDarkThemeButtonToggled = true
-            )  // COPY ENDS
-
-        } // UPDATE ENDS
-
-
-    }
-
-
-
-
-
-
-
-
-
-    fun darkThemeButtonUntoggled(){
-
-
-        _state.update {
-
-            it.copy(
-
-                isDarkThemeButtonToggled = false
-            )  // COPY ENDS
-
-        } // UPDATE ENDS
-
-
-    }
-
-
-
-
-
-
-
-
-
-
-    fun showThemesButtonToggled(){
-
-
-        _state.update {
-
-            it.copy(
-
-                isShowThemesButtonToggled = true
-            )  // COPY ENDS
-
-        } // UPDATE ENDS
-
-
-    }
-
-
-
-
-
-
-
-
-
-    fun showThemesButtonUntoggled(){
-
-
-        _state.update {
-
-            it.copy(
-
-                isShowThemesButtonToggled = false
-            )  // COPY ENDS
-
-        } // UPDATE ENDS
-
-
-    }
-
-
-
-
-
-
-
-
-    fun showVerseOfTheDayButtonToggled(){
-
-
-        _state.update {
-
-            it.copy(
-
-                isShowVerseOfTheDayButtonToggled = true
-            )  // COPY ENDS
-
-        } // UPDATE ENDS
-
-
-    }
-
-
-
-
-
-
-
-
-
-    fun showVerseOfTheDayButtonUntoggled(){
-
-
-        _state.update {
-
-            it.copy(
-
-                isShowVerseOfTheDayButtonToggled = false
-            )  // COPY ENDS
-
-        } // UPDATE ENDS
-
-
-    }
-
-
-
-
-
-
-
-
-    fun showDynamicHeaderButtonToggled(){
-
-
-        _state.update {
-
-            it.copy(
-
-                isShowDynamicHeaderButtonToggled = true
-            )  // COPY ENDS
-
-        } // UPDATE ENDS
-
-
-    }
-
-
-
-
-
-
-
-
-    fun showDynamicHeaderButtonUntoggled(){
-
-
-        _state.update {
-
-            it.copy(
-
-                isShowDynamicHeaderButtonToggled = false
-            )  // COPY ENDS
-
-        } // UPDATE ENDS
-
-
-    }
-
-
-
-
-
-
-
-
-
-    fun showDynamicEncouragementButtonToggled(){
-
-
-        _state.update {
-
-            it.copy(
-
-                isShowDynamicEncouragementButtonToggled = true
-            )  // COPY ENDS
-
-        } // UPDATE ENDS
-
-
-    }
-
-
-
-
-
-
-
-
-    fun showDynamicEncouragementButtonUntoggled(){
-
-
-        _state.update {
-
-            it.copy(
-
-                isShowDynamicEncouragementButtonToggled = false
-            )  // COPY ENDS
-
-        } // UPDATE ENDS
-
-
-    }
 
 
 

@@ -1,28 +1,20 @@
 package com.archie.Sword.viewModels
 
-import android.util.Log
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
-import com.archie.Sword.events.BottomNavigationScreensSharedEvents
 import com.archie.Sword.enums.SortType
-import com.archie.Sword.repositories.database.DataBaseRepositoryImpl
+import com.archie.Sword.events.BottomNavigationScreensSharedEvents
+import com.archie.Sword.repositories.database.SentencesRecordDataBaseRepositoryImpl
+import com.archie.Sword.repositories.database.VersesDataBaseRepositoryImpl
 import com.archie.Sword.repositories.database.Verse
 import com.archie.Sword.states.BottomNavigationSharedStates
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.single
-import kotlinx.coroutines.flow.singleOrNull
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -30,10 +22,12 @@ import javax.inject.Inject
 @HiltViewModel
 class BottomNavigationSharedViewModel @Inject constructor(
 
-    val daoFunctions: DataBaseRepositoryImpl,
+    val daoFunctionsForVerses: VersesDataBaseRepositoryImpl,
+    val daoFunctionsForSentencesRecord: SentencesRecordDataBaseRepositoryImpl
 
 
-): ViewModel() {
+
+    ): ViewModel() {
 
 
     private val _state = MutableStateFlow(BottomNavigationSharedStates())
@@ -52,15 +46,17 @@ class BottomNavigationSharedViewModel @Inject constructor(
         ) // PAGING CONFIG ENDS
     ) {
 
+
+//
 //      when(_state.value.sortType){
 //
-//          SortType.byBook -> daoFunctions.getVerseByBook()
-//          SortType.byDate -> daoFunctions.getVersesByDate()
-//          SortType.byTheme -> daoFunctions.getVersesByTheme()
+//          "By book" -> daoFunctionsForTheme.getVerseByBook()
+//          "" -> daoFunctionsForTheme.getVersesByDate()
+//          SortType.byTheme -> daoFunctionsForTheme.getVersesByTheme()
 //      }
 
 
-        daoFunctions.getVersesByDate()
+        daoFunctionsForVerses.getVersesByDate()
 
 
     }// PAGER ENDS
@@ -83,10 +79,10 @@ class BottomNavigationSharedViewModel @Inject constructor(
 
             try {
 
-               val verses1 = daoFunctions.searchDatabaseUsingVerseTag("*$searchQuery*")
-                val verses2 = daoFunctions.searchDatabaseUsingVerse("*$searchQuery*")
-                val verses3 = daoFunctions.searchDatabaseUsingThemeName("*$searchQuery*")
-                val verses4 = daoFunctions.searchDatabaseUsingNotes("*$searchQuery*")
+               val verses1 = daoFunctionsForVerses.searchDatabaseUsingVerseTag("*$searchQuery*")
+                val verses2 = daoFunctionsForVerses.searchDatabaseUsingVerse("*$searchQuery*")
+                val verses3 = daoFunctionsForVerses.searchDatabaseUsingThemeName("*$searchQuery*")
+                val verses4 = daoFunctionsForVerses.searchDatabaseUsingNotes("*$searchQuery*")
 
                 combine(verses1, verses2, verses3, verses4) { v1, v2, v3, v4 ->
 
@@ -103,7 +99,7 @@ class BottomNavigationSharedViewModel @Inject constructor(
 
             catch (e: Exception) {
 
-              TODO()
+
                 }  // TRY CATCH ENDS
 
             }  // VIEW MODEL SCOPE ENDS
@@ -169,10 +165,10 @@ class BottomNavigationSharedViewModel @Inject constructor(
         }
 
 
-        fun changeSortTypeTo(sortType: SortType) {
+        fun showSortTypeDialog(showSortTypeDialog: Boolean) {
 
 
-            _state.update { it.copy(sortType = sortType) }
+            _state.update { it.copy(showSortTypeDialog = showSortTypeDialog) }
 
         }
 
@@ -190,28 +186,32 @@ class BottomNavigationSharedViewModel @Inject constructor(
 
         fun EmptyVerseListVerse() = _state.update { it.copy(verses = emptyList()) }
 
-        fun upDateVerse(verse: Verse) {
 
-            viewModelScope.launch {
+        fun upDateVerse(verse: Verse) =  viewModelScope.launch {
 
-                daoFunctions.addVerse(verse)
+                daoFunctionsForVerses.addVerse(verse)
             }
 
-        }
 
 
-        fun deleteVerse(verse: Verse) {
 
-            viewModelScope.launch {
+        fun deleteVerse(verse: Verse) =  viewModelScope.launch {
 
-                daoFunctions.deleteVerse(verse)
+                daoFunctionsForVerses.deleteVerse(verse)
             }
 
-        }
 
-        fun isSwipeToDeleteEnabled(isSwipeToDeleteEnabled: Boolean) =
-            _state.update { it.copy(isSwipeToDeleteEnabled = isSwipeToDeleteEnabled) }
+        fun isSwipeToDeleteEnabled(isSwipeToDeleteEnabled: Boolean) = _state.update { it.copy(isSwipeToDeleteEnabled = isSwipeToDeleteEnabled) }
 
+
+        fun enableOrDisableDynamicTheme(isDynamicThemeEnabled: Boolean) = _state.update { it.copy(isDynamicThemeEnabled = isDynamicThemeEnabled) }
+        fun enableOrDisableDynamicSentence(isDynamicSentencesEnabled: Boolean) = _state.update { it.copy(isDynamicSentencesEnabled = isDynamicSentencesEnabled) }
+        fun enableOrDisableVerseOfTheDay(isVerseOfTheDayEnabled: Boolean) = _state.update { it.copy(isVerseOfTheDayEnabled = isVerseOfTheDayEnabled) }
+
+
+        fun enableOrDisableDarkTheme(isDarkTheme: Boolean) = _state.update { it.copy(isSystemDarkTheme = isDarkTheme) }
+        fun setContrastTo(contrast: String) = _state.update { it.copy(contrast = contrast) }
+        fun setSortTypeTo(sortType: String) = _state.update { it.copy(sortType = sortType) }
 
 
 }

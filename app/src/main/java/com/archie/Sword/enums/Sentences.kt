@@ -14,7 +14,7 @@ enum class Sentences(val secondaryText: String, val primaryText: String) {
     text10("Just","Do It"),
     text11("Why", "Cry?"),
     text12("Death", "Died"),
-    text13("''I","Am''"),
+    text13("'' I","Am ''"),
     text14("Slay","It"),
     text15("Die","to Self"),
     text16("Why", "Die?"),
@@ -33,7 +33,8 @@ enum class Sentences(val secondaryText: String, val primaryText: String) {
     text29("stand", "guard"),
     text30("Break","Free"),
     text31("In", "Him"),
-    text32("Get","Up")
+    text32("Get","Up"),
+    text33("Be","Real")
 
 
 

@@ -79,7 +79,7 @@ fun addingVerseScreenLaunched(viewModel: AddingVerseScreenViewModel, state: Addi
 
 
 
-  //  eventHandler(state = state, viewModel = viewModel )
+  //  eventHandlerForBottomNavigation(state = state, viewModel = viewModel )
     addingVerseScreen(onEvent = viewModel::onEvent, state = state)
 
 }
@@ -88,11 +88,6 @@ fun addingVerseScreenLaunched(viewModel: AddingVerseScreenViewModel, state: Addi
 
 @Composable
 fun addingVerseScreen(onEvent:(AddingVerseScreenEvents) -> Unit, state: AddingVerseScreenStates) {
-
-
-
-
-
 
 
 
@@ -321,6 +316,8 @@ fun topScreen(onEvent:(AddingVerseScreenEvents) -> Unit, state: AddingVerseScree
                                 .padding(bottom = 10.dp)
                                 .clickable {
 
+
+                                    // TODO() LAST OPENED THEME
 
                                     if(state.themeName == theme.name)
                                         onEvent( AddingVerseScreenEvents.SetThemeName("None", false) )

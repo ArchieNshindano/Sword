@@ -1,9 +1,13 @@
 package com.archie.Sword.viewModels
 
+import android.content.SharedPreferences
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.datastore.preferences.core.mutablePreferencesOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.archie.Sword.events.AddingVerseScreenEvents
-import com.archie.Sword.repositories.database.DataBaseRepositoryImpl
+import com.archie.Sword.repositories.database.VersesDataBaseRepositoryImpl
 import com.archie.Sword.repositories.database.Verse
 import com.archie.Sword.states.AddingVerseScreenStates
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,16 +22,16 @@ import javax.inject.Inject
 @HiltViewModel
 class AddingVerseScreenViewModel @Inject constructor(
 
-    private val daoFunctions: DataBaseRepositoryImpl
+    private val daoFunctions: VersesDataBaseRepositoryImpl
 
 ): ViewModel() {
 
 
 
 
-
     private val _state = MutableStateFlow(AddingVerseScreenStates())
     val state = _state.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), AddingVerseScreenStates())
+    val sharedPreferences = mutableStateOf<SharedPreferences?>(null)
 
 
 
@@ -94,6 +98,7 @@ class AddingVerseScreenViewModel @Inject constructor(
 
 
 
+
     fun onEvent(event: AddingVerseScreenEvents){
 
         when(event){
@@ -108,7 +113,17 @@ class AddingVerseScreenViewModel @Inject constructor(
             is AddingVerseScreenEvents.SetChapter ->  setChapter(event.chapter)
             is AddingVerseScreenEvents.SetNote ->  setNote(event.note)
             is AddingVerseScreenEvents.SetThemeColor -> setThemeColour(event.color)
-            is AddingVerseScreenEvents.SetThemeName -> setThemeName(event.theme, event.isThemeSelected)
+            is AddingVerseScreenEvents.SetThemeName -> {
+
+                sharedPreferences.value?.edit()?.apply{
+
+                    putString("lastOpenedTheme",event.theme)
+                    apply()
+                }
+
+                setThemeName(event.theme,event.isThemeSelected)
+
+            }
             is AddingVerseScreenEvents.SetVerse -> setVerse(event.verse)
             is AddingVerseScreenEvents.SetVerseNumber -> setVerseNumber(event.verseNumber)
             AddingVerseScreenEvents.ShowChapterSelectionDialog -> showChapterSelectionDialog()
@@ -243,9 +258,9 @@ class AddingVerseScreenViewModel @Inject constructor(
     }
 
 
-    fun setThemeName(themeName: String, isAThemeSelected: Boolean){
+    fun setThemeName(themeName: String, isThemeSelected: Boolean){
 
-        _state.update {    it.copy(isAThemeSelected = isAThemeSelected, themeName = themeName)    }
+        _state.update {    it.copy( themeName = themeName, isAThemeSelected = isThemeSelected )    }
 
 
  }
@@ -275,8 +290,10 @@ class AddingVerseScreenViewModel @Inject constructor(
     fun setBookPosition(bookPosition: Byte) = _state.update { it.copy(bookPosition = bookPosition) }
 
 
+    fun getSharedPreferences(sharedPreferences: SharedPreferences) {
 
-
+        this.sharedPreferences.value = sharedPreferences
+    }
 
 
 

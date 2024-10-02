@@ -3,7 +3,7 @@ package com.archie.Sword.repositories.database
 import androidx.paging.PagingSource
 import kotlinx.coroutines.flow.Flow
 
-interface DataBaseRepository {
+interface VersesDataBaseRepository {
 
 
 
@@ -29,12 +29,12 @@ interface DataBaseRepository {
 
 
 
-    suspend fun addTheme(theme: Theme)
-
-    fun getThemeByName(): Flow<Theme>
-    fun getThemeByDate(): Flow<Theme>
-
-    fun deleteTheme(theme: Theme)
-    suspend fun updateTheme(theme: Theme)
+//    suspend fun addTheme(theme: Theme)
+//
+//    fun getThemeByName(): Flow<Theme>
+//    fun getThemeByDate(): Flow<Theme>
+//
+//    fun deleteTheme(theme: Theme)
+//    suspend fun updateTheme(theme: Theme)
 
 }

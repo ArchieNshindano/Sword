@@ -3,7 +3,7 @@ package com.archie.Sword.repositories.database
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class DataBaseRepositoryImpl @Inject constructor( val daos: DaoFunctions): DataBaseRepository{
+class VersesDataBaseRepositoryImpl @Inject constructor(val daos: DaoFunctionsForVerses): VersesDataBaseRepository{
 
     override suspend fun addVerse(verse: Verse)  = daos.addVerse(verse)
 
@@ -24,12 +24,5 @@ class DataBaseRepositoryImpl @Inject constructor( val daos: DaoFunctions): DataB
     override suspend fun deleteVerse(verse: Verse) = daos.deleteVerse(verse)
     override suspend fun updateVerse(verse: Verse) = daos.updateVerse(verse)
 
-    override suspend fun addTheme(theme: Theme) = daos.addTheme(theme)
-
-    override fun getThemeByName(): Flow<Theme> = daos.getThemeByName()
-
-    override fun getThemeByDate(): Flow<Theme> = daos.getThemeByDate()
-    override fun deleteTheme(theme: Theme) = daos.deleteTheme(theme)
-    override suspend fun updateTheme(theme: Theme) = daos.updateTheme(theme)
 
 }

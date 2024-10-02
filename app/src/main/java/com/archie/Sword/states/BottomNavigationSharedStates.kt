@@ -38,7 +38,9 @@ data class BottomNavigationSharedStates(
     val isAddingVerseFloatingButtonShowing: Boolean = true,
 
     val lastOpenedTheme: String = "",
-    val sortType: SortType = SortType.byDate,
+    val isSystemDarkTheme: Boolean = true,
+
+    val showSortTypeDialog: Boolean = false,
 
     val selectedIndex: Byte = 0,
 
@@ -52,6 +54,13 @@ data class BottomNavigationSharedStates(
 
     val verses: List<Verse> = listOf(),
 
+
+    val isDynamicThemeEnabled: Boolean = true,
+    val isDynamicSentencesEnabled: Boolean = false,
+    val isVerseOfTheDayEnabled: Boolean = false,
+
+    val contrast: String = "Normal",
+    val sortType: String = ""
 
 
 

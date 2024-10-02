@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -70,12 +71,13 @@ import androidx.compose.ui.unit.sp
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.archie.Sword.enums.Sentences
 import com.archie.Sword.events.BottomNavigationScreensSharedEvents
 import com.archie.Sword.helperFunctions.SwipeToDeleteContainer
 import com.archie.Sword.helperFunctions.VerticalOverscroll
 import com.archie.Sword.repositories.database.Verse
 import com.archie.Sword.states.BottomNavigationSharedStates
-import com.example.Sword.R
+
 import com.example.Sword.ui.theme.SwordTheme
 import kotlinx.coroutines.flow.flowOf
 
@@ -83,6 +85,7 @@ import org.threeten.bp.LocalDate
 import org.threeten.bp.Period
 import java.text.SimpleDateFormat
 import java.util.Date
+import kotlin.random.Random
 
 //viewModel: BottomNavigationSharedViewModel,state: BottomNavigationSharedStates,pagingData: T,event: BottomNavigationScreensSharedEvents,context: Context
 
@@ -205,82 +208,100 @@ fun homeScreenContent(state: BottomNavigationSharedStates, onEvent: (BottomNavig
 
 
 
+    val randomSentence = remember {
 
+         Sentences.values().random()
 
+    }
 
-    LazyColumn(
-            state = listState,
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(15.dp),
+    val sentenceComposableValue = remember {
 
-            modifier = Modifier
-//                .fillMaxSize()
+        Random.nextInt(0,4)
 
-                .overscroll(overscrollEffect)
-                .scrollable(
-                    orientation = Orientation.Vertical,
-                    reverseDirection = true,
-                    state = listState,
-                    overscrollEffect = overscrollEffect
-                ),
-            contentPadding = contentPadding.value,
-
-            content = {
+    }
 
 
 
 
-                item {
 
 
-                    Card(
-                        modifier = Modifier
-                            .width(362.dp)
-                            .height(200.dp)
+   Column(
 
-                            ,
-
-                        colors = CardDefaults.cardColors(
-                            MaterialTheme.colorScheme.background,
-                        ),
-
-                        elevation = CardDefaults.cardElevation(5.dp)
-                    ) {
+       modifier = Modifier.padding(contentPadding.value)
+   ) {
 
 
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                        ) {
+       LazyColumn(
+           state = listState,
+           horizontalAlignment = Alignment.CenterHorizontally,
+           verticalArrangement = Arrangement.spacedBy(15.dp),
+
+           modifier = Modifier
+                .fillMaxSize()
+               .overscroll(overscrollEffect)
+               .scrollable(
+                   orientation = Orientation.Vertical,
+                   reverseDirection = true,
+                   state = listState,
+                   overscrollEffect = overscrollEffect
+               ),
+
+           content = {
 
 
-                            Column{
-
-                                Text(
-                                    text = "Rooky",
-                                    fontSize = 20.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    modifier = Modifier
-                                        .align(Alignment.CenterHorizontally)
-                                        .padding(top = 20.dp)
-                                    //.padding(end = 40.dp)
-                                )
-
-                                CustomComponent(
-                                    canvasSize = 150.dp,
-                                    backgroundIndicatorStrokeWidth = 30f,
-                                    foregroundIndicatorStrokeWidth = 60f,
-                                    smallText = "Memorised",
-                                    bigTextSuffix = "/100",
-                                    indicatorValue = 50,
-                                    maxIndicatorValue = 100,
-
-                                    )
+               item {
 
 
-                            }
+                   Card(
+                       modifier = Modifier
+                           .width(362.dp)
+                           .height(200.dp),
+
+                       colors = CardDefaults.cardColors(
+                           MaterialTheme.colorScheme.background,
+                       ),
+
+                       elevation = CardDefaults.cardElevation(5.dp)
+                   ) {
 
 
-                           DynamicSentence(mainText = "Died", mainWord =  "for Me", sentenceFormat = 4)
+                       Row(
+                           modifier = Modifier.fillMaxWidth(),
+                       ) {
+
+
+                           Column {
+
+                               Text(
+                                   text = "Rooky",
+                                   fontSize = 20.sp,
+                                   fontWeight = FontWeight.Bold,
+                                   modifier = Modifier
+                                       .align(Alignment.CenterHorizontally)
+                                       .padding(top = 20.dp)
+                                   //.padding(end = 40.dp)
+                               )
+
+                               CustomComponent(
+                                   canvasSize = 150.dp,
+                                   backgroundIndicatorStrokeWidth = 30f,
+                                   foregroundIndicatorStrokeWidth = 60f,
+                                   smallText = "Memorised",
+                                   bigTextSuffix = "/100",
+                                   indicatorValue = 50,
+                                   maxIndicatorValue = 100,
+
+                                   )
+
+
+                           }
+
+
+                           DynamicSentence(
+                               mainText = randomSentence.secondaryText,
+                               mainWord = randomSentence.primaryText,
+                               sentenceFormat = sentenceComposableValue
+                           )
 
 //                            Column(
 //                                modifier = Modifier.fillMaxWidth()
@@ -291,9 +312,9 @@ fun homeScreenContent(state: BottomNavigationSharedStates, onEvent: (BottomNavig
 //
 //                            }
 
-                        }
-                    }
-                }
+                       }
+                   }
+               }
 
 
 
@@ -301,399 +322,64 @@ fun homeScreenContent(state: BottomNavigationSharedStates, onEvent: (BottomNavig
 
 
 
-                items(
+               items(
 
-                    items = pagingItems.itemSnapshotList,
-                    key = { verse ->
-                        "${verse?.verseTag}  ${verse?.id}"
-                    }
-
-
-                ) { verse->
+                   items = pagingItems.itemSnapshotList,
+                   key = { verse ->
+                       "${verse?.verseTag}  ${verse?.id}"
+                   }
 
 
-
-                 if(state.isSwipeToDeleteEnabled) {
-
-                     SwipeToDeleteContainer(
-                         item = verse,
-                         onEvent = onEvent,
-                     ) {
+               ) { verse ->
 
 
-                            themedVerseHolder(onEvent = onEvent, state = state, verse = verse)
+                   if (state.isSwipeToDeleteEnabled) {
+
+                       SwipeToDeleteContainer(
+                           item = verse,
+                           onEvent = onEvent,
+                       ) {
 
 
-                     }
-
-                     BackHandler {
-
-                             onEvent(BottomNavigationScreensSharedEvents.IsSwipeToDeleteEnabled(false))
-                     }
+                           themedVerseHolder(onEvent = onEvent, state = state, verse = verse)
 
 
-                 }
+                       }
 
-                 else
-                        themedVerseHolder(onEvent = onEvent, state = state, verse = verse)
+                       BackHandler {
 
-
-                } // ITEMS ENDS
-
-
-                items(
-
-                    list.size
-
-                ) { index ->
+                           onEvent(BottomNavigationScreensSharedEvents.IsSwipeToDeleteEnabled(false))
+                       }
 
 
+                   } else
+                       themedVerseHolder(onEvent = onEvent, state = state, verse = verse)
 
-                    themedVerseHolder(onEvent = onEvent, state = state, verse = list[index])
+
+               } // ITEMS ENDS
 
 
-                } // ITEMS ENDS
+               items(
 
-            } // CONTENT ENDS
+                   list.size
 
-        ) // LAZY COLUMN ENDS
+               ) { index ->
+
+
+                   themedVerseHolder(onEvent = onEvent, state = state, verse = list[index])
+
+
+               } // ITEMS ENDS
+
+           } // CONTENT ENDS
+
+       ) // LAZY COLUMN ENDS
+
+   } // COLUMN ENDS
 
 
 
 }
-
-
-@Composable
-fun themedVerseHolder(onEvent:(BottomNavigationScreensSharedEvents) -> Unit, state: BottomNavigationSharedStates, verse: Verse?){
-
-    SwordTheme(verseTheme = verse?.themeName ?: "", isContainerVerseHolder = true) {
-
-        verseHolder(onEvent = onEvent, state = state, verse = verse)
-
-    }
-}
-
-
-
-@Composable
-fun verseHolder(onEvent:(BottomNavigationScreensSharedEvents) -> Unit, state: BottomNavigationSharedStates, verse: Verse?){
-
-
-    val verseTag = verse?.verseTag ?: ""
-
-
-
-
-
-
-
-
-
-
-    val context = LocalContext.current
-
-    val checkBoxState = remember {
-
-        mutableStateOf(false)
-    }
-
-    val currentDate = remember {
-
-        LocalDate.now()
-    }
-
-
-    LaunchedEffect(key1 = verse?.memorisedToday, key2 = verseTag,key3 = {"${currentDate.dayOfMonth} ${currentDate.monthValue} ${currentDate.year}"} ) {
-
-
-        if(verse?.memorisedToday == 1 && !verse.memorisedTodayDate.isNullOrBlank()){
-
-
-            val from = LocalDate.parse(verse.memorisedTodayDate,org.threeten.bp.format.DateTimeFormatter.ofPattern("yyyy-MM-dd") )
-
-            // calculate the period between those two
-            val period = Period.between(from, currentDate)
-            // Get the current date
-
-            Log.d("Dates", "${verse.verseTag}  Today: ${currentDate}  Yesterday: ${from} ${period.days}")
-
-            if (period.days == 1) {
-                // If the difference is 1 day or more, reset memorisedToday to 0
-
-                var memorised = verse.memorisedCount
-
-                onEvent(
-                    BottomNavigationScreensSharedEvents.UpdateVerse( verse.copy(memorisedToday = 0, memorisedCount = ++memorised) )
-                )
-            }
-
-        }
-
-
-        checkBoxState.value = verse?.memorisedToday == 1
-
-
-    }
-
-
-
-    val haptics = LocalHapticFeedback.current
-
-
-
-
-
-
-
-
-    Card(
-        modifier = Modifier
-            .width(362.dp)
-            .padding(top = 15.dp,)
-            .pointerInput(Unit) {
-
-                detectTapGestures(
-                    onLongPress = {
-
-                        haptics.performHapticFeedback(HapticFeedbackType.LongPress)
-
-                        onEvent(BottomNavigationScreensSharedEvents.IsSwipeToDeleteEnabled(true))
-
-                    },
-
-                    onDoubleTap = {
-
-                        if ((verse?.themeName != "None") || !verse.themeName.isNullOrBlank())
-                            onEvent(
-                                BottomNavigationScreensSharedEvents.UpdateUiThemeTo(
-                                    verse?.themeName ?: ""
-                                )
-                            )
-                    },
-
-                    onTap = {
-
-                        if ((verse?.themeName != "None") || !verse.themeName.isNullOrBlank())
-                            onEvent(
-                                BottomNavigationScreensSharedEvents.UpdateUiThemeTo(
-                                    verse?.themeName ?: ""
-                                )
-                            )
-
-                    }
-                )
-
-            },// A
-        // .height(100.dp),
-        shape = RoundedCornerShape(20.dp),
-        elevation = CardDefaults.cardElevation(
-
-            defaultElevation = 0.dp
-        ),
-
-        colors = CardDefaults.cardColors(
-//            MaterialTheme.colorScheme.background.copy(alpha = 0.9f),
-        )
-
-
-    ) {
-
-        Column {
-
-            Text(
-                text = verseTag ,
-                fontSize = 30.sp,
-                fontFamily = FontFamily.Cursive,
-                modifier = Modifier.padding(start = 10.dp)
-
-            )
-
-
-
-            Text(
-                text = "${verse?.verse}",
-                fontFamily = FontFamily.Serif,
-                fontSize = 20.sp,
-                modifier = Modifier.padding(start = 10.dp)
-            )
-
-            Text(
-                text = buildAnnotatedString {
-
-                    append("  Memorised \n")
-
-                    withStyle(style = SpanStyle(fontSize = 28.sp)) {
-
-                        append("${verse?.memorisedCount} times")
-
-
-                    }
-
-
-                },
-
-                modifier = Modifier.align(Alignment.End)
-
-            )
-
-
-
-
-
-
-
-
-
-
-
-            Row(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-
-
-
-                    IconButton(
-                        onClick = {
-
-
-                            var isPartOfFavorites = 0
-
-
-
-                            if(verse?.isPartOfFavorites == 1)
-                                isPartOfFavorites = 0
-
-                            else
-                                isPartOfFavorites = 1
-
-
-
-
-                            if(verse != null) {
-
-
-                                onEvent(
-                                    BottomNavigationScreensSharedEvents.UpdateVerse(
-
-                                        verse.copy(isPartOfFavorites = isPartOfFavorites)
-
-                                    )
-
-                                )
-
-                            }
-
-
-
-                        }
-                    ) {
-
-                        Icon(
-                            imageVector = if (verse?.isPartOfFavorites == 1) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                            contentDescription = "Favorites"
-                        )
-
-                    }
-
-
-                IconButton(
-
-                    onClick = {
-
-                        val sendIntent: Intent = Intent().apply {
-                            action = Intent.ACTION_SEND
-                            putExtra(Intent.EXTRA_TEXT, "${verse?.verseTag} \n ${verse?.verse}")
-                            putExtra(Intent.EXTRA_TITLE, "Share Verse")
-                            type = "text/plain"
-
-                        }
-
-                        val shareIntent = Intent.createChooser(sendIntent, null)
-                        context.startActivity(shareIntent)
-                    }
-
-                ) {
-
-                    Icon(
-                        imageVector = Icons.Default.Share,
-                        contentDescription = "Share"
-                    )
-
-                }
-
-
-                Row(
-
-                    modifier = Modifier.padding(start = 115.dp)
-
-                ) {
-
-                    Text(
-                        text = "Memorise Today",
-                        modifier = Modifier
-                            .padding(top = 15.dp)
-                    )
-
-
-
-                        Checkbox(
-                            checked = checkBoxState.value,
-                            onCheckedChange = { isCheckBoxTicked ->
-
-                                var memorisedToday = 0
-                                var memorisedTodayDate = verse?.memorisedTodayDate
-
-                                if (isCheckBoxTicked) {
-
-                                    memorisedToday = 1
-                                    val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd")
-
-                                    memorisedTodayDate = simpleDateFormat.format(Date())
-
-                                }
-
-
-
-                                if( verse != null) {
-                                  onEvent(
-                                     BottomNavigationScreensSharedEvents.UpdateVerse(
-
-                                       verse.copy(memorisedToday= memorisedToday, memorisedTodayDate = memorisedTodayDate)
-
-
-                                   ) // B
-
-                               )
-
-                           }
-                            }
-
-                        )
-
-
-
-
-
-
-
-
-
-
-
-                }
-
-
-            }
-
-
-        } // COLUMN ENDS
-
-    } // CARD ENDS
-}
-
-
-
-
 
 
 

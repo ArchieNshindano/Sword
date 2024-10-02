@@ -29,12 +29,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,7 +42,7 @@ import androidx.paging.compose.LazyPagingItems
 import com.archie.Sword.events.BottomNavigationScreensSharedEvents
 import com.archie.Sword.repositories.database.Verse
 import com.archie.Sword.screenViews.homeScreenBottomNavigation.Screens
-import com.archie.Sword.screenViews.homeScreenBottomNavigation.versesScreenTabItem
+import com.archie.Sword.screenViews.themeScreen.versesLayoutWithStickHeader
 import com.archie.Sword.states.BottomNavigationSharedStates
 
 @ExperimentalMaterial3Api
@@ -172,9 +170,9 @@ fun favoritesScreen(onEvent:(BottomNavigationScreensSharedEvents) -> Unit, state
 
                 0 -> {
 
-                    versesScreenTabItem(onEvent = onEvent, state = state , pagingItems = pagingItems , Screens.FavoritesScreen)
+                    versesLayoutWithStickHeader(onEvent = onEvent, state = state , pagingItems = pagingItems , Screens.FavoritesScreen)
                 }
-                //1 -> versesScreenTabItem(onEvent = onEvent, state = state, pagingItems = pagingItems)
+                //1 -> versesLayoutWithStickHeader(onEvent = onEvent, state = state, pagingItems = pagingItems)
             }
 
         } // HORIZONTAL PAGER ENDS

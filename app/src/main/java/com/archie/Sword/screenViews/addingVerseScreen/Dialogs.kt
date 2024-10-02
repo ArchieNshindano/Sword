@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -35,6 +36,7 @@ fun bookSelectionDialog(onEvent:(AddingVerseScreenEvents) -> Unit){
 
         Books.values().toList()
     }
+
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -64,7 +66,7 @@ fun bookSelectionDialog(onEvent:(AddingVerseScreenEvents) -> Unit){
                 )
 
 
-                Divider()
+                HorizontalDivider()
 
 
                 LazyColumn(
@@ -84,11 +86,10 @@ fun bookSelectionDialog(onEvent:(AddingVerseScreenEvents) -> Unit){
 
                                         onClick = {
 
-                                            onEvent( AddingVerseScreenEvents.SetBookName(book.bookName) )
-                                            onEvent( AddingVerseScreenEvents.SetBookPosition(book.bookPosition) )
-                                            onEvent( AddingVerseScreenEvents.HideBookSelectionDialog )
-                                            onEvent( AddingVerseScreenEvents.ShowChapterSelectionDialog )
-
+                                            onEvent(AddingVerseScreenEvents.SetBookName(book.bookName))
+                                            onEvent(AddingVerseScreenEvents.SetBookPosition(book.bookPosition))
+                                            onEvent(AddingVerseScreenEvents.HideBookSelectionDialog)
+                                            onEvent(AddingVerseScreenEvents.ShowChapterSelectionDialog)
 
 
                                         }
@@ -186,9 +187,9 @@ fun chapterSelectionDialog(onEvent:(AddingVerseScreenEvents) -> Unit, state: Add
                                             onClick = {
 
 
-                                                onEvent( AddingVerseScreenEvents.SetChapter( chapter.toString() ) )
-                                                onEvent( AddingVerseScreenEvents.HideChapterSelectionDialog )
-                                                onEvent( AddingVerseScreenEvents.ShowVerseSelectionDialog )
+                                                onEvent(AddingVerseScreenEvents.SetChapter(chapter.toString()))
+                                                onEvent(AddingVerseScreenEvents.HideChapterSelectionDialog)
+                                                onEvent(AddingVerseScreenEvents.ShowVerseSelectionDialog)
 
 
                                             } // on click ends
@@ -280,10 +281,12 @@ fun verseSelectionDialog(onEvent:(AddingVerseScreenEvents) -> Unit, state: Addin
 
                                             onClick = {
 
-                                                onEvent( AddingVerseScreenEvents.SetVerseNumber( verseNumber.toString() ) )
-                                                onEvent( AddingVerseScreenEvents.HideVerseSelectionDialog )
-
-
+                                                onEvent(
+                                                    AddingVerseScreenEvents.SetVerseNumber(
+                                                        verseNumber.toString()
+                                                    )
+                                                )
+                                                onEvent(AddingVerseScreenEvents.HideVerseSelectionDialog)
 
 
                                             } // on click ends
@@ -322,6 +325,8 @@ fun verseSelectionDialog(onEvent:(AddingVerseScreenEvents) -> Unit, state: Addin
 @Preview(showBackground = true)
 @Composable
 fun GreetinggPreview() {
+
+    bookSelectionDialog( onEvent = {})
 
 
 }

@@ -1,17 +1,11 @@
 package com.archie.Sword.repositories.database
 
-import androidx.room.AutoMigration
 import androidx.room.Database
-import androidx.room.DeleteColumn
-import androidx.room.DeleteTable
-import androidx.room.RenameColumn
-import androidx.room.RenameTable
 import androidx.room.RoomDatabase
-import androidx.room.migration.AutoMigrationSpec
 
 
 @Database(
-    entities = [Verse::class, Theme::class, VerseFTS::class],
+    entities = [Verse::class, Theme::class, VerseFTS::class, Settings::class, SentencesRecord::class],
     version = 1,
 
 
@@ -26,16 +20,20 @@ import androidx.room.migration.AutoMigrationSpec
 //         AutoMigration(
 //             from = 5,
 //             to = 6,
-//             spec = VersesDatabase.MyAutoMigration::class
+//             spec = LocalDatabase.MyAutoMigration::class
 //         )
 //
 //    ]
 
 )
-abstract class VersesDatabase: RoomDatabase() {
+abstract class LocalDatabase: RoomDatabase() {
 
-    abstract fun daoFunctions(): DaoFunctions
+    abstract fun daoFunctionsForVerses(): DaoFunctionsForVerses
+    abstract fun daoFunctionsForThemes(): DaoFunctionsForTheme
 
+    abstract fun daoFunctionsForSettings(): DaoFunctionsForSettings
+
+    abstract fun daoFunctionsForSentencesRecord(): DaoFunctionsForSentencesRecord
 
 
 //    @RenameColumn(tableName = "MyVersesTable", fromColumnName = "bookName", toColumnName = "verseTag")

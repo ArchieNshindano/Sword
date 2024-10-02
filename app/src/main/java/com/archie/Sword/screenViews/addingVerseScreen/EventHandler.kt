@@ -3,7 +3,6 @@ package com.archie.Sword.screenViews.addingVerseScreen
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import com.archie.Sword.events.AddingVerseScreenEvents
 import com.archie.Sword.states.AddingVerseScreenStates
 import com.archie.Sword.viewModels.AddingVerseScreenViewModel
@@ -11,7 +10,7 @@ import com.archie.Sword.viewModels.AddingVerseScreenViewModel
 
 
 @Composable
-fun eventHandler(state: AddingVerseScreenStates, viewModel: AddingVerseScreenViewModel){
+fun eventHandlerForAddingVerse(state: AddingVerseScreenStates, viewModel: AddingVerseScreenViewModel){
 
 //    val state = remember {
 //

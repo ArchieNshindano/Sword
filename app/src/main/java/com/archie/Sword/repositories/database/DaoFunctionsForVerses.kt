@@ -10,7 +10,10 @@ import kotlinx.coroutines.flow.Flow
 
 
 @Dao
-interface DaoFunctions {
+interface DaoFunctionsForVerses {
+
+
+    // VERSE DATABASE DAO FUNCTIONS
 
     @Upsert
     suspend fun addVerse(verse: Verse)
@@ -26,8 +29,20 @@ interface DaoFunctions {
     @Query("SELECT * FROM MyVersesTable ORDER BY date ASC")
     fun getVersesByDate(): PagingSource<Int,Verse>
 
+    @Delete
+    suspend fun deleteVerse(verse: Verse)
 
 
+    @Update
+    suspend fun updateVerse(verse: Verse)
+
+
+
+
+
+
+
+    // SEARCH DATABASE DAO FUNCTIONS
     @Query("""
     SELECT * FROM MyVersesTable
     JOIN SearchQueryTable ON MyVersesTable.id == SearchQueryTable.rowid
@@ -56,46 +71,6 @@ interface DaoFunctions {
     WHERE SearchQueryTable.note MATCH :searchQuery 
     """)
     fun searchDatabaseUsingNotes(searchQuery: String): Flow < List<Verse> >
-
-
-
-
-    @Delete
-    suspend fun deleteVerse(verse: Verse)
-
-
-    @Update
-    suspend fun updateVerse(verse: Verse)
-
-
-
-
-
-
-    @Upsert
-    fun addTheme(theme: Theme)
-
-
-    @Query("SELECT * FROM MyThemesTable ORDER BY themeName ASC")
-    fun getThemeByName(): Flow<Theme>
-
-    @Query("SELECT * FROM MyThemesTable ORDER BY themeName ASC")
-    fun getThemeByDate(): Flow<Theme>
-
-    @Delete
-    fun deleteTheme(theme: Theme)
-
-
-    @Update
-    suspend fun updateTheme(theme: Theme)
-
-
-
-
-
-
-
-
 
 
 

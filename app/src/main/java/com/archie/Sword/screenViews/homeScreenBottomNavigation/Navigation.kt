@@ -1,6 +1,6 @@
 package com.archie.Sword.screenViews.homeScreenBottomNavigation
 
-import android.util.Log
+import android.content.SharedPreferences
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -20,6 +20,7 @@ import com.archie.Sword.events.BottomNavigationScreensSharedEvents
 import com.archie.Sword.repositories.database.Verse
 import com.archie.Sword.screenViews.favouritesScreen.favoritesScreen
 import com.archie.Sword.screenViews.homeScreen.homeScreenContent
+import com.archie.Sword.screenViews.themeScreen.ThemeScreen
 import com.archie.Sword.states.BottomNavigationSharedStates
 import com.archie.Sword.viewModels.BottomNavigationSharedViewModel
 
@@ -61,7 +62,7 @@ fun Navigation(navController: NavHostController, paddingValues: PaddingValues, s
 //            val pagingItems = viewModel.allVerses.flow.collectAsLazyPagingItems()
 
 
-//            eventHandler(state = state.value, viewModel = viewModel)
+//            eventHandlerForBottomNavigation(state = state.value, viewModel = viewModel)
 
             ThemeScreen(onEvent = onEvent , state = state,contentPadding, pagingItems)
 
@@ -76,7 +77,7 @@ fun Navigation(navController: NavHostController, paddingValues: PaddingValues, s
 //
 //
 //
-//            eventHandler(state = state.value, viewModel = viewModel)
+//            eventHandlerForBottomNavigation(state = state.value, viewModel = viewModel)
             favoritesScreen(onEvent = onEvent , state = state,contentPadding,pagingItems)
         }
 
@@ -94,14 +95,14 @@ fun Navigation(navController: NavHostController, paddingValues: PaddingValues, s
 
 
 @Composable
-inline fun eventHandler(state: BottomNavigationSharedStates,viewModel: BottomNavigationSharedViewModel){
+inline fun eventHandlerForBottomNavigation(state: BottomNavigationSharedStates, viewModel: BottomNavigationSharedViewModel, sharedPreferences: SharedPreferences){
 
     LaunchedEffect(state.currentEvent){
 
         val event = state.currentEvent
 
         when(event){
-            is BottomNavigationScreensSharedEvents.ChangeSortTypeTo -> viewModel.changeSortTypeTo(event.sortType)
+            is BottomNavigationScreensSharedEvents.ShowSortDialog -> viewModel.showSortTypeDialog(event.showDialog)
             is BottomNavigationScreensSharedEvents.CollapseSearchBar -> viewModel.collapseSearchBar()
             is BottomNavigationScreensSharedEvents.ExpandSearchBar -> viewModel.expandSearchBar()
             is BottomNavigationScreensSharedEvents.HideAddingVerseFloatingButton -> viewModel.hideAddingVerseFloatingButton()
@@ -110,7 +111,16 @@ inline fun eventHandler(state: BottomNavigationSharedStates,viewModel: BottomNav
             is BottomNavigationScreensSharedEvents.ShowAddingVerseFloatingButton -> viewModel.showAddingVerseFloatingButton()
             is BottomNavigationScreensSharedEvents.ShowMenuSideBar -> viewModel.showMenuSideBar()
             is BottomNavigationScreensSharedEvents.ShowPopUpMenu -> viewModel.showPopUpMenu()
-            is BottomNavigationScreensSharedEvents.UpdateUiThemeTo -> viewModel.updateUiThemeTo(event.theme)
+            is BottomNavigationScreensSharedEvents.UpdateUiThemeTo -> {
+
+                sharedPreferences.edit().apply{
+
+                    putString("lastOpenedTheme",event.theme)
+                    apply()
+                }
+
+                viewModel.updateUiThemeTo(event.theme)
+            }
             is BottomNavigationScreensSharedEvents.SearchFor -> viewModel.searchFor(event.searchQuery)
             is BottomNavigationScreensSharedEvents.SetVerse -> viewModel.setVerse(event.verse)
             is BottomNavigationScreensSharedEvents.UpdateVerse -> viewModel.upDateVerse(event.verse)

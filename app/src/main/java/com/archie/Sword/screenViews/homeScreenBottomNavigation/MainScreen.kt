@@ -1,16 +1,21 @@
 @file:OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class,
-    ExperimentalFoundationApi::class, ExperimentalFoundationApi::class
+    ExperimentalFoundationApi::class, ExperimentalFoundationApi::class,
+    ExperimentalMaterial3WindowSizeClassApi::class
 )
 
 package com.archie.Sword.screenViews.homeScreenBottomNavigation
 
 import android.content.Intent
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -21,11 +26,14 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.DropdownMenu
@@ -34,16 +42,19 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationRail
+import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -54,6 +65,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -68,9 +80,10 @@ import com.archie.Sword.repositories.database.Verse
 import com.archie.Sword.screenViews.favouritesScreen.notesHolder
 import com.archie.Sword.screenViews.homeScreen.TopAppBarIcon
 import com.archie.Sword.screenViews.homeScreen.list
-import com.archie.Sword.screenViews.homeScreen.verseHolder
 import com.archie.Sword.states.BottomNavigationSharedStates
 import com.example.Sword.AddingVerseActivity
+import com.example.Sword.R
+import com.example.Sword.SettingsScreenActivity
 import com.example.Sword.ui.theme.SwordTheme
 import kotlinx.coroutines.flow.flowOf
 
@@ -93,6 +106,15 @@ data class TopAppBarIcon(
 
 )
 
+
+data class NavigationItem(
+    val title: String,
+    val unselectedIcon: ImageVector,
+    val selectedIcon: ImageVector,
+    val hasNews: Boolean,
+    val badgeCount: Int? = null
+)
+
 @ExperimentalFoundationApi
 @ExperimentalMaterial3Api
 @Composable
@@ -113,8 +135,7 @@ fun mainScreen(navController: NavHostController, state: BottomNavigationSharedSt
 
 
 
-
-    val listOfItems = listOf(
+    val bottomNavigationIcons = listOf(
 
         BottomNavigationItem(
 
@@ -167,15 +188,45 @@ fun mainScreen(navController: NavHostController, state: BottomNavigationSharedSt
         ) // LIST ENDS
 
 
+
+
+
+
+    val items = listOf(
+        NavigationItem(
+            title = "Home",
+            selectedIcon = Icons.Filled.Home,
+            unselectedIcon = Icons.Outlined.Home,
+            hasNews = false,
+        ),
+
+        NavigationItem(
+            title = "Settings",
+            selectedIcon = Icons.Filled.Settings,
+            unselectedIcon = Icons.Outlined.Settings,
+            hasNews = true,
+        ),
+
+        )  // LIST ENDS
+
+//    val windowClass = calculateWindowSizeClass(context)
+    val showNavigationRail = false
+//        windowClass.widthSizeClass != WindowWidthSizeClass.Compact
+    var selectedItemIndex by rememberSaveable {
+        mutableStateOf(0)
+    }
+
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
 
     val query =  remember { mutableStateOf("") }
-    
+    val showSortTypeDialog = remember { mutableStateOf(false) }
+
     Scaffold(
 
         modifier = Modifier
             .fillMaxSize()
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
+            .padding(start = if(showNavigationRail) 80.dp else 0.dp),
 
         topBar = {
 
@@ -258,10 +309,10 @@ fun mainScreen(navController: NavHostController, state: BottomNavigationSharedSt
                             key = { verse -> "${verse.verseTag} ${verse.id}" }
                         ) { verse ->
 
-                            SwordTheme(verseTheme = state.lastOpenedTheme, isContainerVerseHolder = true) {
-                                
+                            SwordTheme(verseTheme = state.lastOpenedTheme, containerDoesNotAffectStatusBar = true) {
+
                                 notesHolder(onEvent = onEvent, state = state, verse = verse, isContentANote = false )
-                                
+
                             }
 
                         } // ITEMS ENDS
@@ -272,7 +323,7 @@ fun mainScreen(navController: NavHostController, state: BottomNavigationSharedSt
                     BackHandler {
 
                         onEvent(BottomNavigationScreensSharedEvents.CollapseSearchBar)
-                        query.value = ""
+
                     }
 
                 } // SEARCH BAR ENDS
@@ -286,7 +337,7 @@ fun mainScreen(navController: NavHostController, state: BottomNavigationSharedSt
                      Text(
                         text = "Truth",
                         fontWeight = FontWeight.Bold,
-                        fontSize = 33.sp
+                        fontSize = 40.sp
                     )
 
                 },
@@ -297,10 +348,16 @@ fun mainScreen(navController: NavHostController, state: BottomNavigationSharedSt
                         topAppBarIcons.forEachIndexed { index, iconInfo ->
 
 
-                            IconButton(onClick = {
+                            IconButton(
+
+                                onClick = {
 
                             if(iconInfo.description == "Search")
                                 onEvent(BottomNavigationScreensSharedEvents.ExpandSearchBar)
+
+
+                            if (iconInfo.description == "More")
+                                onEvent(BottomNavigationScreensSharedEvents.ShowPopUpMenu)
 
                             }
                             ) {
@@ -318,19 +375,56 @@ fun mainScreen(navController: NavHostController, state: BottomNavigationSharedSt
 
 
                         DropdownMenu(
-                            expanded = false,
+                            expanded = state.isPopupMenuShowing,
                             onDismissRequest = {
-//                            onEvent(BottomNavigationScreensSharedEvents.HidePopUpMenu)
+
+                            onEvent(BottomNavigationScreensSharedEvents.HidePopUpMenu)
+
                             },
-//                        modifier = Modifier.width(100.dp)
+
                         ) {
 
                             DropdownMenuItem(
-                                text = { Text(text = "Hello") },
-                                onClick = { /*TODO*/ })
+
+                                leadingIcon ={
+
+                                    Icon(
+                                        imageVector = ImageVector.vectorResource(id = R.drawable.sort),
+                                        contentDescription = null
+                                    )
+                                },
+
+                                text = { Text(text = "Sort By") },
+                                onClick = {
+
+                                    showSortTypeDialog.value = !showSortTypeDialog.value
+
+                                    onEvent(BottomNavigationScreensSharedEvents.ShowSortDialog(showSortTypeDialog.value))
+
+                                }
+
+                            )
+
+
                             DropdownMenuItem(
-                                text = { Text(text = "Hello") },
-                                onClick = { /*TODO*/ })
+
+                                leadingIcon = {
+
+                                    Icon(
+                                        imageVector = Icons.Default.Settings ,
+                                        contentDescription = null
+                                    )
+                                },
+                                text = { Text(text = "Settings") },
+                                onClick = {
+
+                                    val intentObject = Intent(context, SettingsScreenActivity::class.java)
+                                    intentObject.putExtra("lastOpenedTheme", state.lastOpenedTheme)
+                                    context.startActivity(intentObject)
+
+                                }
+
+                            )
 
                         }
 
@@ -354,7 +448,7 @@ fun mainScreen(navController: NavHostController, state: BottomNavigationSharedSt
 
             NavigationBar {
 
-                listOfItems.forEachIndexed{ index,item ->
+                bottomNavigationIcons.forEachIndexed{ index, item ->
 
                     NavigationBarItem(
                         selected = selectedIndex == index ,
@@ -441,7 +535,18 @@ fun mainScreen(navController: NavHostController, state: BottomNavigationSharedSt
 
         Navigation( navController = navController, paddingValues = padding , state = state, onEvent = onEvent, pagingItems = pagingItems)
 
+
+
     } // SCAFFOLD ENDS
+
+
+    if (showNavigationRail)
+        NavigationSideBar(
+            items = items,
+            selectedItemIndex = selectedItemIndex,
+            onNavigate = { selectedItemIndex = it }
+        )
+
 
 
 
@@ -450,13 +555,118 @@ fun mainScreen(navController: NavHostController, state: BottomNavigationSharedSt
 
 
 
-@Preview(showBackground = true, apiLevel = 23)
+
+
+
+
+
+
+
+
+@Composable
+fun NavigationSideBar(
+    items: List<NavigationItem>,
+    selectedItemIndex: Int,
+    onNavigate: (Int) -> Unit
+) {
+
+    val context = LocalContext.current
+
+
+
+
+    NavigationRail(
+        header = {
+            IconButton(onClick = {  } ) {
+                Icon(
+                    imageVector = Icons.Default.Menu,
+                    contentDescription = "Menu"
+                )
+            }
+
+        },
+
+
+        modifier = Modifier
+            .background(MaterialTheme.colorScheme.inverseOnSurface)
+            .offset(x = (-1).dp)
+    ) {
+        Column(
+            modifier = Modifier.fillMaxHeight(),
+            verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.Bottom)
+        ) {
+            items.forEachIndexed { index, item ->
+                NavigationRailItem(
+                    selected = selectedItemIndex == index,
+                    onClick = {
+                       // onNavigate(index)
+
+                              if(item.title == "Settings")
+                                    context.startActivity(Intent(context, com.example.Sword.SettingsScreenActivity::class.java))
+
+
+
+
+
+                    },
+                    icon = {
+                        NavigationIcon(
+                            item = item,
+                            selected = selectedItemIndex == index
+                        )
+                    },
+                    label = {
+                        Text(text = item.title)
+                    },
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun NavigationIcon(
+    item: NavigationItem,
+    selected: Boolean
+) {
+    BadgedBox(
+        badge = {
+            if (item.badgeCount != null) {
+                Badge {
+                    Text(text = item.badgeCount.toString())
+                }
+            } else if (item.hasNews) {
+                Badge()
+            }
+        }
+    ) {
+        Icon(
+            imageVector = if (selected) item.selectedIcon else item.unselectedIcon,
+            contentDescription = item.title
+        )
+    }
+}
+
+
+
+
+
+
+
+
+
+
+@Preview(showBackground = true, apiLevel = 23, showSystemUi = true)
 @Composable
 fun GreetingPreview(
 
 ) {
 
-    SwordTheme(verseTheme = "Love", darkTheme = true) {
+    SwordTheme(
+        verseTheme = "Glory",
+//        isHighContrastEnabled = true,
+        darkTheme = true
+    ) {
         mainScreen(
             navController = rememberNavController(),
             state = BottomNavigationSharedStates(isSearchBarActive = false, verses = list),

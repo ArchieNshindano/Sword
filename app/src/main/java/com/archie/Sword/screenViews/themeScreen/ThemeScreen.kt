@@ -3,7 +3,7 @@
     ExperimentalFoundationApi::class, ExperimentalFoundationApi::class
 )
 
-package com.archie.Sword.screenViews.homeScreenBottomNavigation
+package com.archie.Sword.screenViews.themeScreen
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -16,10 +16,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -32,16 +30,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
@@ -52,8 +47,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.archie.Sword.enums.VerseThemes
 import com.archie.Sword.events.BottomNavigationScreensSharedEvents
 import com.archie.Sword.repositories.database.Verse
-import com.archie.Sword.screenViews.homeScreen.list
-import com.archie.Sword.screenViews.homeScreen.themedVerseHolder
+import com.archie.Sword.screenViews.homeScreenBottomNavigation.Screens
 import com.archie.Sword.states.BottomNavigationSharedStates
 import kotlinx.coroutines.flow.flowOf
 
@@ -169,7 +163,7 @@ fun ThemeScreen(onEvent:(BottomNavigationScreensSharedEvents) -> Unit, state: Bo
             when(index){
 
                 0 -> themeGridScreenTabItem(onEvent)
-                1 -> versesScreenTabItem(onEvent = onEvent, state = state, pagingItems = pagingItems, screen = Screens.ThemeScreen)
+                1 -> versesLayoutWithStickHeader(onEvent = onEvent, state = state, pagingItems = pagingItems, screen = Screens.ThemeScreen)
             }
 
         } // HORIZONTAL PAGER ENDS
@@ -306,173 +300,7 @@ fun themeGridScreenTabItem(onEvent: (BottomNavigationScreensSharedEvents) -> Uni
 
 
 
-@Composable
-fun versesScreenTabItem(onEvent: (BottomNavigationScreensSharedEvents) -> kotlin.Unit, state: BottomNavigationSharedStates, pagingItems: LazyPagingItems<Verse>, screen: Screens){
 
-    val verses = remember {
-
-        mutableStateOf(listOf<Verse?>())
-    }
-
-
-    if (screen.route == Screens.ThemeScreen.route)
-        verses.value = pagingItems.itemSnapshotList
-
-    else if(screen.route == Screens.FavoritesScreen.route)
-        verses.value = pagingItems.itemSnapshotList.filter { verse ->
-
-            verse?.isPartOfFavorites == 1
-        }
-
-
-
-    val themes =  remember {
-        VerseThemes.values().toList()
-    }
-
-
-
-    val newList = remember {
-
-        list.filter {
-
-            it.isPartOfFavorites == 1
-        }
-    }
-
-    LazyColumn(
-
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(10.dp),
-        content = {
-
-
-            themes.forEachIndexed{ index, theme ->
-
-                val themeVerses = verses.value.filter { verse ->
-
-                    verse?.themeName == theme.name
-                }
-
-
-                val versesWithNoTheme = verses.value.filter { verse ->
-
-                        verse?.themeName.isNullOrBlank() || theme.name.equals("None")
-                }
-
-                val themeVersesDemo = list.filter { verse ->
-
-                    verse.themeName == theme.name
-                }
-
-                val versesWithNoThemeDemo = list.filter { verse ->
-
-                        verse.themeName.isNullOrBlank() || theme.name.equals("None")
-                }
-
-
-
-                val isNoThemeListNotEmpty = versesWithNoTheme.isNotEmpty() || versesWithNoThemeDemo.isNotEmpty()
-
-
-
-                when(themeVerses.isNotEmpty() || themeVersesDemo.isNotEmpty()){
-
-                    true -> {
-
-                        stickyHeader {
-
-
-
-
-                            stickyHeader(title = theme.name)
-
-
-                        }
-
-                        items( items = themeVerses){ verse ->
-
-                                themedVerseHolder(onEvent = onEvent, state = state, verse = verse)
-
-                        }
-
-
-                        items(
-                            themeVersesDemo
-                        ){ verse ->
-
-                                themedVerseHolder(onEvent = onEvent, state = state, verse = verse)
-
-
-
-                        }
-
-
-
-
-
-
-                    }
-
-
-
-                    false -> {
-
-
-                          if(isNoThemeListNotEmpty)
-                            stickyHeader {  stickyHeader(title = "No Theme")   }
-
-                            items( items = versesWithNoTheme) { verse ->
-
-                                themedVerseHolder(onEvent = onEvent, state = state, verse = verse)
-                            }
-
-                            items( items = versesWithNoThemeDemo) { verse ->
-
-                                themedVerseHolder(onEvent = onEvent, state = state, verse = verse)
-                            }
-
-
-
-
-                    }
-                }
-
-
-
-
-
-
-            }
-
-
-
-
-        }
-
-    )
-
-
-}
-
-
-
-@Composable
-fun stickyHeader(title: String){
-
-    Column(
-        modifier = Modifier
-    ) {
-        Text(
-            text = " "+ title,
-            fontSize = 25.sp,
-            textAlign = TextAlign.Start
-        )
-
-    }
-
-}
 
 
 

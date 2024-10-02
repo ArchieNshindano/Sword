@@ -1,28 +1,17 @@
 package com.example.Sword
 
-import android.app.Instrumentation
 import android.content.Context
 import androidx.room.Room
-import androidx.room.migration.Migration
 import androidx.room.testing.MigrationTestHelper
 import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 
-import com.archie.Sword.repositories.database.DaoFunctions
-import com.archie.Sword.repositories.database.Migration_2_3
-import com.archie.Sword.repositories.database.Verse
-import com.archie.Sword.repositories.database.VersesDatabase
-import junit.framework.TestCase
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.runBlocking
+import com.archie.Sword.repositories.database.DaoFunctionsForTheme
+import com.archie.Sword.repositories.database.DaoFunctionsForVerses
+import com.archie.Sword.repositories.database.LocalDatabase
 import org.junit.After
-import org.junit.Assert
-import org.junit.Assert.assertThat
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -33,8 +22,8 @@ import java.io.IOException
 class VerseDataBaseTest{
 
     // get reference to the LanguageDatabase and LanguageDao class
-    private lateinit var db: VersesDatabase
-    private lateinit var dao: DaoFunctions
+    private lateinit var db: LocalDatabase
+    private lateinit var dao: DaoFunctionsForVerses
     private val context = ApplicationProvider.getApplicationContext<Context>()
 
     // Override function setUp() and annotate it with @Before
@@ -44,7 +33,7 @@ class VerseDataBaseTest{
     val helper = MigrationTestHelper(
 
         InstrumentationRegistry.getInstrumentation(),
-        VersesDatabase::class.java,
+        LocalDatabase::class.java,
         listOf(),
         FrameworkSQLiteOpenHelperFactory()
     )
@@ -54,8 +43,8 @@ class VerseDataBaseTest{
         // context from the running application
 
         // initialize the db and dao variable
-        db = Room.inMemoryDatabaseBuilder(context, VersesDatabase::class.java).build()
-        dao = db.daoFunctions()
+        db = Room.inMemoryDatabaseBuilder(context, LocalDatabase::class.java).build()
+        dao = db.daoFunctionsForVerses()
     }
 
     // Override function closeDb() and annotate it with @After

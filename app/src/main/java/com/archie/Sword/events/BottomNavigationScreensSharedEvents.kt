@@ -23,8 +23,13 @@ sealed interface BottomNavigationScreensSharedEvents{
     object ShowAddingVerseFloatingButton: BottomNavigationScreensSharedEvents
     object HideAddingVerseFloatingButton: BottomNavigationScreensSharedEvents
 
+//    data class DynamicThemeEnabled(val isEnabled: Boolean): BottomNavigationScreensSharedEvents
+//    data class DynamicSentencesEnabled(val isEnabled: Boolean): BottomNavigationScreensSharedEvents
+//    data class VerseOfTheDayEnabled(val isEnabled: Boolean): BottomNavigationScreensSharedEvents
+
+
     data class SearchFor(val searchQuery: String): BottomNavigationScreensSharedEvents
-    data class ChangeSortTypeTo(val sortType: SortType): BottomNavigationScreensSharedEvents
+    data class ShowSortDialog(val showDialog: Boolean): BottomNavigationScreensSharedEvents
 
     data class UpdateVerse(val verse: Verse): BottomNavigationScreensSharedEvents
 
